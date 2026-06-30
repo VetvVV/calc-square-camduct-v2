@@ -1,34 +1,54 @@
 import { useTranslation } from 'react-i18next'
 import { useAppStore } from '../../store/appStore'
 import { CamductToggle } from '../Calculator/CamductToggle'
+import { canViewCamductMode } from '../../roles/permissions'
+
+const assetPath = (path: string) => `${import.meta.env.BASE_URL}${path}`
 
 export function AppHeader() {
-  const { t } = useTranslation()
+  const { i18n, t } = useTranslation()
   const role = useAppStore((state) => state.role)
   const setRole = useAppStore((state) => state.setRole)
-  const canUseCamduct = role === 'admin' || role === 'service'
+  const canUseCamduct = canViewCamductMode(role)
 
   return (
-    <header className="border-b border-slate-200 bg-white/95 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-        <div>
-          <h1 className="text-xl font-semibold text-slate-900">{t('app.title')}</h1>
-          <p className="text-sm text-slate-600">{t('app.subtitle')}</p>
+    <header className="brand-topbar sticky top-0 z-30">
+      <div className="brand-container flex min-h-[56px] flex-col gap-2 py-1.5 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+          <img src={assetPath('assets/logos/stspecmontazh-logo-dark.png')} alt="ST Spetsmontazh" className="brand-logo-st" />
+          <div className="hidden h-8 w-px bg-slate-200 sm:block" />
+          <div className="min-w-0 leading-none">
+            <div className="brand-title text-lg leading-none sm:text-xl">Calc Square</div>
+            <div className="mt-0.5 text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--brand-accent)]">CAMduct V2</div>
+          </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center justify-start gap-2 lg:justify-end">
           <select
             aria-label="role"
             value={role}
             onChange={(event) => setRole(event.target.value as typeof role)}
-            className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"
+            className="brand-select h-8 px-2"
           >
-            <option value="guest">guest</option>
-            <option value="user">user</option>
-            <option value="client">client</option>
-            <option value="admin">admin</option>
-            <option value="service">service</option>
+            <option value="guest">{t('role.guest')}</option>
+            <option value="user">{t('role.user')}</option>
+            <option value="client">{t('role.client')}</option>
+            <option value="admin">{t('role.admin')}</option>
+            <option value="service">{t('role.service')}</option>
           </select>
+
+          <div className="flex items-center gap-1">
+            {['ru', 'uk', 'en'].map((lang) => (
+              <button
+                key={lang}
+                type="button"
+                onClick={() => void i18n.changeLanguage(lang)}
+                className={['brand-lang-button px-3 py-1', i18n.language === lang ? 'is-active' : ''].join(' ')}
+              >
+                {lang}
+              </button>
+            ))}
+          </div>
 
           {canUseCamduct && <CamductToggle />}
         </div>
@@ -36,3 +56,4 @@ export function AppHeader() {
     </header>
   )
 }
+

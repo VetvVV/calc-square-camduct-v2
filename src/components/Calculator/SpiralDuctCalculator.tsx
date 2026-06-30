@@ -13,8 +13,9 @@ import { addItem, replaceItem } from '../../domain/specification/specificationMa
 import { createSpecificationItem } from '../../domain/specification/itemFactory'
 import { useAppStore } from '../../store/appStore'
 import { useTranslation } from 'react-i18next'
-import { getGuestUsageLimitState, incrementGuestUsage } from '../../utils/guestUsage'
-import { guestCalculationLimitPerDay, isGuestRole } from '../../constants/roles'
+import { getGuestUsageLimitState } from '../../utils/guestUsage'
+import { isGuestRole } from '../../constants/roles'
+import { canAddSpecItem, canViewCamductMode, canViewDebugPanel, getCalculationLimit } from '../../roles/permissions'
 import { Alert } from '../Common/Alert'
 
 export function SpiralDuctCalculator() {
@@ -35,7 +36,7 @@ export function SpiralDuctCalculator() {
   const [thickness, setThickness] = useState(0.5)
   const [spiralSectionLength, setSpiralSectionLength] = useState<6000 | 5000 | 4000 | 3000 | 2000>(6000)
   const [comment, setComment] = useState('')
-  const [guestUsageCount, setGuestUsageCount] = useState(() => getGuestUsageLimitState().count)
+  const [guestUsageCount] = useState(() => getGuestUsageLimitState().count)
 
   useEffect(() => {
     if (!editingItemId || editingDraft?.moduleKey !== 'spiral-duct') return
@@ -77,11 +78,13 @@ export function SpiralDuctCalculator() {
   )
 
   const visibleMessages = filterMessagesByRole(result.messages, role)
-  const guestLimitState = getGuestUsageLimitState()
-  const guestLimitReached = isGuestRole(role) && guestLimitState.exhausted
+  const roleLimit = getCalculationLimit(role)
+  const roleUsageCount = isGuestRole(role) ? guestUsageCount : project.items.length
+  const roleLimitReached = roleLimit !== null && roleUsageCount >= roleLimit
+  const addAllowed = canAddSpecItem(role) && !roleLimitReached
 
   const handleAdd = () => {
-    if (guestLimitReached) return
+    if (!canAddSpecItem(role) || roleLimitReached) return
     const item = createSpecificationItem('spiral-duct')
     item.quantity = Q
     item.comment = comment
@@ -105,54 +108,50 @@ export function SpiralDuctCalculator() {
       setProject(addItem(project, item))
     }
 
-    if (isGuestRole(role)) {
-      const nextUsage = incrementGuestUsage()
-      setGuestUsageCount(nextUsage.count)
-    }
   }
 
   const materialConfig = materialOptions.find((option) => option.key === material) ?? materialOptions[0]
 
   return (
     <div className="space-y-6">
-      <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+      <div className="brand-cream-panel">
+        <div className="brand-section-head flex flex-col gap-3 px-4 py-3 md:flex-row md:items-start md:justify-between">
           <div>
-            <h3 className="text-lg font-semibold text-slate-900">SPIRAL-001 / {t('product.spiralDuct')}</h3>
-            <p className="mt-1 text-sm text-slate-600">{t('product.spiralDuctDescription')}</p>
+            <h3 className="text-lg font-extrabold text-[#5b4e2a]">SPIRAL-001 / {t('product.spiralDuct')}</h3>
+            <p className="mt-1 text-sm font-semibold leading-6 text-[#6d6247]">{t('product.spiralDuctDescription')}</p>
           </div>
-          <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-700">
-            <div className="font-medium text-slate-900">{t('common.splitSummary')}</div>
+          <div className="rounded-lg border border-[#c9bea0] bg-white/70 px-3 py-2 text-sm font-semibold text-[#5b4e2a]">
+            <div className="font-extrabold text-[#5b4e2a]">{t('common.splitSummary')}</div>
             <div className="mt-1">{result.splitInfo?.summary}</div>
           </div>
         </div>
-        {isGuestRole(role) ? (
+        {(!canAddSpecItem(role) || roleLimitReached) ? (
           <div className="mt-5">
-            <Alert tone={guestLimitReached ? 'warning' : 'info'} title={t('message.guestLimit.title')}>
-              {t('message.guestLimit.description', {
-                limit: guestCalculationLimitPerDay,
-                used: guestUsageCount,
-                remaining: Math.max(guestCalculationLimitPerDay - guestUsageCount, 0),
+            <Alert tone={roleLimitReached ? 'warning' : 'info'} title={t(isGuestRole(role) ? 'access.guestLimitTitle' : 'access.userLimitTitle')}>
+              {t(isGuestRole(role) ? 'access.guestLimitDescription' : 'access.userLimitDescription', {
+                limit: roleLimit ?? 0,
+                used: roleUsageCount,
+                remaining: roleLimit === null ? 0 : Math.max(roleLimit - roleUsageCount, 0),
               })}
             </Alert>
           </div>
         ) : null}
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
-          <ParameterField label={camductMode && (role === 'admin' || role === 'service') ? 'A / ØD' : 'ØD'}>
-            <input type="number" value={A} onChange={(e) => setA(Number(e.target.value || 0))} className="w-full rounded-lg border border-slate-300 px-3 py-2" />
+        <div className="grid gap-3 p-4 md:grid-cols-2">
+          <ParameterField label={camductMode && canViewCamductMode(role) ? 'A / ØD' : 'ØD'}>
+            <input type="number" value={A} onChange={(e) => setA(Number(e.target.value || 0))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
           </ParameterField>
-          <ParameterField label={camductMode && (role === 'admin' || role === 'service') ? 'B / L' : 'L'}>
-            <input type="number" value={B} onChange={(e) => setB(Number(e.target.value || 0))} className="w-full rounded-lg border border-slate-300 px-3 py-2" />
+          <ParameterField label={camductMode && canViewCamductMode(role) ? 'B / L' : 'L'}>
+            <input type="number" value={B} onChange={(e) => setB(Number(e.target.value || 0))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
           </ParameterField>
           <ParameterField label="Q">
-            <input type="number" value={Q} onChange={(e) => setQ(Number(e.target.value || 1))} className="w-full rounded-lg border border-slate-300 px-3 py-2" />
+            <input type="number" value={Q} onChange={(e) => setQ(Number(e.target.value || 1))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
           </ParameterField>
           <ParameterField label={t('split.spiralBySelectedLength')}>
             <SectionLengthSelector value={spiralSectionLength} onChange={setSpiralSectionLength} />
           </ParameterField>
           <ParameterField label={t('common.material')}>
-            <select value={material} onChange={(e) => setMaterial(e.target.value)} className="w-full rounded-lg border border-slate-300 px-3 py-2">
+            <select value={material} onChange={(e) => setMaterial(e.target.value)} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2">
               {materialOptions.map((option) => (
                 <option key={option.key} value={option.key}>
                   {t(`material.${option.key}`)}
@@ -161,7 +160,7 @@ export function SpiralDuctCalculator() {
             </select>
           </ParameterField>
           <ParameterField label={t('common.thickness')}>
-            <select value={thickness} onChange={(e) => setThickness(Number(e.target.value))} className="w-full rounded-lg border border-slate-300 px-3 py-2">
+            <select value={thickness} onChange={(e) => setThickness(Number(e.target.value))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2">
               {materialConfig.thicknesses.map((value) => (
                 <option key={value} value={value}>
                   {value}
@@ -171,14 +170,14 @@ export function SpiralDuctCalculator() {
           </ParameterField>
         </div>
 
-        <div className="mt-4">
+        <div className="px-4 pb-1">
           <ParameterField label={t('common.comment')}>
-            <textarea value={comment} onChange={(e) => setComment(e.target.value)} className="min-h-24 w-full rounded-lg border border-slate-300 px-3 py-2" />
+            <textarea value={comment} onChange={(e) => setComment(e.target.value)} className="min-h-20 w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
           </ParameterField>
         </div>
 
-        <div className="mt-6">
-          <button type="button" disabled={guestLimitReached} onClick={handleAdd} className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300">
+        <div className="px-4 pb-4 pt-3">
+          <button type="button" disabled={!addAllowed} onClick={handleAdd} className="brand-action-button px-5 py-3 text-sm disabled:cursor-not-allowed">
             {editingItemId ? t('action.updateItem') : t('action.addToProject')}
           </button>
         </div>
@@ -188,7 +187,11 @@ export function SpiralDuctCalculator() {
 
       <MessageList messages={visibleMessages} />
 
-      {(role === 'admin' || role === 'service') && <AdminDebugPanel data={{ camductMode, result }} />}
+      {canViewDebugPanel(role) && <AdminDebugPanel data={{ camductMode, result }} />}
     </div>
   )
 }
+
+
+
+

@@ -1,31 +1,47 @@
 import { Link } from 'react-router-dom'
-import type { AtlasVariantConfig } from '../../config/atlas'
+import type { AtlasItemConfig } from '../../config/atlas'
 import { useTranslation } from 'react-i18next'
 
 interface VariantCardProps {
-  variant: AtlasVariantConfig
+  variant: AtlasItemConfig
 }
 
 export function VariantCard({ variant }: VariantCardProps) {
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
   const lang = i18n.language as 'ru' | 'uk' | 'en'
+  const available = variant.status === 'available' && Boolean(variant.moduleKey)
 
-  return (
-    <Link
-      to={`/split?module=${variant.moduleKey}`}
-      className="group rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-blue-400 hover:shadow-md"
-    >
-      <div className="aspect-[16/10] overflow-hidden rounded-lg bg-slate-100">
+  const content = (
+    <>
+      <div className="atlas-image-v1">
         <img
           src={variant.image}
           alt={variant.title[lang]}
-          className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
         />
       </div>
-      <div className="mt-4">
-        <div className="text-xs font-semibold uppercase tracking-wide text-blue-600">{variant.code}</div>
-        <h4 className="mt-1 text-base font-semibold text-slate-900">{variant.title[lang]}</h4>
+      <div className="atlas-caption-v1">
+        <div className="atlas-code-v1">{variant.code}</div>
+        <h3 className="atlas-title-v1">{variant.title[lang]}</h3>
+        <div className={['atlas-status-v1', available ? 'is-active' : ''].join(' ')}>
+          {available ? t('atlas.openCalculator') : t('atlas.moduleUnavailable')}
+        </div>
       </div>
+    </>
+  )
+
+  const className = 'atlas-tile-v1 group'
+
+  if (!available) {
+    return (
+      <article className={className} aria-disabled="true">
+        {content}
+      </article>
+    )
+  }
+
+  return (
+    <Link to={`/split?module=${variant.moduleKey}`} className={className} aria-label={`${t('atlas.openCalculator')}: ${variant.title[lang]}`}>
+      {content}
     </Link>
   )
 }

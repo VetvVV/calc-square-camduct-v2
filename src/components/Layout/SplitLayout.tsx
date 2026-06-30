@@ -7,9 +7,9 @@ interface SplitLayoutProps {
 
 export function SplitLayout({ left, right }: SplitLayoutProps) {
   return (
-    <div className="grid gap-6 2xl:grid-cols-[minmax(0,1.18fr)_minmax(360px,0.82fr)]">
-      <div className="min-w-0 space-y-6">{left}</div>
-      <div className="min-w-0 space-y-6 2xl:sticky 2xl:top-6 2xl:self-start">{right}</div>
+    <div className="grid w-full gap-3 xl:grid-cols-[minmax(0,2fr)_minmax(400px,0.95fr)] 2xl:grid-cols-[minmax(0,2.1fr)_minmax(430px,0.9fr)]">
+      <div className="min-w-0 space-y-3">{left}</div>
+      <aside className="min-w-0 space-y-3 xl:sticky xl:top-[116px] xl:self-start">{right}</aside>
     </div>
   )
 }

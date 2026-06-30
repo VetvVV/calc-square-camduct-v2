@@ -8,6 +8,9 @@ interface SpecRowProps {
   item: SpecificationItem
   onRemove: (itemId: string) => void
   onEdit: (item: SpecificationItem) => void
+  canEdit: boolean
+  canRemove: boolean
+  onLockedAction: () => void
 }
 
 function buildSizeLabel(item: SpecificationItem, t: (key: string) => string) {
@@ -23,7 +26,7 @@ function materialLabel(material: unknown, t: (key: string) => string) {
   return typeof material === 'string' ? t(`material.${material}`) : '—'
 }
 
-export function SpecRow({ index, item, onRemove, onEdit }: SpecRowProps) {
+export function SpecRow({ index, item, onRemove, onEdit, canEdit, canRemove, onLockedAction }: SpecRowProps) {
   const { i18n, t } = useTranslation()
 
   const splitSummary =
@@ -45,31 +48,35 @@ export function SpecRow({ index, item, onRemove, onEdit }: SpecRowProps) {
 
   return (
     <tr>
-      <td className="px-4 py-3">{index + 1}</td>
-      <td className="px-4 py-3 font-medium text-slate-900">{item.moduleKey === 'round-duct' ? t('product.roundDuctStraight') : t('product.spiralDuct')}</td>
-      <td className="px-4 py-3">{buildSizeLabel(item, t)}</td>
-      <td className="px-4 py-3">{description}</td>
-      <td className="px-4 py-3">{item.quantity}</td>
-      <td className="px-4 py-3">{materialLabel(item.options.material, t)}</td>
-      <td className="px-4 py-3">{item.options.thickness ?? '—'}</td>
-      <td className="px-4 py-3">{formatArea(item.calculated.areaDisplay, t('unit.m2'))}</td>
-      <td className="px-4 py-3">{formatMass(item.calculated.massDisplay, t('unit.kg'))}</td>
-      <td className="px-4 py-3">{item.comment || '—'}</td>
-      <td className="px-4 py-3">
+      <td className="px-3 py-2 text-center">{index + 1}</td>
+      <td className="px-3 py-2 font-extrabold text-[var(--brand-ink)]">{item.moduleKey === 'round-duct' ? t('product.roundDuctStraight') : t('product.spiralDuct')}</td>
+      <td className="px-3 py-2">{buildSizeLabel(item, t)}</td>
+      <td className="px-3 py-2">{description}</td>
+      <td className="px-3 py-2">{item.quantity}</td>
+      <td className="px-3 py-2">{materialLabel(item.options.material, t)}</td>
+      <td className="px-3 py-2">{item.options.thickness ?? '—'}</td>
+      <td className="px-3 py-2">{formatArea(item.calculated.areaDisplay, t('unit.m2'))}</td>
+      <td className="px-3 py-2">{formatMass(item.calculated.massDisplay, t('unit.kg'))}</td>
+      <td className="px-3 py-2">{item.comment || '—'}</td>
+      <td className="px-3 py-2">
         <div className="flex gap-2">
           <button
             type="button"
-            onClick={() => onEdit(item)}
-            className="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
+            onClick={() => (canEdit ? onEdit(item) : onLockedAction())}
+            className="brand-mini-button"
+            title="Edit"
+            aria-disabled={!canEdit}
           >
-            Edit
+            ✎
           </button>
           <button
             type="button"
-            onClick={() => onRemove(item.id)}
-            className="rounded-md border border-red-300 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-50"
+            onClick={() => (canRemove ? onRemove(item.id) : onLockedAction())}
+            className="brand-mini-button danger"
+            title="Remove"
+            aria-disabled={!canRemove}
           >
-            Remove
+            ×
           </button>
         </div>
       </td>

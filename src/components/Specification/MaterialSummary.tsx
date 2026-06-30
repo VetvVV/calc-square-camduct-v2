@@ -11,15 +11,15 @@ export function MaterialSummary() {
   const summary = useMemo(() => calculateMaterialSummary(items), [items])
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <h3 className="text-lg font-semibold text-slate-900">{t('materials.title')}</h3>
+    <div className="brand-section overflow-hidden">
+      <div className="bg-[#5d6673] px-4 py-3 text-white"><h3 className="text-base font-extrabold">{t('materials.title')}</h3></div>
 
       {summary.length === 0 ? (
-        <p className="mt-2 text-sm text-slate-600">{t('materials.noData')}</p>
+        <p className="p-4 text-sm font-bold text-[var(--brand-muted)]">{t('materials.noData')}</p>
       ) : (
-        <div className="mt-4 overflow-x-auto">
-          <table className="min-w-full text-sm">
-            <thead className="text-left text-slate-500">
+        <div className="overflow-x-auto">
+          <table className="brand-table min-w-[720px] w-full border-collapse text-sm">
+            <thead className="text-left">
               <tr>
                 <th className="px-3 py-2">{t('spec.material')}</th>
                 <th className="px-3 py-2">{t('spec.thickness')}</th>
@@ -30,7 +30,7 @@ export function MaterialSummary() {
             </thead>
             <tbody>
               {summary.map((row) => (
-                <tr key={`${row.material}-${row.thickness}`} className="border-t border-slate-100">
+                <tr key={`${row.material}-${row.thickness}`} >
                   <td className="px-3 py-2">{t(`material.${row.material}`)}</td>
                   <td className="px-3 py-2">{row.thickness}</td>
                   <td className="px-3 py-2">{row.itemCount}</td>

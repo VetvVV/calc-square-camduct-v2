@@ -1,6 +1,6 @@
 import type { AtlasCategoryConfig } from '../../config/atlas'
 import { useTranslation } from 'react-i18next'
-import { ProductFamilyCard } from './ProductFamilyCard'
+import { VariantCard } from './VariantCard'
 
 interface ProductCategorySectionProps {
   category: AtlasCategoryConfig
@@ -11,14 +11,14 @@ export function ProductCategorySection({ category }: ProductCategorySectionProps
   const lang = i18n.language as 'ru' | 'uk' | 'en'
 
   return (
-    <section className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold text-slate-900">{category.title[lang]}</h2>
+    <section className="atlas-section-v1">
+      <div className="atlas-section-head-v1">
+        <h2>{category.title[lang]}</h2>
+        <div className="atlas-count-v1">{category.items.length}</div>
       </div>
-
-      <div className="space-y-6">
-        {category.families.map((family) => (
-          <ProductFamilyCard key={family.familyKey} family={family} />
+      <div className="atlas-grid-v1">
+        {category.items.map((item) => (
+          <VariantCard key={item.code} variant={item} />
         ))}
       </div>
     </section>

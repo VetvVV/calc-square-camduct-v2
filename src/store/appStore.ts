@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import type { ModuleKey, UserRole } from '../types'
+import { canViewCamductMode } from '../roles/permissions'
 
 interface AppState {
   activeModule: ModuleKey
@@ -15,6 +16,10 @@ export const useAppStore = create<AppState>((set) => ({
   role: 'guest',
   camductMode: false,
   setActiveModule: (activeModule) => set({ activeModule }),
-  setRole: (role) => set({ role }),
-  toggleCamductMode: () => set((state) => ({ camductMode: !state.camductMode })),
+  setRole: (role) => set((state) => ({ role, camductMode: canViewCamductMode(role) ? state.camductMode : false })),
+  toggleCamductMode: () =>
+    set((state) => ({
+      camductMode: canViewCamductMode(state.role) ? !state.camductMode : false,
+    })),
 }))
+

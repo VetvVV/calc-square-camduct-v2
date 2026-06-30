@@ -7,6 +7,8 @@ import { validateProjectForExport } from '../../data/exportValidation'
 import { withRecalculatedTotals } from '../../domain/specification/specificationManager'
 import type { SpecificationProject } from '../../types'
 import { useProjectStore } from '../../store/projectStore'
+import { useAppStore } from '../../store/appStore'
+import { canExportProject, canImportProject, canUseProjectFiles } from '../../roles/permissions'
 import { downloadTextFile } from '../../utils/download'
 import { Alert } from '../Common/Alert'
 import { StatusBanner } from '../Common/StatusBanner'
@@ -19,12 +21,20 @@ interface ActionState {
   issues?: string[]
 }
 
-export function SpecActions() {
+interface SpecActionsProps {
+  locked?: boolean
+}
+
+export function SpecActions({ locked = false }: SpecActionsProps) {
   const { t } = useTranslation()
+  const role = useAppStore((state) => state.role)
   const project = useProjectStore((state) => state.project)
   const setProject = useProjectStore((state) => state.setProject)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [actionState, setActionState] = useState<ActionState | null>(null)
+  const filesAllowed = !locked && canUseProjectFiles(role)
+  const exportAllowed = !locked && canExportProject(role)
+  const importAllowed = !locked && canImportProject(role)
 
   const projectStats = useMemo(
     () => ({
@@ -35,7 +45,16 @@ export function SpecActions() {
     [project],
   )
 
+  const showLocked = () => {
+    setActionState({
+      tone: 'warning',
+      title: t('access.lockedTitle'),
+      description: t('access.clientOnlyFeature'),
+    })
+  }
+
   const handleSaveLocal = () => {
+    if (!filesAllowed) return showLocked()
     saveProjectToStorage(project)
     setActionState({
       tone: 'success',
@@ -45,6 +64,7 @@ export function SpecActions() {
   }
 
   const handleOpenLocal = () => {
+    if (!filesAllowed) return showLocked()
     const loaded = loadProjectFromStorage()
     setProject(loaded)
     setActionState({
@@ -55,6 +75,7 @@ export function SpecActions() {
   }
 
   const handleClearLocal = () => {
+    if (!filesAllowed) return showLocked()
     clearProjectFromStorage()
     setActionState({
       tone: 'warning',
@@ -64,6 +85,7 @@ export function SpecActions() {
   }
 
   const handleExportJson = () => {
+    if (!exportAllowed) return showLocked()
     const validation = validateProjectForExport(project)
     if (!validation.valid) {
       setActionState({
@@ -84,10 +106,12 @@ export function SpecActions() {
   }
 
   const handlePickFile = () => {
+    if (!importAllowed) return showLocked()
     fileInputRef.current?.click()
   }
 
   const handleImportJson = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!importAllowed) return showLocked()
     const file = event.target.files?.[0]
     if (!file) return
 
@@ -130,45 +154,51 @@ export function SpecActions() {
   }
 
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="brand-section p-4">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <h3 className="text-lg font-semibold text-slate-900">{t('action.projectActionsTitle')}</h3>
           <p className="mt-1 max-w-2xl text-sm text-slate-600">{t('action.projectActionsDescription')}</p>
         </div>
-        <div className="grid grid-cols-3 gap-2 rounded-2xl bg-slate-50 p-3 text-center text-xs text-slate-600 sm:w-auto sm:min-w-80">
-          <div className="rounded-xl bg-white px-3 py-2 shadow-sm">
+        <div className="grid grid-cols-3 gap-2 rounded-lg border border-[#d1d5db] bg-[#f6f7f8] p-2 text-center text-xs text-slate-600 lg:min-w-[360px]">
+          <div className="rounded-md bg-white px-3 py-2">
             <div className="font-semibold text-slate-900">{projectStats.items}</div>
             <div>{t('action.statsItems')}</div>
           </div>
-          <div className="rounded-xl bg-white px-3 py-2 shadow-sm">
+          <div className="rounded-md bg-white px-3 py-2">
             <div className="font-semibold text-slate-900">{projectStats.area.toFixed(3)}</div>
             <div>{t('common.area')}</div>
           </div>
-          <div className="rounded-xl bg-white px-3 py-2 shadow-sm">
+          <div className="rounded-md bg-white px-3 py-2">
             <div className="font-semibold text-slate-900">{projectStats.mass.toFixed(2)}</div>
             <div>{t('common.mass')}</div>
           </div>
         </div>
       </div>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-        <button type="button" onClick={handleSaveLocal} className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700">
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
+        <button type="button" onClick={handleSaveLocal} className="brand-action-button px-4 py-2 text-sm">
           {t('action.saveLocal')}
         </button>
-        <button type="button" onClick={handleOpenLocal} className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700">
+        <button type="button" onClick={handleOpenLocal} className="brand-action-button px-4 py-2 text-sm">
           {t('action.openLocal')}
         </button>
-        <button type="button" onClick={handleExportJson} className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700">
+        <button type="button" onClick={handleExportJson} className="brand-action-button px-4 py-2 text-sm">
           {t('action.exportJson')}
         </button>
-        <button type="button" onClick={handlePickFile} className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700">
+        <button type="button" onClick={handlePickFile} className="brand-action-button px-4 py-2 text-sm">
           {t('action.importJson')}
         </button>
-        <button type="button" onClick={handleClearLocal} className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800 transition hover:border-amber-400 hover:bg-amber-100">
+        <button type="button" onClick={handleClearLocal} className="rounded-lg border border-[#ead4b5] bg-[#fff7ed] px-4 py-2 text-sm font-extrabold text-[#9a5800] transition hover:bg-[#ffedd5]">
           {t('action.clearLocal')}
         </button>
       </div>
+
+      {locked ? (
+        <div className="mt-5">
+          <StatusBanner tone="warning" title={t('access.lockedTitle')} description={t('access.clientOnlyFeature')} />
+        </div>
+      ) : null}
 
       {actionState ? (
         <div className="mt-5 space-y-3">

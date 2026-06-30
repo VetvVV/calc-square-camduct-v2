@@ -1,4 +1,5 @@
 import type { UserRole } from '../types'
+import { getCalculationLimit } from '../roles/permissions'
 
 export const guestCalculationLimitPerDay = 5
 
@@ -9,5 +10,9 @@ export function isGuestRole(role: UserRole) {
 }
 
 export function bypassesGuestLimit(role: UserRole) {
-  return privilegedRoles.includes(role)
+  return role !== 'guest'
+}
+
+export function calculationLimitForRole(role: UserRole) {
+  return getCalculationLimit(role)
 }

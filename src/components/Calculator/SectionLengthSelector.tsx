@@ -10,7 +10,7 @@ export function SectionLengthSelector({ value, onChange }: SectionLengthSelector
     <select
       value={value}
       onChange={(event) => onChange(Number(event.target.value) as 6000 | 5000 | 4000 | 3000 | 2000)}
-      className="w-full rounded-lg border border-slate-300 px-3 py-2"
+      className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2"
     >
       {options.map((option) => (
         <option key={option} value={option}>
