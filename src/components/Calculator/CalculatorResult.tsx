@@ -12,7 +12,7 @@ export function CalculatorResult({ area, mass, description }: CalculatorResultPr
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <h4 className="text-lg font-semibold text-slate-900">Calculation result</h4>
+      <h4 className="text-lg font-semibold text-slate-900">{t('calculator.resultTitle')}</h4>
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <div className="rounded-xl bg-slate-50 p-4">
           <div className="text-sm text-slate-500">{t('common.area')}</div>

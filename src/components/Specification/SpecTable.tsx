@@ -44,16 +44,16 @@ export function SpecTable() {
           <thead className="bg-slate-50 text-left text-slate-600">
             <tr>
               <th className="px-4 py-3">№</th>
-              <th className="px-4 py-3">Item</th>
-              <th className="px-4 py-3">Sizes</th>
-              <th className="px-4 py-3">Description</th>
-              <th className="px-4 py-3">Qty</th>
-              <th className="px-4 py-3">Material</th>
-              <th className="px-4 py-3">Thickness</th>
-              <th className="px-4 py-3">Area</th>
-              <th className="px-4 py-3">Mass</th>
-              <th className="px-4 py-3">Comment</th>
-              <th className="px-4 py-3">Actions</th>
+              <th className="px-4 py-3">{t('spec.item')}</th>
+              <th className="px-4 py-3">{t('spec.sizes')}</th>
+              <th className="px-4 py-3">{t('spec.description')}</th>
+              <th className="px-4 py-3">{t('spec.qty')}</th>
+              <th className="px-4 py-3">{t('spec.material')}</th>
+              <th className="px-4 py-3">{t('spec.thickness')}</th>
+              <th className="px-4 py-3">{t('spec.area')}</th>
+              <th className="px-4 py-3">{t('spec.mass')}</th>
+              <th className="px-4 py-3">{t('spec.comment')}</th>
+              <th className="px-4 py-3">{t('spec.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 bg-white">

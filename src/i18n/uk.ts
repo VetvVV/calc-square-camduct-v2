@@ -13,8 +13,23 @@ export const uk = {
     homeTitle: 'Calc Square CAMduct V2 / ST Spetsmontazh',
     homeText: 'Готове робоче середовище для розрахунку круглих повітропроводів, розбиття на секції та формування проєктної специфікації.',
     atlasTitle: 'Атлас виробів',
+    atlasDescription: 'Оберіть сімейство виробу, потім конкретний варіант. Перехід виконується одразу в робочу зону без popup.',
     splitTitle: 'Робоча зона Split',
     specificationTitle: 'Специфікація проєкту',
+  },
+  spec: {
+    title: 'Проєктна специфікація',
+    item: 'Виріб',
+    sizes: 'Розміри',
+    description: 'Опис',
+    qty: 'К-сть',
+    material: 'Матеріал',
+    thickness: 'Товщина',
+    area: 'Площа',
+    mass: 'Маса',
+    comment: 'Коментар',
+    actions: 'Дії',
+    noItems: 'Позиції ще не додані. Оберіть виріб праворуч і додайте його до специфікації.',
   },
   common: {
     none: 'Немає',
@@ -27,6 +42,19 @@ export const uk = {
     comment: 'Коментар',
     internalJointType: 'Тип внутрішнього з’єднання',
     splitSummary: 'Підсумок розбиття',
+  },
+  summary: {
+    title: 'Підсумки',
+    items: 'Позицій',
+    areaTotal: 'Загальна площа',
+    massTotal: 'Загальна маса',
+  },
+  materials: {
+    title: 'Зведення матеріалів',
+    noData: 'Даних по матеріалах поки немає',
+  },
+  calculator: {
+    resultTitle: 'Результат розрахунку',
   },
   product: {
     roundDuctGroup: 'Повітропровід круглий',

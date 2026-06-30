@@ -10,7 +10,7 @@ export function AtlasPage() {
     <section className="space-y-6">
       <PageSection
         title={t('page.atlasTitle')}
-        description="Выберите семейство изделия, затем конкретный вариант. Переход выполняется сразу в рабочую зону без popup."
+        description={t('page.atlasDescription')}
       >
         <div />
       </PageSection>

@@ -13,8 +13,23 @@ export const en = {
     homeTitle: 'Calc Square CAMduct V2 / ST Spetsmontazh',
     homeText: 'A ready workspace for round duct calculation, section splitting, and project specification output.',
     atlasTitle: 'Product atlas',
+    atlasDescription: 'Choose a product family, then a specific variant. Selection opens the workspace directly without a popup.',
     splitTitle: 'Split workspace',
     specificationTitle: 'Project specification',
+  },
+  spec: {
+    title: 'Project specification',
+    item: 'Item',
+    sizes: 'Sizes',
+    description: 'Description',
+    qty: 'Qty',
+    material: 'Material',
+    thickness: 'Thickness',
+    area: 'Area',
+    mass: 'Mass',
+    comment: 'Comment',
+    actions: 'Actions',
+    noItems: 'No items have been added yet. Choose a product on the right and add it to the specification.',
   },
   common: {
     none: 'None',
@@ -27,6 +42,19 @@ export const en = {
     comment: 'Comment',
     internalJointType: 'Internal joint type',
     splitSummary: 'Split summary',
+  },
+  summary: {
+    title: 'Totals',
+    items: 'Items',
+    areaTotal: 'Area total',
+    massTotal: 'Mass total',
+  },
+  materials: {
+    title: 'Material summary',
+    noData: 'No material data yet.',
+  },
+  calculator: {
+    resultTitle: 'Calculation result',
   },
   product: {
     roundDuctGroup: 'Round duct',
