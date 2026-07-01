@@ -11,6 +11,7 @@ import { useAppStore } from '../../store/appStore'
 import { canExportProject, canImportProject, canUseProjectFiles } from '../../roles/permissions'
 import { downloadTextFile } from '../../utils/download'
 import { Alert } from '../Common/Alert'
+import { AccessInvitationDialog } from '../Common/AccessInvitationDialog'
 import { StatusBanner } from '../Common/StatusBanner'
 import { useTranslation } from 'react-i18next'
 
@@ -32,6 +33,7 @@ export function SpecActions({ locked = false }: SpecActionsProps) {
   const setProject = useProjectStore((state) => state.setProject)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [actionState, setActionState] = useState<ActionState | null>(null)
+  const [lockedDialogOpen, setLockedDialogOpen] = useState(false)
   const filesAllowed = !locked && canUseProjectFiles(role)
   const exportAllowed = !locked && canExportProject(role)
   const importAllowed = !locked && canImportProject(role)
@@ -46,11 +48,7 @@ export function SpecActions({ locked = false }: SpecActionsProps) {
   )
 
   const showLocked = () => {
-    setActionState({
-      tone: 'warning',
-      title: t('access.lockedTitle'),
-      description: t('access.clientOnlyFeature'),
-    })
+    setLockedDialogOpen(true)
   }
 
   const handleSaveLocal = () => {
@@ -177,28 +175,22 @@ export function SpecActions({ locked = false }: SpecActionsProps) {
       </div>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
-        <button type="button" onClick={handleSaveLocal} className="brand-action-button px-4 py-2 text-sm">
+        <button type="button" onClick={handleSaveLocal} aria-disabled={!filesAllowed} className="brand-action-button px-4 py-2 text-sm">
           {t('action.saveLocal')}
         </button>
-        <button type="button" onClick={handleOpenLocal} className="brand-action-button px-4 py-2 text-sm">
+        <button type="button" onClick={handleOpenLocal} aria-disabled={!filesAllowed} className="brand-action-button px-4 py-2 text-sm">
           {t('action.openLocal')}
         </button>
-        <button type="button" onClick={handleExportJson} className="brand-action-button px-4 py-2 text-sm">
+        <button type="button" onClick={handleExportJson} aria-disabled={!exportAllowed} className="brand-action-button px-4 py-2 text-sm">
           {t('action.exportJson')}
         </button>
-        <button type="button" onClick={handlePickFile} className="brand-action-button px-4 py-2 text-sm">
+        <button type="button" onClick={handlePickFile} aria-disabled={!importAllowed} className="brand-action-button px-4 py-2 text-sm">
           {t('action.importJson')}
         </button>
-        <button type="button" onClick={handleClearLocal} className="rounded-lg border border-[#ead4b5] bg-[#fff7ed] px-4 py-2 text-sm font-extrabold text-[#9a5800] transition hover:bg-[#ffedd5]">
+        <button type="button" onClick={handleClearLocal} aria-disabled={!filesAllowed} className="rounded-lg border border-[#ead4b5] bg-[#fff7ed] px-4 py-2 text-sm font-extrabold text-[#9a5800] transition hover:bg-[#ffedd5]">
           {t('action.clearLocal')}
         </button>
       </div>
-
-      {locked ? (
-        <div className="mt-5">
-          <StatusBanner tone="warning" title={t('access.lockedTitle')} description={t('access.clientOnlyFeature')} />
-        </div>
-      ) : null}
 
       {actionState ? (
         <div className="mt-5 space-y-3">
@@ -215,7 +207,12 @@ export function SpecActions({ locked = false }: SpecActionsProps) {
         </div>
       ) : null}
 
+      <AccessInvitationDialog open={lockedDialogOpen} onClose={() => setLockedDialogOpen(false)} />
+
       <input ref={fileInputRef} type="file" accept="application/json,.json" className="hidden" onChange={handleImportJson} />
     </div>
   )
 }
+
+
+

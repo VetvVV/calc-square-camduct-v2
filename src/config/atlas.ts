@@ -14,7 +14,7 @@ export interface LocalizedText {
 export interface AtlasItemConfig {
   code: string
   title: LocalizedText
-  image: string
+  image?: string
   status: AtlasStatus
   moduleKey?: AtlasModuleKey
 }
@@ -46,7 +46,7 @@ export const atlasConfig: AtlasCategoryConfig[] = [
         image: buildPublicAssetPath('assets/atlas/01-round-duct-v2.png'),
       },
       {
-        code: 'SPIRAL-001',
+        code: 'R-sp-001',
         status: 'available',
         moduleKey: 'spiral-duct',
         title: {
@@ -178,4 +178,36 @@ export const atlasConfig: AtlasCategoryConfig[] = [
       },
     ],
   },
+  {
+    categoryKey: 'rectangular',
+    title: {
+      ru: 'Прямоугольные изделия',
+      uk: 'Прямокутні вироби',
+      en: 'Rectangular products',
+    },
+    items: [
+      { code: 'RECT-001', status: 'coming_soon', title: { ru: 'Прямоугольный воздуховод', uk: 'Прямокутний повітропровід', en: 'Rectangular duct' } },
+      { code: 'RECT-002', status: 'coming_soon', title: { ru: 'Отвод прямоугольный', uk: 'Відвід прямокутний', en: 'Rectangular elbow' } },
+      { code: 'RECT-003', status: 'coming_soon', title: { ru: 'Переход прямоугольный', uk: 'Перехід прямокутний', en: 'Rectangular transition' } },
+      { code: 'RECT-004', status: 'coming_soon', title: { ru: 'Тройник прямоугольный', uk: 'Трійник прямокутний', en: 'Rectangular tee' } },
+      { code: 'RECT-005', status: 'coming_soon', title: { ru: 'Заглушка прямоугольная', uk: 'Заглушка прямокутна', en: 'Rectangular cap' } },
+      { code: 'RECT-006', status: 'coming_soon', title: { ru: 'Врезка прямоугольная', uk: 'Врізка прямокутна', en: 'Rectangular inset' } },
+    ],
+  },
+  {
+    categoryKey: 'combined',
+    title: {
+      ru: 'Комбинированные изделия',
+      uk: 'Комбіновані вироби',
+      en: 'Combined products',
+    },
+    items: [
+      { code: 'COMB-001', status: 'coming_soon', title: { ru: 'Переход круг/прямоугольник', uk: 'Перехід круг/прямокутник', en: 'Round to rectangular transition' } },
+      { code: 'COMB-002', status: 'coming_soon', title: { ru: 'Врезка круглая в прямоугольный воздуховод', uk: 'Кругла врізка в прямокутний повітропровід', en: 'Round inset into rectangular duct' } },
+      { code: 'COMB-003', status: 'coming_soon', title: { ru: 'Адаптер', uk: 'Адаптер', en: 'Adapter' } },
+      { code: 'COMB-004', status: 'coming_soon', title: { ru: 'Седло / переходной узел', uk: 'Сідло / перехідний вузол', en: 'Saddle / transition node' } },
+    ],
+  }
 ]
+
+

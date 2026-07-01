@@ -1,7 +1,7 @@
 export const en = {
   app: {
-    title: 'Calc Square CAMduct V2',
-    subtitle: 'Web calculator for ventilation products and CAMduct-ready specifications',
+    title: 'Calc Square V2',
+    subtitle: 'Web calculator for ventilation products and project specifications',
     versionBadge: 'v2.0.0 MVP',
   },
   nav: {
@@ -11,7 +11,7 @@ export const en = {
     specification: 'Specification',
   },
   role: {
-    guest: 'Guest mode',
+    guest: 'View only',
     user: 'User',
     client: 'Client',
     service: 'Service',
@@ -28,10 +28,19 @@ export const en = {
     userLimitTitle: 'User mode limit reached',
     userLimitDescription: 'User mode allows 20 calculations. Contact us to extend access.',
     clientOnlyFeature: 'This feature is available in client mode. Contact us to enable access.',
+    invitationTitle: 'Cooperation invitation',
+    invitationSubtitle: 'This feature is available to ST Spetsmontazh clients.',
+    invitationDescription: 'If you are already selecting products for a project, contact us in any convenient way. A manager will help with the order and provide a personal QR code to unlock saving, printing, and other working features.',
+    invitationHours: 'Mon–Fri 9:00–18:00',
+    openAccount: 'Open account',
+    companySite: 'Company site',
+    later: 'Later',
     serviceOnlyFeature: 'This feature is available in service mode.',
+    workspaceLockedDescription: 'The workspace is available only for project roles. In guest mode, choose a product in the Atlas and use the separate calculator.',
+    specificationLockedDescription: 'The specification is available only for project roles. In guest mode, open the Atlas and calculate a product.',
   },
   page: {
-    homeTitle: 'Calc Square CAMduct V2 / ST Spetsmontazh',
+    homeTitle: 'Calc Square V2 / ST Spetsmontazh',
     homeText: 'A ready workspace for round duct calculation, section splitting, and project specification output.',
     atlasTitle: 'Product atlas',
     atlasDescription: 'Choose a product family, then a specific variant. Selection opens the workspace directly without a popup.',
@@ -39,17 +48,17 @@ export const en = {
     specificationTitle: 'Project specification',
   },
   home: {
-    title: 'Calc Square CAMduct V2',
-    subtitle: 'Start workspace for ventilation product calculations and CAMduct project specifications.',
+    title: 'Calc Square V2',
+    subtitle: 'Start workspace for ventilation product calculations and project specifications.',
     heroTitle: 'Product atlas, area calculation, and ventilation specification',
-    heroSubtitle: 'A web calculator for selecting products, calculating area, splitting sections, and preparing CAMduct project specifications.',
+    heroSubtitle: 'A web calculator for selecting products, calculating area, splitting sections, and preparing project specifications.',
     openAtlas: 'Open atlas',
     createSpecification: 'Build specification',
     startRound: 'Start calculation',
     openRound: 'Workspace R-001',
-    openSpiral: 'Workspace SPIRAL-001',
+    openSpiral: 'Workspace R-sp-001',
     openRoundDuct: 'Workspace: R-001',
-    openSpiralDuct: 'Workspace: SPIRAL-001',
+    openSpiralDuct: 'Workspace: R-sp-001',
     availableModules: 'Available work modules',
     openCalculator: 'Open calculator',
     stepsTitle: 'Workflow',
@@ -82,8 +91,8 @@ export const en = {
     ctaCreateSpec: 'Create specification',
     contactTitle: 'Need a calculation or consultation for ventilation products?',
     contactSubtitle: 'Share project details and we will help prepare a calculation scenario.',
-    contactPhone: 'Phone: +380 XX XXX XX XX',
-    contactEmail: 'Email: info@stspecmontazh.example',
+    contactPhone: 'Phone: +38 (044) 502-25-92 / +38 (067) 468-55-51',
+    contactEmail: 'Email: office@stspetsmontag.com.ua',
     contactProject: 'Object / project',
     contactAction: 'Contact us',
     quickActions: 'Quick links',
@@ -93,13 +102,13 @@ export const en = {
     mvpTitle: 'Available in MVP',
     mvpCapabilities: 'MVP capabilities',
     mvpR001: 'R-001: straight seam duct, area and 1250 mm section split.',
-    mvpSpiral: 'SPIRAL-001: spiral duct, area and selected branch split.',
+    mvpSpiral: 'R-sp-001: spiral duct, area and selected branch split.',
     mvpSpec: 'Project specification: add, edit, and remove items.',
     mvpJson: 'Save, open local copy, export, and import JSON.',
     mvpI18n: 'RU / UK / EN interface.',
     mvpAdmin: 'Admin / service debug for internal data checks.',
     capabilityR001: 'R-001: area calculation and technological split by 1250 mm.',
-    capabilitySpiral: 'SPIRAL-001: area calculation and selected branch split.',
+    capabilitySpiral: 'R-sp-001: area calculation and selected branch split.',
     capabilitySpec: 'Project specification with add, edit, and remove workflows.',
     capabilityJson: 'Save, open local copy, export, and import JSON.',
     capabilityI18n: 'RU / UK / EN interface.',
@@ -131,6 +140,16 @@ export const en = {
     actions: 'Actions',
     noItems: 'No items have been added yet. Choose a product on the right and add it to the specification.',
   },
+  unitSystem: {
+    title: 'Size system',
+    metric: 'Metric',
+    inches: 'Inches',
+    inchesComingSoon: 'Inches: coming soon',
+  },
+  parameter: {
+    diameterLabel: 'D — Diameter, mm',
+    lengthLabel: 'L — Length, mm',
+  },
   common: {
     none: 'None',
     quantity: 'Quantity',
@@ -155,13 +174,18 @@ export const en = {
   },
   calculator: {
     resultTitle: 'Calculation result',
+    singleModeDescription: 'A calm single-product calculation mode without a permanently visible specification.',
+    selectFromAtlas: 'Choose a product in the Atlas.',
+    emptyDescription: 'Open the Atlas and choose a specific product to calculate.',
+    backToAtlas: '← Atlas',
+    roundCategory: 'Round →',
   },
   product: {
     roundDuctGroup: 'Round duct',
     roundDuctStraight: 'Straight seam duct',
     roundDuctStraightDescription: 'R-001 module for straight seam round duct with V1 logic preserved.',
     spiralDuct: 'Spiral duct',
-    spiralDuctDescription: 'SPIRAL-001 module for spiral duct with split-by-selected-section behavior.',
+    spiralDuctDescription: 'R-sp-001 module for spiral duct with split-by-selected-section behavior.',
   },
   connector: {
     c1: 'End connection 1',
@@ -195,8 +219,9 @@ export const en = {
       description: 'Guest mode allows up to {{limit}} added items per day. Already used: {{used}}. Remaining: {{remaining}}.',
     },
     debug: {
-      title: 'Debug information',
-      description: 'Internal JSON payload for CAMduct key checks, trace data, and service diagnostics.',
+      title: 'Debug',
+      badge: 'Service',
+      description: 'Internal JSON payload for key checks, trace data, and service diagnostics.',
       collapsedHint: 'The panel is collapsed. Expand it to inspect calculation internals and the service payload.',
     },
   },
@@ -210,6 +235,8 @@ export const en = {
     importJson: 'Import JSON',
     showDebug: 'Show debug',
     hideDebug: 'Hide debug',
+    serviceMode: 'Service',
+    closeDialog: 'Close',
     projectActionsTitle: 'Project data and file exchange',
     projectActionsDescription: 'Save the current state locally, move the project through JSON, and quickly return to the latest working version.',
     statsItems: 'Items',
@@ -260,6 +287,11 @@ export const en = {
     pcs: 'pcs',
   },
 } as const
+
+
+
+
+
 
 
 

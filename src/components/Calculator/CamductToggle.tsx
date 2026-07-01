@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next'
 import { useAppStore } from '../../store/appStore'
 
 export function CamductToggle() {
+  const { t } = useTranslation()
   const camductMode = useAppStore((state) => state.camductMode)
   const toggleCamductMode = useAppStore((state) => state.toggleCamductMode)
 
@@ -15,7 +17,7 @@ export function CamductToggle() {
           : 'border-slate-300 bg-white text-slate-700',
       ].join(' ')}
     >
-      CAMduct {camductMode ? 'ON' : 'OFF'}
+      {t('action.serviceMode')} {camductMode ? 'ON' : 'OFF'}
     </button>
   )
 }

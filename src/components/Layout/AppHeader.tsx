@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppStore } from '../../store/appStore'
 import { CamductToggle } from '../Calculator/CamductToggle'
@@ -5,11 +6,19 @@ import { canViewCamductMode } from '../../roles/permissions'
 
 const assetPath = (path: string) => `${import.meta.env.BASE_URL}${path}`
 
+const languageOptions = [
+  { code: 'ru', short: 'RU', label: 'Русский' },
+  { code: 'uk', short: 'UK', label: 'Українська' },
+  { code: 'en', short: 'EN', label: 'English' },
+] as const
+
 export function AppHeader() {
   const { i18n, t } = useTranslation()
   const role = useAppStore((state) => state.role)
   const setRole = useAppStore((state) => state.setRole)
   const canUseCamduct = canViewCamductMode(role)
+  const [languageOpen, setLanguageOpen] = useState(false)
+  const currentLanguage = languageOptions.find((option) => option.code === i18n.language) ?? languageOptions[0]
 
   return (
     <header className="brand-topbar sticky top-0 z-30">
@@ -19,7 +28,7 @@ export function AppHeader() {
           <div className="hidden h-8 w-px bg-slate-200 sm:block" />
           <div className="min-w-0 leading-none">
             <div className="brand-title text-lg leading-none sm:text-xl">Calc Square</div>
-            <div className="mt-0.5 text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--brand-accent)]">CAMduct V2</div>
+            <div className="mt-0.5 text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--brand-accent)]">V2</div>
           </div>
         </div>
 
@@ -37,17 +46,43 @@ export function AppHeader() {
             <option value="service">{t('role.service')}</option>
           </select>
 
-          <div className="flex items-center gap-1">
-            {['ru', 'uk', 'en'].map((lang) => (
-              <button
-                key={lang}
-                type="button"
-                onClick={() => void i18n.changeLanguage(lang)}
-                className={['brand-lang-button px-3 py-1', i18n.language === lang ? 'is-active' : ''].join(' ')}
-              >
-                {lang}
-              </button>
-            ))}
+          <div
+            className="brand-language-select"
+            onBlur={(event) => {
+              if (!event.relatedTarget || !event.currentTarget.contains(event.relatedTarget as Node)) {
+                setLanguageOpen(false)
+              }
+            }}
+          >
+            <button
+              type="button"
+              className="brand-language-trigger"
+              aria-haspopup="listbox"
+              aria-expanded={languageOpen}
+              onClick={() => setLanguageOpen((open) => !open)}
+            >
+              {currentLanguage.short}
+            </button>
+            {languageOpen ? (
+              <div className="brand-language-menu" role="listbox" aria-label="Language">
+                {languageOptions.map((option) => (
+                  <button
+                    key={option.code}
+                    type="button"
+                    role="option"
+                    aria-selected={i18n.language === option.code}
+                    className={['brand-language-option', i18n.language === option.code ? 'is-active' : ''].join(' ')}
+                    onClick={() => {
+                      void i18n.changeLanguage(option.code)
+                      setLanguageOpen(false)
+                    }}
+                  >
+                    <span>{option.short}</span>
+                    <span>{option.label}</span>
+                  </button>
+                ))}
+              </div>
+            ) : null}
           </div>
 
           {canUseCamduct && <CamductToggle />}

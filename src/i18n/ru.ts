@@ -1,7 +1,7 @@
 export const ru = {
   app: {
-    title: 'Calc Square CAMduct V2',
-    subtitle: 'Веб-калькулятор изделий для вентиляции и спецификаций CAMduct',
+    title: 'Calc Square V2',
+    subtitle: 'Веб-калькулятор изделий для вентиляции и проектных спецификаций',
     versionBadge: 'v2.0.0 MVP',
   },
   nav: {
@@ -11,7 +11,7 @@ export const ru = {
     specification: 'Спецификация',
   },
   role: {
-    guest: 'Гостевой режим',
+    guest: 'Просмотр',
     user: 'Пользователь',
     client: 'Клиент',
     service: 'Сервис',
@@ -28,10 +28,19 @@ export const ru = {
     userLimitTitle: 'Лимит пользовательского режима исчерпан',
     userLimitDescription: 'В пользовательском режиме доступно 20 расчётов. Для расширения возможностей свяжитесь с нами.',
     clientOnlyFeature: 'Эта функция доступна в клиентском режиме. Свяжитесь с нами для подключения.',
+    invitationTitle: 'Приглашение к сотрудничеству',
+    invitationSubtitle: 'Эта возможность доступна клиентам ST Spetsmontazh.',
+    invitationDescription: 'Если вы уже подбираете изделия для проекта, свяжитесь с нами любым удобным способом. Менеджер поможет с заказом и выдаст персональный QR-код, чтобы открыть сохранение, печать и другие рабочие функции.',
+    invitationHours: 'Пн–пт 9:00–18:00',
+    openAccount: 'Открыть кабинет',
+    companySite: 'Сайт компании',
+    later: 'Позже',
     serviceOnlyFeature: 'Эта функция доступна в сервисном режиме.',
+    workspaceLockedDescription: 'Рабочая зона доступна только проектным ролям. В гостевом режиме выберите изделие в Атласе и используйте отдельный калькулятор.',
+    specificationLockedDescription: 'Спецификация доступна только проектным ролям. В гостевом режиме можно открыть Атлас и выполнить расчёт изделия.',
   },
   page: {
-    homeTitle: 'Calc Square CAMduct V2 / ST Spetsmontazh',
+    homeTitle: 'Calc Square V2 / ST Spetsmontazh',
     homeText: 'Готовая рабочая среда для расчёта круглых воздуховодов, разбиения на секции и выпуска проектной спецификации.',
     atlasTitle: 'Атлас изделий',
     atlasDescription: 'Выберите семейство изделия, затем конкретный вариант. Переход выполняется сразу в рабочую зону без popup.',
@@ -39,17 +48,17 @@ export const ru = {
     specificationTitle: 'Спецификация проекта',
   },
   home: {
-    title: 'Calc Square CAMduct V2',
-    subtitle: 'Стартовая рабочая панель для расчёта вентиляционных изделий и проектных спецификаций CAMduct.',
+    title: 'Calc Square V2',
+    subtitle: 'Стартовая рабочая панель для расчёта вентиляционных изделий и проектных спецификаций.',
     heroTitle: 'Атлас изделий, расчёт площади и спецификация для вентиляции',
-    heroSubtitle: 'Веб-калькулятор для подбора изделий, расчёта площади, разбиения и подготовки проектной спецификации CAMduct.',
+    heroSubtitle: 'Веб-калькулятор для подбора изделий, расчёта площади, разбиения и подготовки проектной спецификации.',
     openAtlas: 'Открыть атлас',
     createSpecification: 'Собрать спецификацию',
     startRound: 'Начать расчёт',
     openRound: 'Рабочая зона R-001',
-    openSpiral: 'Рабочая зона SPIRAL-001',
+    openSpiral: 'Рабочая зона R-sp-001',
     openRoundDuct: 'Рабочая зона: R-001',
-    openSpiralDuct: 'Рабочая зона: SPIRAL-001',
+    openSpiralDuct: 'Рабочая зона: R-sp-001',
     availableModules: 'Доступные рабочие модули',
     openCalculator: 'Открыть калькулятор',
     stepsTitle: 'Как работать',
@@ -82,8 +91,8 @@ export const ru = {
     ctaCreateSpec: 'Создать спецификацию',
     contactTitle: 'Нужен расчёт или консультация по вентиляционным изделиям?',
     contactSubtitle: 'Оставьте данные проекта и мы поможем подготовить расчётный сценарий.',
-    contactPhone: 'Телефон: +380 XX XXX XX XX',
-    contactEmail: 'Email: info@stspecmontazh.example',
+    contactPhone: 'Телефон: +38 (044) 502-25-92 / +38 (067) 468-55-51',
+    contactEmail: 'Email: office@stspetsmontag.com.ua',
     contactProject: 'Объект / проект',
     contactAction: 'Связаться',
     quickActions: 'Быстрые ссылки',
@@ -93,13 +102,13 @@ export const ru = {
     mvpTitle: 'Что доступно в MVP',
     mvpCapabilities: 'MVP возможности',
     mvpR001: 'R-001: труба прямошовная, площадь и разбиение по 1250 мм.',
-    mvpSpiral: 'SPIRAL-001: спирально-навивная труба, площадь и выбранное разбиение ветки.',
+    mvpSpiral: 'R-sp-001: спирально-навивная труба, площадь и выбранное разбиение ветки.',
     mvpSpec: 'Проектная спецификация: добавить, редактировать, удалить позицию.',
     mvpJson: 'Сохранение, локальное открытие, экспорт и импорт JSON.',
     mvpI18n: 'Интерфейс RU / UK / EN.',
     mvpAdmin: 'Admin / service debug для проверки внутренних данных.',
     capabilityR001: 'R-001: расчёт площади и технологическое разбиение по 1250 мм.',
-    capabilitySpiral: 'SPIRAL-001: расчёт площади и выбранное разбиение ветки.',
+    capabilitySpiral: 'R-sp-001: расчёт площади и выбранное разбиение ветки.',
     capabilitySpec: 'Проектная спецификация с добавлением, редактированием и удалением позиций.',
     capabilityJson: 'Сохранение, локальное открытие, экспорт и импорт JSON.',
     capabilityI18n: 'Интерфейс RU / UK / EN.',
@@ -131,6 +140,16 @@ export const ru = {
     actions: 'Действия',
     noItems: 'Позиции ещё не добавлены. Выберите изделие справа и добавьте его в спецификацию.',
   },
+  unitSystem: {
+    title: 'Система размеров',
+    metric: 'Метрическая',
+    inches: 'Дюймы',
+    inchesComingSoon: 'Дюймы: скоро',
+  },
+  parameter: {
+    diameterLabel: 'D — Диаметр, мм',
+    lengthLabel: 'L — Длина, мм',
+  },
   common: {
     none: 'Нет',
     quantity: 'Количество',
@@ -155,13 +174,18 @@ export const ru = {
   },
   calculator: {
     resultTitle: 'Результат расчёта',
+    singleModeDescription: 'Спокойный режим расчёта одного изделия без постоянно открытой спецификации.',
+    selectFromAtlas: 'Выберите изделие в Атласе.',
+    emptyDescription: 'Откройте Атлас и выберите конкретное изделие для расчёта.',
+    backToAtlas: '← Атлас',
+    roundCategory: 'Круглые →',
   },
   product: {
     roundDuctGroup: 'Воздуховод круглый',
     roundDuctStraight: 'Труба прямошовная',
     roundDuctStraightDescription: 'Модуль R-001 для прямошовного круглого воздуховода с сохранением логики V1.',
     spiralDuct: 'Спирально-навивная труба',
-    spiralDuctDescription: 'Модуль SPIRAL-001 для спирального воздуховода с разбиением по выбранной длине секции.',
+    spiralDuctDescription: 'Модуль R-sp-001 для спирального воздуховода с разбиением по выбранной длине секции.',
   },
   connector: {
     c1: 'Торцевое соединение 1',
@@ -195,8 +219,9 @@ export const ru = {
       description: 'Гостевой режим позволяет добавить до {{limit}} позиций в сутки. Уже использовано: {{used}}. Осталось: {{remaining}}.',
     },
     debug: {
-      title: 'Отладочная информация',
-      description: 'Внутренний JSON-пакет для проверки CAMduct-ключей, trace-данных и сервисной диагностики.',
+      title: 'Отладка',
+      badge: 'Сервис',
+      description: 'Внутренний JSON-пакет для проверки ключей, trace-данных и сервисной диагностики.',
       collapsedHint: 'Панель свернута. Откройте её, чтобы посмотреть внутренние данные расчёта и служебный payload.',
     },
   },
@@ -210,6 +235,8 @@ export const ru = {
     importJson: 'Импорт JSON',
     showDebug: 'Показать debug',
     hideDebug: 'Скрыть debug',
+    serviceMode: 'Сервис',
+    closeDialog: 'Понятно',
     projectActionsTitle: 'Данные проекта и обмен файлами',
     projectActionsDescription: 'Сохраняйте рабочее состояние локально, переносите проект через JSON и быстро возвращайтесь к последней версии.',
     statsItems: 'Позиций',
@@ -260,6 +287,11 @@ export const ru = {
     pcs: 'шт',
   },
 } as const
+
+
+
+
+
 
 
 

@@ -1,7 +1,7 @@
 export const uk = {
   app: {
-    title: 'Calc Square CAMduct V2',
-    subtitle: 'Веб-калькулятор виробів для вентиляції та специфікацій CAMduct',
+    title: 'Calc Square V2',
+    subtitle: 'Веб-калькулятор виробів для вентиляції та проєктних специфікацій',
     versionBadge: 'v2.0.0 MVP',
   },
   nav: {
@@ -11,7 +11,7 @@ export const uk = {
     specification: 'Специфікація',
   },
   role: {
-    guest: 'Гостьовий режим',
+    guest: 'Перегляд',
     user: 'Користувач',
     client: 'Клієнт',
     service: 'Сервіс',
@@ -28,10 +28,19 @@ export const uk = {
     userLimitTitle: 'Ліміт користувацького режиму вичерпано',
     userLimitDescription: 'У користувацькому режимі доступно 20 розрахунків. Для розширення можливостей зв’яжіться з нами.',
     clientOnlyFeature: 'Ця функція доступна в клієнтському режимі. Зв’яжіться з нами для підключення.',
+    invitationTitle: 'Запрошення до співпраці',
+    invitationSubtitle: 'Ця можливість доступна клієнтам ST Spetsmontazh.',
+    invitationDescription: 'Якщо ви вже підбираєте вироби для проєкту, зв’яжіться з нами будь-яким зручним способом. Менеджер допоможе із замовленням і надасть персональний QR-код, щоб відкрити збереження, друк та інші робочі функції.',
+    invitationHours: 'Пн–пт 9:00–18:00',
+    openAccount: 'Відкрити кабінет',
+    companySite: 'Сайт компанії',
+    later: 'Пізніше',
     serviceOnlyFeature: 'Ця функція доступна в сервісному режимі.',
+    workspaceLockedDescription: 'Робоча зона доступна лише проєктним ролям. У гостьовому режимі оберіть виріб в Атласі та використовуйте окремий калькулятор.',
+    specificationLockedDescription: 'Специфікація доступна лише проєктним ролям. У гостьовому режимі можна відкрити Атлас і виконати розрахунок виробу.',
   },
   page: {
-    homeTitle: 'Calc Square CAMduct V2 / ST Spetsmontazh',
+    homeTitle: 'Calc Square V2 / ST Spetsmontazh',
     homeText: 'Готове робоче середовище для розрахунку круглих повітропроводів, розбиття на секції та формування проєктної специфікації.',
     atlasTitle: 'Атлас виробів',
     atlasDescription: 'Оберіть сімейство виробу, потім конкретний варіант. Перехід виконується одразу в робочу зону без popup.',
@@ -39,17 +48,17 @@ export const uk = {
     specificationTitle: 'Специфікація проєкту',
   },
   home: {
-    title: 'Calc Square CAMduct V2',
-    subtitle: 'Стартова робоча панель для розрахунку вентиляційних виробів і проєктних специфікацій CAMduct.',
+    title: 'Calc Square V2',
+    subtitle: 'Стартова робоча панель для розрахунку вентиляційних виробів і проєктних специфікацій.',
     heroTitle: 'Атлас виробів, розрахунок площі та специфікація для вентиляції',
-    heroSubtitle: 'Веб-калькулятор для підбору виробів, розрахунку площі, розбиття та підготовки проєктної специфікації CAMduct.',
+    heroSubtitle: 'Веб-калькулятор для підбору виробів, розрахунку площі, розбиття та підготовки проєктної специфікації.',
     openAtlas: 'Відкрити атлас',
     createSpecification: 'Зібрати специфікацію',
     startRound: 'Почати розрахунок',
     openRound: 'Робоча зона R-001',
-    openSpiral: 'Робоча зона SPIRAL-001',
+    openSpiral: 'Робоча зона R-sp-001',
     openRoundDuct: 'Робоча зона: R-001',
-    openSpiralDuct: 'Робоча зона: SPIRAL-001',
+    openSpiralDuct: 'Робоча зона: R-sp-001',
     availableModules: 'Доступні робочі модулі',
     openCalculator: 'Відкрити калькулятор',
     stepsTitle: 'Як працювати',
@@ -82,8 +91,8 @@ export const uk = {
     ctaCreateSpec: 'Створити специфікацію',
     contactTitle: 'Потрібен розрахунок або консультація щодо вентиляційних виробів?',
     contactSubtitle: 'Залиште дані проєкту, і ми допоможемо підготувати розрахунковий сценарій.',
-    contactPhone: 'Телефон: +380 XX XXX XX XX',
-    contactEmail: 'Email: info@stspecmontazh.example',
+    contactPhone: 'Телефон: +38 (044) 502-25-92 / +38 (067) 468-55-51',
+    contactEmail: 'Email: office@stspetsmontag.com.ua',
     contactProject: 'Об’єкт / проєкт',
     contactAction: 'Зв’язатися',
     quickActions: 'Швидкі посилання',
@@ -93,13 +102,13 @@ export const uk = {
     mvpTitle: 'Що доступно в MVP',
     mvpCapabilities: 'MVP можливості',
     mvpR001: 'R-001: труба прямошовна, площа та розбиття по 1250 мм.',
-    mvpSpiral: 'SPIRAL-001: спірально-навивна труба, площа та вибране розбиття гілки.',
+    mvpSpiral: 'R-sp-001: спірально-навивна труба, площа та вибране розбиття гілки.',
     mvpSpec: 'Проєктна специфікація: додати, редагувати, видалити позицію.',
     mvpJson: 'Збереження, локальне відкриття, експорт та імпорт JSON.',
     mvpI18n: 'Інтерфейс RU / UK / EN.',
     mvpAdmin: 'Admin / service debug для перевірки внутрішніх даних.',
     capabilityR001: 'R-001: розрахунок площі та технологічне розбиття по 1250 мм.',
-    capabilitySpiral: 'SPIRAL-001: розрахунок площі та вибране розбиття гілки.',
+    capabilitySpiral: 'R-sp-001: розрахунок площі та вибране розбиття гілки.',
     capabilitySpec: 'Проєктна специфікація з додаванням, редагуванням і видаленням позицій.',
     capabilityJson: 'Збереження, локальне відкриття, експорт та імпорт JSON.',
     capabilityI18n: 'Інтерфейс RU / UK / EN.',
@@ -131,6 +140,16 @@ export const uk = {
     actions: 'Дії',
     noItems: 'Позиції ще не додані. Оберіть виріб праворуч і додайте його до специфікації.',
   },
+  unitSystem: {
+    title: 'Система розмірів',
+    metric: 'Метрична',
+    inches: 'Дюйми',
+    inchesComingSoon: 'Дюйми: скоро',
+  },
+  parameter: {
+    diameterLabel: 'D — Діаметр, мм',
+    lengthLabel: 'L — Довжина, мм',
+  },
   common: {
     none: 'Немає',
     quantity: 'Кількість',
@@ -155,13 +174,18 @@ export const uk = {
   },
   calculator: {
     resultTitle: 'Результат розрахунку',
+    singleModeDescription: 'Спокійний режим розрахунку одного виробу без постійно відкритої специфікації.',
+    selectFromAtlas: 'Оберіть виріб в Атласі.',
+    emptyDescription: 'Відкрийте Атлас і оберіть конкретний виріб для розрахунку.',
+    backToAtlas: '← Атлас',
+    roundCategory: 'Круглі →',
   },
   product: {
     roundDuctGroup: 'Повітропровід круглий',
     roundDuctStraight: 'Труба прямошовна',
     roundDuctStraightDescription: 'Модуль R-001 для прямошовного круглого повітропроводу зі збереженням логіки V1.',
     spiralDuct: 'Спірально-навивна труба',
-    spiralDuctDescription: 'Модуль SPIRAL-001 для спірального повітропроводу з розбиттям за вибраною довжиною секції.',
+    spiralDuctDescription: 'Модуль R-sp-001 для спірального повітропроводу з розбиттям за вибраною довжиною секції.',
   },
   connector: {
     c1: 'Торцеве з’єднання 1',
@@ -195,8 +219,9 @@ export const uk = {
       description: 'Гостьовий режим дозволяє додати до {{limit}} позицій на добу. Уже використано: {{used}}. Залишилось: {{remaining}}.',
     },
     debug: {
-      title: 'Налагоджувальна інформація',
-      description: 'Внутрішній JSON-пакет для перевірки CAMduct-ключів, trace-даних і сервісної діагностики.',
+      title: 'Налагодження',
+      badge: 'Сервіс',
+      description: 'Внутрішній JSON-пакет для перевірки ключів, trace-даних і сервісної діагностики.',
       collapsedHint: 'Панель згорнута. Відкрийте її, щоб переглянути внутрішні дані розрахунку та службовий payload.',
     },
   },
@@ -210,6 +235,8 @@ export const uk = {
     importJson: 'Імпорт JSON',
     showDebug: 'Показати debug',
     hideDebug: 'Сховати debug',
+    serviceMode: 'Сервіс',
+    closeDialog: 'Зрозуміло',
     projectActionsTitle: 'Дані проєкту та обмін файлами',
     projectActionsDescription: 'Зберігайте робочий стан локально, переносіть проєкт через JSON та швидко повертайтеся до останньої версії.',
     statsItems: 'Позицій',
@@ -260,6 +287,11 @@ export const uk = {
     pcs: 'шт',
   },
 } as const
+
+
+
+
+
 
 
 

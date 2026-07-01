@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { calculateSpiralDuct } from '../domain/calculators'
 
 describe('spiral duct UI contract baseline', () => {
-  it('returns result payload needed for SPIRAL-001 UI', () => {
+  it('returns result payload needed for R-sp-001 UI', () => {
     const result = calculateSpiralDuct({
       A: 250,
       B: 14500,

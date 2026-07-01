@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { getGuestUsageLimitState } from '../../utils/guestUsage'
 import { isGuestRole } from '../../constants/roles'
 import { canAddSpecItem, canViewCamductMode, canViewDebugPanel, getCalculationLimit } from '../../roles/permissions'
-import { Alert } from '../Common/Alert'
+import { AccessInvitationDialog } from '../Common/AccessInvitationDialog'
 
 export function RoundDuctCalculator() {
   const { t, i18n } = useTranslation()
@@ -38,6 +38,7 @@ export function RoundDuctCalculator() {
   const [internalJointType, setInternalJointType] = useState<'none' | 'nipple' | 'coupling' | 'overlap' | 'zig_tractor'>('none')
   const [comment, setComment] = useState('')
   const [guestUsageCount] = useState(() => getGuestUsageLimitState().count)
+  const [invitationOpen, setInvitationOpen] = useState(false)
 
   useEffect(() => {
     if (!editingItemId || editingDraft?.moduleKey !== 'round-duct') return
@@ -88,9 +89,13 @@ export function RoundDuctCalculator() {
   const roleUsageCount = isGuestRole(role) ? guestUsageCount : project.items.length
   const roleLimitReached = roleLimit !== null && roleUsageCount >= roleLimit
   const addAllowed = canAddSpecItem(role) && !roleLimitReached
+  const showRoundSplitInfo = Boolean(result.splitInfo && (B > 2000 || (canViewDebugPanel(role) && camductMode)))
 
   const handleAdd = () => {
-    if (!canAddSpecItem(role) || roleLimitReached) return
+    if (!canAddSpecItem(role) || roleLimitReached) {
+      setInvitationOpen(true)
+      return
+    }
     const item = createSpecificationItem('round-duct')
     item.quantity = quantity
     item.comment = comment
@@ -126,29 +131,29 @@ export function RoundDuctCalculator() {
             <h3 className="text-lg font-extrabold text-[#5b4e2a]">R-001 / {t('product.roundDuctStraight')}</h3>
             <p className="mt-1 text-sm font-semibold leading-6 text-[#6d6247]">{t('product.roundDuctStraightDescription')}</p>
           </div>
-          <div className="rounded-lg border border-[#c9bea0] bg-white/70 px-3 py-2 text-sm font-semibold text-[#5b4e2a]">
-            <div className="font-extrabold text-[#5b4e2a]">{t('split.roundStandard1250')}</div>
-            <div className="mt-1">{result.splitInfo?.summary}</div>
-          </div>
+          {showRoundSplitInfo && (
+            <div className="rounded-lg border border-[#c9bea0] bg-white/70 px-3 py-2 text-sm font-semibold text-[#5b4e2a]">
+              <div className="font-extrabold text-[#5b4e2a]">{t('split.roundStandard1250')}</div>
+              <div className="mt-1">{result.splitInfo?.summary}</div>
+            </div>
+          )}
         </div>
-        {(!canAddSpecItem(role) || roleLimitReached) ? (
-          <div className="mt-5">
-            <Alert tone={roleLimitReached ? 'warning' : 'info'} title={t(isGuestRole(role) ? 'access.guestLimitTitle' : 'access.userLimitTitle')}>
-              {t(isGuestRole(role) ? 'access.guestLimitDescription' : 'access.userLimitDescription', {
-                limit: roleLimit ?? 0,
-                used: roleUsageCount,
-                remaining: roleLimit === null ? 0 : Math.max(roleLimit - roleUsageCount, 0),
-              })}
-            </Alert>
-          </div>
-        ) : null}
 
-        <div className="grid gap-3 p-4 md:grid-cols-2">
-          <ParameterField label={camductMode && canViewCamductMode(role) ? 'A / ØD' : 'ØD'}>
-            <input type="number" value={A} onChange={(e) => setA(Number(e.target.value || 0))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
+        <div className="unit-switch-v1 mx-4 mt-4" aria-label={t('unitSystem.title')}>
+          <button type="button" className="is-active">
+            {t('unitSystem.metric')}
+          </button>
+          <button type="button" aria-disabled="true" title={t('unitSystem.inchesComingSoon')}>
+            {t('unitSystem.inches')}
+          </button>
+        </div>
+
+        <div className="grid gap-2 p-4">
+          <ParameterField label={camductMode && canViewCamductMode(role) ? `A / ${t('parameter.diameterLabel')}` : t('parameter.diameterLabel')}>
+            <input type="number" placeholder={t('unit.mm')} value={A} onChange={(e) => setA(Number(e.target.value || 0))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
           </ParameterField>
-          <ParameterField label={camductMode && canViewCamductMode(role) ? 'B / L' : 'L'}>
-            <input type="number" value={B} onChange={(e) => setB(Number(e.target.value || 0))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
+          <ParameterField label={camductMode && canViewCamductMode(role) ? `B / ${t('parameter.lengthLabel')}` : t('parameter.lengthLabel')}>
+            <input type="number" placeholder={t('unit.mm')} value={B} onChange={(e) => setB(Number(e.target.value || 0))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
           </ParameterField>
           <ParameterField label={t('common.quantity')}>
             <input type="number" value={quantity} onChange={(e) => setQuantity(Number(e.target.value || 1))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
@@ -203,7 +208,7 @@ export function RoundDuctCalculator() {
         </div>
 
         <div className="px-4 pb-4 pt-3">
-          <button type="button" disabled={!addAllowed} onClick={handleAdd} className="brand-action-button px-5 py-3 text-sm disabled:cursor-not-allowed">
+          <button type="button" aria-disabled={!addAllowed} onClick={handleAdd} className="brand-action-button px-5 py-3 text-sm">
             {editingItemId ? t('action.updateItem') : t('action.addToProject')}
           </button>
         </div>
@@ -217,10 +222,16 @@ export function RoundDuctCalculator() {
 
       <MessageList messages={visibleMessages} />
 
-      {canViewDebugPanel(role) && <AdminDebugPanel data={{ camductMode, result }} />}
+      {canViewDebugPanel(role) && camductMode && <AdminDebugPanel data={{ camductMode, result }} />}
+
+      <AccessInvitationDialog open={invitationOpen} onClose={() => setInvitationOpen(false)} />
     </div>
   )
 }
+
+
+
+
 
 
 

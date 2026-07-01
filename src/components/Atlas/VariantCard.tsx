@@ -14,10 +14,14 @@ export function VariantCard({ variant }: VariantCardProps) {
   const content = (
     <>
       <div className="atlas-image-v1">
-        <img
-          src={variant.image}
-          alt={variant.title[lang]}
-        />
+        {variant.image ? (
+          <img
+            src={variant.image}
+            alt={variant.title[lang]}
+          />
+        ) : (
+          <div className="atlas-placeholder-v1" aria-hidden="true">{variant.code}</div>
+        )}
       </div>
       <div className="atlas-caption-v1">
         <div className="atlas-code-v1">{variant.code}</div>
@@ -40,7 +44,7 @@ export function VariantCard({ variant }: VariantCardProps) {
   }
 
   return (
-    <Link to={`/split?module=${variant.moduleKey}`} className={className} aria-label={`${t('atlas.openCalculator')}: ${variant.title[lang]}`}>
+    <Link to={`/calculator?module=${variant.moduleKey}`} className={className} aria-label={`${t('atlas.openCalculator')}: ${variant.title[lang]}`}>
       {content}
     </Link>
   )

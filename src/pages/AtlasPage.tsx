@@ -1,9 +1,12 @@
+import { useSearchParams } from 'react-router-dom'
 import { atlasConfig } from '../config/atlas'
 import { ProductCategorySection } from '../components/Atlas/ProductCategorySection'
 import { useTranslation } from 'react-i18next'
 
 export function AtlasPage() {
   const { t } = useTranslation()
+  const [searchParams] = useSearchParams()
+  const activeCategory = searchParams.get('category')
 
   return (
     <section className="atlas-page-v1">
@@ -15,7 +18,7 @@ export function AtlasPage() {
       </header>
 
       {atlasConfig.map((category) => (
-        <ProductCategorySection key={category.categoryKey} category={category} />
+        <ProductCategorySection key={category.categoryKey} category={category} activeCategory={activeCategory} />
       ))}
     </section>
   )

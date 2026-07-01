@@ -136,8 +136,10 @@ export function HomePage() {
           <p>{t('home.contactSubtitle')}</p>
         </div>
         <div className="home-contact-list-v1">
-          <span>{t('home.contactPhone')}</span>
-          <span>{t('home.contactEmail')}</span>
+          <a href="tel:+380445022592">+38 (044) 502-25-92</a>
+          <a href="tel:+380674685551">+38 (067) 468-55-51</a>
+          <a href="mailto:office@stspetsmontag.com.ua">office@stspetsmontag.com.ua</a>
+          <a href="https://stspetsmontag.com.ua" target="_blank" rel="noreferrer">stspetsmontag.com.ua</a>
           <span>{t('home.contactProject')}</span>
           <button type="button">{t('home.contactAction')}</button>
         </div>

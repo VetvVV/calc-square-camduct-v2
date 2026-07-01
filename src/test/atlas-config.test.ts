@@ -8,7 +8,7 @@ describe('atlasConfig', () => {
     expect(roundCategory?.items).toHaveLength(14)
 
     const activeItems = roundCategory?.items.filter((item) => item.status === 'available') ?? []
-    expect(activeItems.map((item) => item.code)).toEqual(['R-001', 'SPIRAL-001'])
+    expect(activeItems.map((item) => item.code)).toEqual(['R-001', 'R-sp-001'])
     expect(activeItems.map((item) => item.moduleKey)).toEqual(['round-duct', 'spiral-duct'])
 
     const futureItems = roundCategory?.items.filter((item) => item.status === 'coming_soon') ?? []
