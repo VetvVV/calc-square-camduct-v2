@@ -61,7 +61,7 @@ export function SpecTable() {
       quantity: item.quantity,
       moduleMetadata: item.moduleMetadata,
     })
-    navigate(`/split?module=${item.moduleKey}`)
+    navigate(item.moduleKey === 'rect-duct' ? `/calculator?module=${item.moduleKey}` : `/split?module=${item.moduleKey}`)
   }
 
   return (
@@ -151,3 +151,4 @@ export function SpecTable() {
     </div>
   )
 }
+

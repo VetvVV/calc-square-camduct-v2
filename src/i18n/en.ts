@@ -149,6 +149,9 @@ export const en = {
   parameter: {
     diameterLabel: 'D — Diameter, mm',
     lengthLabel: 'L — Length, mm',
+    widthLabel: 'A — Width, mm',
+    heightLabel: 'B — Height, mm',
+    rectLengthLabel: 'L — Length, mm',
   },
   common: {
     none: 'None',
@@ -180,6 +183,7 @@ export const en = {
     emptyDescription: 'Open the Atlas and choose a specific product to calculate.',
     backToAtlas: '← Atlas',
     roundCategory: 'Round →',
+    rectangularCategory: 'Rectangular →',
   },
   product: {
     roundDuctGroup: 'Round duct',
@@ -187,6 +191,13 @@ export const en = {
     roundDuctStraightDescription: 'Calculation module',
     spiralDuct: 'Spiral duct',
     spiralDuctDescription: 'Calculation module',
+    rectDuct: 'Rectangular duct',
+    rectDuctDescription: 'Calculation module',
+  },
+  lock: {
+    american: 'American lock',
+    russian: 'Russian lock',
+    welded: 'welding',
   },
   connector: {
     c1: 'End connection 1',
@@ -288,6 +299,7 @@ export const en = {
     pcs: 'pcs',
   },
 } as const
+
 
 
 

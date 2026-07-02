@@ -2,19 +2,21 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ModuleCalculator } from '../components/Calculator/ModuleCalculator'
 
-const supportedModules = new Set(['round-duct', 'spiral-duct'])
+const supportedModules = new Set(['round-duct', 'spiral-duct', 'rect-duct'])
 
 export function CalculatorPage() {
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
   const moduleFromQuery = searchParams.get('module')
   const hasSupportedModule = Boolean(moduleFromQuery && supportedModules.has(moduleFromQuery))
+  const categoryLink = moduleFromQuery === 'rect-duct' ? '/atlas?category=rectangular' : '/atlas?category=round'
+  const categoryLabel = moduleFromQuery === 'rect-duct' ? t('calculator.rectangularCategory') : t('calculator.roundCategory')
 
   return (
     <section className="calculator-page-v1">
       <div className="calculator-page-toolbar-v1">
         <Link to="/atlas">{t('calculator.backToAtlas')}</Link>
-        <Link to="/atlas?category=round">{t('calculator.roundCategory')}</Link>
+        <Link to={categoryLink}>{categoryLabel}</Link>
       </div>
 
       <div className="calculator-page-body-v1">
@@ -31,4 +33,5 @@ export function CalculatorPage() {
     </section>
   )
 }
+
 

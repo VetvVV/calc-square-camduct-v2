@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { useAppStore } from '../../store/appStore'
 import { RoundDuctCalculator } from './RoundDuctCalculator'
 import { SpiralDuctCalculator } from './SpiralDuctCalculator'
+import { RectDuctCalculator } from './RectDuctCalculator'
 
 export function ModuleCalculator() {
   const [searchParams] = useSearchParams()
@@ -10,7 +11,7 @@ export function ModuleCalculator() {
   const moduleFromQuery = searchParams.get('module')
 
   const activeModule = useMemo(() => {
-    return moduleFromQuery === 'spiral-duct' || moduleFromQuery === 'round-duct'
+    return moduleFromQuery === 'spiral-duct' || moduleFromQuery === 'round-duct' || moduleFromQuery === 'rect-duct'
       ? moduleFromQuery
       : storeModule
   }, [moduleFromQuery, storeModule])
@@ -21,6 +22,10 @@ export function ModuleCalculator() {
 
   if (activeModule === 'spiral-duct') {
     return <SpiralDuctCalculator />
+  }
+
+  if (activeModule === 'rect-duct') {
+    return <RectDuctCalculator />
   }
 
   return null
