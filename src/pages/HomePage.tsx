@@ -1,5 +1,8 @@
+import type { CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+
+const revealStyle = (delay: number) => ({ '--d': delay } as CSSProperties)
 
 export function HomePage() {
   const { t } = useTranslation()
@@ -41,7 +44,7 @@ export function HomePage() {
 
   return (
     <section className="home-landing-v1">
-      <section className="home-landing-hero-v1">
+      <section className="home-landing-hero-v1 home-reveal" style={revealStyle(0)}>
         <div className="home-landing-copy-v1">
           <div className="home-kicker-v1">ST Spetsmontazh</div>
           <h1>{t('home.heroTitle')}</h1>
@@ -65,7 +68,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="home-stats-v1" aria-label={t('home.statsTitle')}>
+      <section className="home-stats-v1 home-reveal" style={revealStyle(1)} aria-label={t('home.statsTitle')}>
         {stats.map(([value, label]) => (
           <div key={`${value}-${label}`}>
             <strong>{value}</strong>
@@ -74,7 +77,7 @@ export function HomePage() {
         ))}
       </section>
 
-      <section className="home-section-v1">
+      <section className="home-section-v1 home-reveal" style={revealStyle(2)}>
         <div className="home-section-head-v1">
           <h2>{t('home.featuresTitle')}</h2>
         </div>
@@ -88,7 +91,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="home-section-v1">
+      <section className="home-section-v1 home-reveal" style={revealStyle(3)}>
         <div className="home-section-head-v1">
           <h2>{t('home.categoriesTitle')}</h2>
         </div>
@@ -102,7 +105,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="home-section-v1">
+      <section className="home-section-v1 home-reveal" style={revealStyle(4)}>
         <div className="home-section-head-v1">
           <h2>{t('home.scenarioTitle')}</h2>
         </div>
@@ -116,7 +119,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="home-cta-v1">
+      <section className="home-cta-v1 home-reveal" style={revealStyle(5)}>
         <div>
           <h2>{t('home.ctaTitle')}</h2>
           <p>{t('home.ctaSubtitle')}</p>
@@ -129,7 +132,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="home-contact-v1">
+      <section className="home-contact-v1 home-reveal" style={revealStyle(6)}>
         <div>
           <h2>{t('home.contactTitle')}</h2>
           <p>{t('home.contactSubtitle')}</p>
@@ -144,7 +147,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <footer className="home-footer-v1">
+      <footer className="home-footer-v1 home-reveal" style={revealStyle(6)}>
         <span>ST Spetsmontazh · Calc Square</span>
       </footer>
     </section>
