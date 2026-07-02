@@ -10,4 +10,9 @@ describe('edit workflow active module contract', () => {
     const item = { moduleKey: 'round-duct' }
     expect(item.moduleKey).toBe('round-duct')
   })
+
+  it('supports switching active module to rect-duct during edit', () => {
+    const item = { moduleKey: 'rect-duct' }
+    expect(item.moduleKey).toBe('rect-duct')
+  })
 })

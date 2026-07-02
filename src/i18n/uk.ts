@@ -149,6 +149,9 @@ export const uk = {
   parameter: {
     diameterLabel: 'D — Діаметр, мм',
     lengthLabel: 'L — Довжина, мм',
+    widthLabel: 'A — Ширина, мм',
+    heightLabel: 'B — Висота, мм',
+    rectLengthLabel: 'L — Довжина, мм',
   },
   common: {
     none: 'Немає',
@@ -180,6 +183,7 @@ export const uk = {
     emptyDescription: 'Відкрийте Атлас і оберіть конкретний виріб для розрахунку.',
     backToAtlas: '← Атлас',
     roundCategory: 'Круглі →',
+    rectangularCategory: 'Прямокутні →',
   },
   product: {
     roundDuctGroup: 'Повітропровід круглий',
@@ -187,6 +191,13 @@ export const uk = {
     roundDuctStraightDescription: 'Розрахунковий модуль',
     spiralDuct: 'Спірально-навивна труба',
     spiralDuctDescription: 'Розрахунковий модуль',
+    rectDuct: 'Прямокутний повітропровід',
+    rectDuctDescription: 'Розрахунковий модуль',
+  },
+  lock: {
+    american: 'американський замок',
+    russian: 'руський замок',
+    welded: 'зварювання',
   },
   connector: {
     c1: 'Торцеве з’єднання 1',
@@ -288,6 +299,7 @@ export const uk = {
     pcs: 'шт',
   },
 } as const
+
 
 
 

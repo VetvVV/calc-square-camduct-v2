@@ -3,7 +3,7 @@ function buildPublicAssetPath(path: string) {
 }
 
 export type AtlasStatus = 'available' | 'coming_soon'
-export type AtlasModuleKey = 'round-duct' | 'spiral-duct'
+export type AtlasModuleKey = 'round-duct' | 'spiral-duct' | 'rect-duct'
 
 export interface LocalizedText {
   ru: string
@@ -186,7 +186,7 @@ export const atlasConfig: AtlasCategoryConfig[] = [
       en: 'Rectangular products',
     },
     items: [
-      { code: 'RECT-001', status: 'coming_soon', title: { ru: 'Прямоугольный воздуховод', uk: 'Прямокутний повітропровід', en: 'Rectangular duct' } },
+      { code: 'RECT-001', status: 'available', moduleKey: 'rect-duct', title: { ru: 'Прямоугольный воздуховод', uk: 'Прямокутний повітропровід', en: 'Rectangular duct' } },
       { code: 'RECT-002', status: 'coming_soon', title: { ru: 'Отвод прямоугольный', uk: 'Відвід прямокутний', en: 'Rectangular elbow' } },
       { code: 'RECT-003', status: 'coming_soon', title: { ru: 'Переход прямоугольный', uk: 'Перехід прямокутний', en: 'Rectangular transition' } },
       { code: 'RECT-004', status: 'coming_soon', title: { ru: 'Тройник прямоугольный', uk: 'Трійник прямокутний', en: 'Rectangular tee' } },
@@ -209,5 +209,6 @@ export const atlasConfig: AtlasCategoryConfig[] = [
     ],
   }
 ]
+
 
 

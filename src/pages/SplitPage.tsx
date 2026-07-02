@@ -12,7 +12,7 @@ import { useAppStore } from '../store/appStore'
 import { canUseProjectFiles, canViewSpecification } from '../roles/permissions'
 import { useTranslation } from 'react-i18next'
 
-const supportedModules = new Set(['round-duct', 'spiral-duct'])
+const supportedModules = new Set(['round-duct', 'spiral-duct', 'rect-duct'])
 
 export function SplitPage() {
   const { t } = useTranslation()
@@ -25,7 +25,7 @@ export function SplitPage() {
   const hasSupportedModule = Boolean(moduleFromQuery && supportedModules.has(moduleFromQuery))
 
   useEffect(() => {
-    if (moduleFromQuery === 'round-duct' || moduleFromQuery === 'spiral-duct') {
+    if (moduleFromQuery === 'round-duct' || moduleFromQuery === 'spiral-duct' || moduleFromQuery === 'rect-duct') {
       setActiveModule(moduleFromQuery)
     }
   }, [moduleFromQuery, setActiveModule])
@@ -63,3 +63,4 @@ export function SplitPage() {
     />
   )
 }
+

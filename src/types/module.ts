@@ -1,4 +1,4 @@
-export type ModuleKey = 'round-duct' | 'spiral-duct'
+export type ModuleKey = 'round-duct' | 'spiral-duct' | 'rect-duct'
 
 export type MessageType = 'warning' | 'info' | 'error' | 'success' | 'debug'
 export type MessageScope = 'calculation' | 'limit' | 'help' | 'debug'
@@ -43,6 +43,7 @@ export interface CalculationResult {
 export interface ModuleConfig {
   key: ModuleKey
   productCode: string
-  category: 'round'
+  category: 'round' | 'rectangular'
   parameterMeta: Record<string, ParameterMeta>
 }
+

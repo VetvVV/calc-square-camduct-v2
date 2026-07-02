@@ -149,6 +149,9 @@ export const ru = {
   parameter: {
     diameterLabel: 'D — Диаметр, мм',
     lengthLabel: 'L — Длина, мм',
+    widthLabel: 'A — Ширина, мм',
+    heightLabel: 'B — Высота, мм',
+    rectLengthLabel: 'L — Длина, мм',
   },
   common: {
     none: 'Нет',
@@ -180,6 +183,7 @@ export const ru = {
     emptyDescription: 'Откройте Атлас и выберите конкретное изделие для расчёта.',
     backToAtlas: '← Атлас',
     roundCategory: 'Круглые →',
+    rectangularCategory: 'Прямоугольные →',
   },
   product: {
     roundDuctGroup: 'Воздуховод круглый',
@@ -187,6 +191,13 @@ export const ru = {
     roundDuctStraightDescription: 'Расчётный модуль',
     spiralDuct: 'Спирально-навивная труба',
     spiralDuctDescription: 'Расчётный модуль',
+    rectDuct: 'Прямоугольный воздуховод',
+    rectDuctDescription: 'Расчётный модуль',
+  },
+  lock: {
+    american: 'американский замок',
+    russian: 'русский замок',
+    welded: 'сварка',
   },
   connector: {
     c1: 'Торцевое соединение 1',
@@ -288,6 +299,7 @@ export const ru = {
     pcs: 'шт',
   },
 } as const
+
 
 
 

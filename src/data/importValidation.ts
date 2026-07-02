@@ -1,6 +1,6 @@
 import { isSpecificationProject } from '../domain/specification/itemSchema'
 
-const supportedModules = new Set(['round-duct', 'spiral-duct'])
+const supportedModules = new Set(['round-duct', 'spiral-duct', 'rect-duct'])
 
 export function validateImportedProject(data: unknown) {
   if (!isSpecificationProject(data)) {
@@ -23,3 +23,4 @@ export function validateImportedProject(data: unknown) {
     issues,
   }
 }
+
