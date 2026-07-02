@@ -17,7 +17,7 @@ function buildSizeLabel(item: SpecificationItem, t: (key: string) => string) {
   const A = item.parameters.A
   const B = item.parameters.B
   if (typeof A === 'number' && typeof B === 'number') {
-    return `ØD ${A} × L ${B} ${t('unit.mm')}`
+    return `D ${A} × L ${B} ${t('unit.mm')}`
   }
   return '—'
 }

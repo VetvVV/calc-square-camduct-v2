@@ -6,7 +6,7 @@ interface AccessInvitationDialogProps {
   onClose: () => void
 }
 
-const companyUrl = 'https://stspetsmontag.com.ua'
+const companyUrl = 'https://stspetsmontag.com.ua/'
 
 function gfMultiply(left: number, right: number) {
   let value = 0
@@ -22,17 +22,16 @@ function gfMultiply(left: number, right: number) {
 
 function reedSolomonGenerator(degree: number) {
   let root = 1
-  let coefficients = [1]
+  const coefficients = new Array(degree).fill(0) as number[]
+  coefficients[degree - 1] = 1
   for (let i = 0; i < degree; i += 1) {
-    const next = new Array(coefficients.length + 1).fill(0)
-    coefficients.forEach((coefficient, index) => {
-      next[index] ^= gfMultiply(coefficient, root)
-      next[index + 1] ^= coefficient
-    })
-    coefficients = next
+    for (let j = 0; j < degree; j += 1) {
+      coefficients[j] = gfMultiply(coefficients[j], root)
+      if (j + 1 < degree) coefficients[j] ^= coefficients[j + 1]
+    }
     root = gfMultiply(root, 0x02)
   }
-  return coefficients.slice(1)
+  return coefficients
 }
 
 function reedSolomonRemainder(data: number[], degree: number) {
@@ -160,10 +159,10 @@ function QrSvg({ value }: { value: string }) {
 
   return (
     <svg viewBox={`0 0 ${size} ${size}`} role="img" aria-label={value} className="invitation-qr-svg">
-      <rect width={size} height={size} fill="#f8fafc" />
+      <rect width={size} height={size} fill="#fff" />
       {cells.map((cell) => {
         const [x, y] = String(cell).split(',').map(Number)
-        return <rect key={cell} x={x} y={y} width="1" height="1" fill="#334155" />
+        return <rect key={cell} x={x} y={y} width="1" height="1" fill="#000" />
       })}
     </svg>
   )

@@ -5,7 +5,7 @@ export const moduleParameterMeta: Record<ModuleKey, Record<string, ParameterMeta
   'round-duct': {
     A: {
       camductKey: 'A',
-      displaySymbol: 'ØD',
+      displaySymbol: 'D',
       labelKey: i18nKeys.dimension.diameter,
       formulaSymbol: 'D',
       unitKey: i18nKeys.unit.mm,
@@ -21,7 +21,7 @@ export const moduleParameterMeta: Record<ModuleKey, Record<string, ParameterMeta
   'spiral-duct': {
     A: {
       camductKey: 'A',
-      displaySymbol: 'ØD',
+      displaySymbol: 'D',
       labelKey: i18nKeys.dimension.diameter,
       formulaSymbol: 'D',
       unitKey: i18nKeys.unit.mm,
