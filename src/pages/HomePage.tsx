@@ -24,7 +24,6 @@ export function HomePage() {
     ['03', t('home.featureSpecification')],
     ['04', t('home.featureExport')],
     ['05', t('home.featureWorkflow')],
-    ['06', t('home.featureAdmin')],
   ]
 
   const categories = [

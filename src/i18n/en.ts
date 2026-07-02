@@ -73,11 +73,11 @@ export const en = {
     statsCamduct: 'production',
     featuresTitle: 'Everything needed for calculation and project specification prep',
     featureCatalog: 'Catalog and product atlas',
-    featureCalculators: 'Product calculators',
+    featureCalculators: 'Calculation modules',
     featureSpecification: 'Project specification',
     featureExport: 'Export and exchange',
     featureWorkflow: 'Working process',
-    featureAdmin: 'Admin workflow',
+    featureAdmin: 'Review mode',
     categoriesTitle: 'Main product categories',
     categoryRound: 'Round products',
     categoryRectangular: 'Rectangular products',
@@ -160,7 +160,7 @@ export const en = {
     description: 'Description',
     comment: 'Comment',
     internalJointType: 'Internal joint type',
-    splitSummary: 'Split summary',
+    splitSummary: 'Section summary',
   },
   summary: {
     title: 'Totals',
@@ -197,7 +197,7 @@ export const en = {
   },
   split: {
     roundStandard1250: 'Standard split 1250 mm',
-    spiralBySelectedLength: 'Split branch by',
+    spiralBySelectedLength: 'Divide branch by',
     sections: 'sections',
     section: 'section',
     supplementarySection: 'supplementary section',
@@ -206,14 +206,14 @@ export const en = {
   message: {
     spiralSplit: {
       title: 'Branch split required',
-      description: 'Split: {{count}} sections {{by}} {{sectionLength}}: {{summary}}',
+      description: 'Sectioning: {{count}} sections {{by}} {{sectionLength}}: {{summary}}',
     },
     spiralRemainder: {
-      description: 'Split: {{count}} sections {{by}} {{sectionLength}}: {{summary}}. The last section is supplementary.',
+      description: 'Sectioning: {{count}} sections {{by}} {{sectionLength}}: {{summary}}. The last section is supplementary.',
     },
     roundSplit: {
       title: 'Technological split required',
-      description: 'Split: {{count}} sections {{by}} {{sectionLength}}: {{summary}}',
+      description: 'Sectioning: {{count}} sections {{by}} {{sectionLength}}: {{summary}}',
     },
     guestLimit: {
       title: 'Guest mode limit',
