@@ -193,7 +193,7 @@ export function SpiralDuctCalculator() {
       <CalculatorResult area={result.calculated.areaDisplay} mass={result.calculated.massDisplay} description={description} status={t('calculator.autoCalculation')} />
 
       <div className="calculator-action-row">
-        <button type="button" aria-disabled={!addAllowed} onClick={handleAdd} className={addAllowed ? 'brand-action-button px-5 py-3 text-sm' : 'calculator-add-button px-5 py-3 text-sm'}>
+        <button type="button" onClick={handleAdd} className={addAllowed ? 'brand-action-button px-5 py-3 text-sm' : 'calculator-add-button px-5 py-3 text-sm'}>
           {editingItemId ? t('action.updateItem') : t('action.addToProject')}
         </button>
       </div>
