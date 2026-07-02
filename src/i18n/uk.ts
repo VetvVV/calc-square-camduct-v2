@@ -151,7 +151,10 @@ export const uk = {
     lengthLabel: 'L — Довжина, мм',
     widthLabel: 'A — Ширина, мм',
     heightLabel: 'B — Висота, мм',
-    rectLengthLabel: 'L — Довжина, мм',
+    rectLengthLabel: 'C — Довжина, мм',
+    rectWidthService: 'A / Ширина, мм',
+    rectHeightService: 'B / Висота, мм',
+    rectLengthService: 'C / Довжина, мм',
   },
   common: {
     none: 'Немає',

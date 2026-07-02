@@ -151,7 +151,10 @@ export const en = {
     lengthLabel: 'L — Length, mm',
     widthLabel: 'A — Width, mm',
     heightLabel: 'B — Height, mm',
-    rectLengthLabel: 'L — Length, mm',
+    rectLengthLabel: 'C — Length, mm',
+    rectWidthService: 'A / Width, mm',
+    rectHeightService: 'B / Height, mm',
+    rectLengthService: 'C / Length, mm',
   },
   common: {
     none: 'None',

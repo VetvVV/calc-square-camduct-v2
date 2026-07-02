@@ -8,7 +8,7 @@ import { createSpecificationItem } from '../../domain/specification/itemFactory'
 import { useAppStore } from '../../store/appStore'
 import { useProjectStore } from '../../store/projectStore'
 import { isGuestRole } from '../../constants/roles'
-import { canAddSpecItem, canViewDebugPanel, getCalculationLimit } from '../../roles/permissions'
+import { canAddSpecItem, canViewCamductMode, canViewDebugPanel, getCalculationLimit } from '../../roles/permissions'
 import { getGuestUsageLimitState } from '../../utils/guestUsage'
 import { AccessInvitationDialog } from '../Common/AccessInvitationDialog'
 import { AdminDebugPanel } from './AdminDebugPanel'
@@ -77,6 +77,7 @@ export function RectDuctCalculator() {
   const roleUsageCount = isGuestRole(role) ? guestUsageCount : project.items.length
   const roleLimitReached = roleLimit !== null && roleUsageCount >= roleLimit
   const addAllowed = canAddSpecItem(role) && !roleLimitReached
+  const serviceLabels = camductMode && canViewCamductMode(role)
 
   const handleAdd = () => {
     if (!canAddSpecItem(role) || roleLimitReached) {
@@ -131,13 +132,13 @@ export function RectDuctCalculator() {
         </div>
 
         <div className="grid gap-2 p-4">
-          <ParameterField label={t('parameter.widthLabel')}>
+          <ParameterField label={serviceLabels ? t('parameter.rectWidthService') : t('parameter.widthLabel')}>
             <input type="number" placeholder={t('unit.mm')} value={A} onKeyDown={handleNumberKeyDown} onChange={(e) => setA(Number(e.target.value || 0))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
           </ParameterField>
-          <ParameterField label={t('parameter.heightLabel')}>
+          <ParameterField label={serviceLabels ? t('parameter.rectHeightService') : t('parameter.heightLabel')}>
             <input type="number" placeholder={t('unit.mm')} value={B} onKeyDown={handleNumberKeyDown} onChange={(e) => setB(Number(e.target.value || 0))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
           </ParameterField>
-          <ParameterField label={t('parameter.rectLengthLabel')}>
+          <ParameterField label={serviceLabels ? t('parameter.rectLengthService') : t('parameter.rectLengthLabel')}>
             <input type="number" placeholder={t('unit.mm')} value={L} onKeyDown={handleNumberKeyDown} onChange={(e) => setL(Number(e.target.value || 0))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
           </ParameterField>
           <ParameterField label={`${t('common.thickness')}, ${t('unit.mm')}`}>
