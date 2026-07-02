@@ -1706,26 +1706,21 @@ button[aria-disabled='true'].brand-action-button {
 
 .brand-nav-link::after {
   position: absolute;
-  right: 10px;
-  bottom: 5px;
-  left: 10px;
+  bottom: -2px;
+  left: 0;
+  width: 0;
   height: 2px;
   background: var(--brand-accent);
   content: '';
   opacity: 0;
-  transform: scaleX(0.75);
-  transition: opacity 160ms ease, transform 160ms ease;
+  transition: width 180ms ease, opacity 180ms ease;
 }
 
 .brand-nav-link:hover::after,
 .brand-nav-link:focus-visible::after,
 .brand-nav-link.is-active::after {
+  width: 100%;
   opacity: 1;
-  transform: scaleX(1);
-}
-
-.brand-nav-link.is-active {
-  box-shadow: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1746,3 +1741,4 @@ button[aria-disabled='true'].brand-action-button {
     transform: none;
   }
 }
+
