@@ -9,7 +9,7 @@ export interface SpiralDuctDescriptionInput {
 }
 
 export function buildSpiralDuctDescription(t: TFunction, input: SpiralDuctDescriptionInput) {
-  const base = `ØD ${input.A} × L ${input.B} ${t('unit.mm')} · ${t('product.spiralDuct')}`
+  const base = `D ${input.A} × L ${input.B} ${t('unit.mm')} · ${t('product.spiralDuct')}`
 
   if (!input.splitCount || input.splitCount <= 1 || !input.splitSummary || !input.sectionLength) {
     return base

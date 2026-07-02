@@ -28,7 +28,6 @@ export function AppHeader() {
           <div className="hidden h-8 w-px bg-slate-200 sm:block" />
           <div className="min-w-0 leading-none">
             <div className="brand-title text-lg leading-none sm:text-xl">Calc Square</div>
-            <div className="mt-0.5 text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--brand-accent)]">V2</div>
           </div>
         </div>
 

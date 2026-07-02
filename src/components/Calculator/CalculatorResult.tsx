@@ -5,9 +5,10 @@ interface CalculatorResultProps {
   area: number
   mass: number | null
   description: string
+  status?: string
 }
 
-export function CalculatorResult({ area, mass, description }: CalculatorResultProps) {
+export function CalculatorResult({ area, mass, description, status }: CalculatorResultProps) {
   const { t } = useTranslation()
 
   return (
@@ -25,7 +26,10 @@ export function CalculatorResult({ area, mass, description }: CalculatorResultPr
           <div className="mt-1 text-2xl font-extrabold text-[var(--brand-ink)]">{formatMass(mass, t('unit.kg'))}</div>
         </div>
       </div>
-      <div className="border-t border-[#e7ddc2] bg-[#f7f7f7] p-4 text-sm font-semibold leading-6 text-[#3f4652]">{description}</div>
+      <div className="border-t border-[#e7ddc2] bg-[#f7f7f7] p-4 text-sm font-semibold leading-6 text-[#3f4652]">
+        <div>{description}</div>
+        {status ? <div className="calculator-auto-status mt-2">{status}</div> : null}
+      </div>
     </div>
   )
 }

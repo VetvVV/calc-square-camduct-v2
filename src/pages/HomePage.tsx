@@ -15,7 +15,7 @@ export function HomePage() {
     ['RU / UK / EN', t('home.statsI18n')],
     ['1', t('home.statsProject')],
     ['JSON', t('home.statsExport')],
-    ['CAMduct', t('home.statsCamduct')],
+    ['ST', t('home.statsCamduct')],
   ]
 
   const features = [
@@ -44,7 +44,7 @@ export function HomePage() {
     <section className="home-landing-v1">
       <section className="home-landing-hero-v1">
         <div className="home-landing-copy-v1">
-          <div className="home-kicker-v1">ST Spetsmontazh · Calc Square</div>
+          <div className="home-kicker-v1">ST Spetsmontazh</div>
           <h1>{t('home.heroTitle')}</h1>
           <p>{t('home.heroSubtitle')}</p>
           <div className="home-actions-v1">
@@ -146,9 +146,7 @@ export function HomePage() {
       </section>
 
       <footer className="home-footer-v1">
-        <span>ST Spetsmontazh</span>
-        <span>Calc Square CAMduct V2</span>
-        <span>{t('app.subtitle')}</span>
+        <span>ST Spetsmontazh · Calc Square</span>
       </footer>
     </section>
   )

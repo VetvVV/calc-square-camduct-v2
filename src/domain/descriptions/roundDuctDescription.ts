@@ -8,7 +8,7 @@ export interface RoundDuctDescriptionInput {
 }
 
 export function buildRoundDuctDescription(t: TFunction, input: RoundDuctDescriptionInput) {
-  const base = `ØD ${input.A} × L ${input.B} ${t('unit.mm')} · ${t('product.roundDuctStraight')}`
+  const base = `D ${input.A} × L ${input.B} ${t('unit.mm')} · ${t('product.roundDuctStraight')}`
 
   if (!input.splitCount || input.splitCount <= 1 || !input.splitSummary) {
     return base

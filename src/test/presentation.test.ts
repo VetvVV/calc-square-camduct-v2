@@ -15,7 +15,7 @@ describe('presentation builders', () => {
     })
 
     expect(text).toContain('Spiral duct')
-    expect(text).toContain('ØD 250 × L 14500 mm')
+    expect(text).toContain('D 250 × L 14500 mm')
     expect(text).not.toContain('спирально-навивная')
     expect(text).not.toContain('Диаметр')
   })

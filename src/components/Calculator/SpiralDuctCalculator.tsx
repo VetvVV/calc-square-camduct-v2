@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { type KeyboardEvent, useEffect, useMemo, useState } from 'react'
 import { calculateSpiralDuct } from '../../domain/calculators'
 import { buildDescription } from '../../domain/descriptions/descriptionBuilder'
 import { filterMessagesByRole } from '../../domain/messages/messageFilter'
@@ -116,6 +116,12 @@ export function SpiralDuctCalculator() {
 
   }
 
+  const handleNumberKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter') return
+    event.preventDefault()
+    event.currentTarget.blur()
+  }
+
   const materialConfig = materialOptions.find((option) => option.key === material) ?? materialOptions[0]
 
   return (
@@ -134,24 +140,19 @@ export function SpiralDuctCalculator() {
           )}
         </div>
 
-        <div className="unit-switch-v1 mx-4 mt-4" aria-label={t('unitSystem.title')}>
-          <button type="button" className="is-active">
-            {t('unitSystem.metric')}
-          </button>
-          <button type="button" aria-disabled="true" title={t('unitSystem.inchesComingSoon')}>
-            {t('unitSystem.inches')}
-          </button>
+        <div className="unit-label-v1 mx-4 mt-4">
+          {t('unitSystem.title')}: {t('unit.mm')}
         </div>
 
         <div className="grid gap-2 p-4">
           <ParameterField label={camductMode && canViewCamductMode(role) ? `A / ${t('parameter.diameterLabel')}` : t('parameter.diameterLabel')}>
-            <input type="number" placeholder={t('unit.mm')} value={A} onChange={(e) => setA(Number(e.target.value || 0))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
+            <input type="number" placeholder={t('unit.mm')} value={A} onKeyDown={handleNumberKeyDown} onChange={(e) => setA(Number(e.target.value || 0))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
           </ParameterField>
           <ParameterField label={camductMode && canViewCamductMode(role) ? `B / ${t('parameter.lengthLabel')}` : t('parameter.lengthLabel')}>
-            <input type="number" placeholder={t('unit.mm')} value={B} onChange={(e) => setB(Number(e.target.value || 0))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
+            <input type="number" placeholder={t('unit.mm')} value={B} onKeyDown={handleNumberKeyDown} onChange={(e) => setB(Number(e.target.value || 0))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
           </ParameterField>
           <ParameterField label={t('common.quantity')}>
-            <input type="number" value={Q} onChange={(e) => setQ(Number(e.target.value || 1))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
+            <input type="number" value={Q} onKeyDown={handleNumberKeyDown} onChange={(e) => setQ(Number(e.target.value || 1))} className="w-full rounded-md border border-[#c9bea0] bg-white px-3 py-2" />
           </ParameterField>
           {showSpiralSplitControls && (
             <ParameterField label={t('split.spiralBySelectedLength')}>
@@ -184,14 +185,15 @@ export function SpiralDuctCalculator() {
           </ParameterField>
         </div>
 
-        <div className="px-4 pb-4 pt-3">
-          <button type="button" aria-disabled={!addAllowed} onClick={handleAdd} className="brand-action-button px-5 py-3 text-sm">
-            {editingItemId ? t('action.updateItem') : t('action.addToProject')}
-          </button>
-        </div>
       </div>
 
-      <CalculatorResult area={result.calculated.areaDisplay} mass={result.calculated.massDisplay} description={description} />
+      <CalculatorResult area={result.calculated.areaDisplay} mass={result.calculated.massDisplay} description={description} status={t('calculator.autoCalculation')} />
+
+      <div className="calculator-action-row">
+        <button type="button" aria-disabled={!addAllowed} onClick={handleAdd} className={addAllowed ? 'brand-action-button px-5 py-3 text-sm' : 'calculator-add-button px-5 py-3 text-sm'}>
+          {editingItemId ? t('action.updateItem') : t('action.addToProject')}
+        </button>
+      </div>
 
       <MessageList messages={visibleMessages} />
 
