@@ -9,7 +9,7 @@ export function CalculatorPage() {
   const [searchParams] = useSearchParams()
   const moduleFromQuery = searchParams.get('module')
   const hasSupportedModule = Boolean(moduleFromQuery && supportedModules.has(moduleFromQuery))
-  const categoryLink = moduleFromQuery === 'rect-duct' ? '/atlas?category=rectangular' : '/atlas?category=round'
+  const categoryLink = moduleFromQuery === 'rect-duct' ? '/atlas#atlas-rectangular' : '/atlas#atlas-round'
   const categoryLabel = moduleFromQuery === 'rect-duct' ? t('calculator.rectangularCategory') : t('calculator.roundCategory')
 
   return (

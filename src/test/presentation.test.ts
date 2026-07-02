@@ -33,6 +33,21 @@ describe('presentation builders', () => {
     expect(text).toContain('Спірально-навивна труба')
   })
 
+  it('builds rectangular duct description with visible C length label', async () => {
+    await i18n.changeLanguage('ru')
+    const text = buildDescription(i18n.t.bind(i18n), 'rect-duct', {
+      A: 400,
+      B: 300,
+      L: 1000,
+      thickness: 0.5,
+      lockLabelKey: 'lock.american',
+      lockSize: '6/30',
+    })
+
+    expect(text).toContain('A 400 × B 300 × C 1000 мм')
+    expect(text).not.toContain('× L 1000')
+  })
+
   it('formats area and mass', async () => {
     await i18n.changeLanguage('ru')
     expect(formatArea(47.124)).toMatch(/47[,.]124/)

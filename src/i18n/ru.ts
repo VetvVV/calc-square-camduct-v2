@@ -151,7 +151,10 @@ export const ru = {
     lengthLabel: 'L — Длина, мм',
     widthLabel: 'A — Ширина, мм',
     heightLabel: 'B — Высота, мм',
-    rectLengthLabel: 'L — Длина, мм',
+    rectLengthLabel: 'C — Длина, мм',
+    rectWidthService: 'A / Ширина, мм',
+    rectHeightService: 'B / Высота, мм',
+    rectLengthService: 'C / Длина, мм',
   },
   common: {
     none: 'Нет',
