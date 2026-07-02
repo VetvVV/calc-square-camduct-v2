@@ -1,4 +1,5 @@
 import { type KeyboardEvent, useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { calculateSpiralDuct } from '../../domain/calculators'
 import { buildDescription } from '../../domain/descriptions/descriptionBuilder'
 import { filterMessagesByRole } from '../../domain/messages/messageFilter'
@@ -20,6 +21,7 @@ import { AccessInvitationDialog } from '../Common/AccessInvitationDialog'
 
 export function SpiralDuctCalculator() {
   const { t, i18n } = useTranslation()
+  const navigate = useNavigate()
   const role = useAppStore((state) => state.role)
   const camductMode = useAppStore((state) => state.camductMode)
   const project = useProjectStore((state) => state.project)
@@ -114,6 +116,7 @@ export function SpiralDuctCalculator() {
       setProject(addItem(project, item))
     }
 
+    navigate('/split?module=spiral-duct')
   }
 
   const handleNumberKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
