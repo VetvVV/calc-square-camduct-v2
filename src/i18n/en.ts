@@ -11,7 +11,7 @@ export const en = {
     specification: 'Specification',
   },
   role: {
-    guest: 'View only',
+    guest: 'Guest',
     user: 'Work',
     client: 'Client',
     service: 'Service',
