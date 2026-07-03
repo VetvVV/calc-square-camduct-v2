@@ -11,7 +11,7 @@ export const uk = {
     specification: 'Специфікація',
   },
   role: {
-    guest: 'Перегляд',
+    guest: 'Гість',
     user: 'Робота',
     client: 'Клієнт',
     service: 'Сервіс',
