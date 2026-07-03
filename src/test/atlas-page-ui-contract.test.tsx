@@ -36,4 +36,23 @@ describe('Atlas page UI contract', () => {
     expect(screen.getAllByText('COMB-001').length).toBeGreaterThan(0)
     expect(container.querySelectorAll('.atlas-grid-v1')).toHaveLength(3)
   })
+
+  it('uses the inline R-001 SVG visual without replacing other Atlas images', () => {
+    const { container } = render(
+      <MemoryRouter initialEntries={['/atlas']}>
+        <AtlasPage />
+      </MemoryRouter>,
+    )
+
+    const r001Visual = container.querySelector('.product-svg.product-svg--r-001')
+    expect(r001Visual).toBeInTheDocument()
+    expect(r001Visual).toHaveAttribute('viewBox', '0 0 400 300')
+
+    const dimensionsLayer = r001Visual?.querySelector('.p-dims')
+    expect(dimensionsLayer).toBeInTheDocument()
+    expect(dimensionsLayer).toHaveAttribute('opacity', '0')
+
+    expect(screen.getByAltText('Труба спирально-навивная')).toBeInTheDocument()
+    expect(screen.getByAltText('Отвод 45°')).toBeInTheDocument()
+  })
 })

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { AtlasItemConfig } from '../../config/atlas'
 import { useTranslation } from 'react-i18next'
+import { R001ProductVisual } from '../ProductVisuals'
 
 interface VariantCardProps {
   variant: AtlasItemConfig
@@ -10,11 +11,14 @@ export function VariantCard({ variant }: VariantCardProps) {
   const { i18n, t } = useTranslation()
   const lang = i18n.language as 'ru' | 'uk' | 'en'
   const available = variant.status === 'available' && Boolean(variant.moduleKey)
+  const useInlineR001Visual = variant.code === 'R-001'
 
   const content = (
     <>
       <div className="atlas-image-v1">
-        {variant.image ? (
+        {useInlineR001Visual ? (
+          <R001ProductVisual title={`${variant.code} ${variant.title[lang]}`} />
+        ) : variant.image ? (
           <img
             src={variant.image}
             alt={variant.title[lang]}
