@@ -1,12 +1,23 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { RectDuctCalculator } from '../components/Calculator/RectDuctCalculator'
 import { createEmptyProject } from '../domain/specification/itemFactory'
 import i18n from '../i18n'
 import { useAppStore } from '../store/appStore'
 import { useProjectStore } from '../store/projectStore'
+
+const navigateMock = vi.hoisted(() => vi.fn())
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom')
+
+  return {
+    ...actual,
+    useNavigate: () => navigateMock,
+  }
+})
 
 function renderRectCalculator() {
   return render(
@@ -19,6 +30,7 @@ function renderRectCalculator() {
 describe('RECT-001 UI contract', () => {
   beforeEach(async () => {
     await i18n.changeLanguage('ru')
+    navigateMock.mockClear()
     useAppStore.setState({ activeModule: 'rect-duct', role: 'guest', camductMode: false })
     useProjectStore.setState({ project: createEmptyProject(), editingItemId: null, editingDraft: null })
   })
@@ -56,6 +68,16 @@ describe('RECT-001 UI contract', () => {
     expect(screen.getByRole('dialog')).toBeInTheDocument()
     expect(screen.getByText(/Приглашение к сотрудничеству/i)).toBeInTheDocument()
     expect(useProjectStore.getState().project.items).toHaveLength(0)
+  })
+
+  it('routes a successful client add to the split workspace', () => {
+    useAppStore.setState({ activeModule: 'rect-duct', role: 'client', camductMode: false })
+
+    renderRectCalculator()
+    fireEvent.click(screen.getByRole('button', { name: /Добавить в проект/i }))
+
+    expect(useProjectStore.getState().project.items).toHaveLength(1)
+    expect(navigateMock).toHaveBeenCalledWith('/split?module=rect-duct')
   })
 
   it('shows CAMduct service labels only for service/admin roles with service mode enabled', () => {

@@ -108,7 +108,7 @@ export function RectDuctCalculator() {
       setProject(addItem(project, item))
     }
 
-    navigate('/specification')
+    navigate('/split?module=rect-duct')
   }
 
   const handleNumberKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
