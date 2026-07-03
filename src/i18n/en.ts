@@ -128,7 +128,7 @@ export const en = {
   },
   spec: {
     title: 'Project specification',
-    item: 'Item',
+    item: 'Name',
     sizes: 'Sizes',
     description: 'Description',
     qty: 'Qty',
@@ -139,6 +139,15 @@ export const en = {
     comment: 'Comment',
     actions: 'Actions',
     noItems: 'No items have been added yet. Choose a product on the right and add it to the specification.',
+    preview: {
+      quantity: 'Quantity',
+      material: 'Material',
+      thickness: 'Thickness',
+      area: 'Area',
+      mass: 'Mass',
+      showPositionPreview: 'Show item {{index}} preview',
+      positionTitle: 'Position #{{index}}',
+    },
   },
   unitSystem: {
     title: 'Size system',

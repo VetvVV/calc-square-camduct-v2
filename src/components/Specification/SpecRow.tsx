@@ -1,7 +1,9 @@
 import type { SpecificationItem } from '../../types'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { buildDescription } from '../../domain/descriptions/descriptionBuilder'
 import { formatArea, formatMass } from '../../utils/format'
+import { SpecRowPreview } from './SpecRowPreview'
 
 interface SpecRowProps {
   index: number
@@ -41,6 +43,8 @@ function productLabel(item: SpecificationItem, t: (key: string) => string) {
 
 export function SpecRow({ index, item, onRemove, onEdit, canEdit, canRemove, onLockedAction }: SpecRowProps) {
   const { i18n, t } = useTranslation()
+  const [previewOpen, setPreviewOpen] = useState(false)
+  const [previewAnchor, setPreviewAnchor] = useState<DOMRect | null>(null)
 
   const splitSummary =
     item.moduleKey === 'round-duct'
@@ -71,18 +75,59 @@ export function SpecRow({ index, item, onRemove, onEdit, canEdit, canRemove, onL
     layout: rectMeta?.layout,
     russianLocks: rectMeta?.russianLocks,
   })
+  const productTitle = productLabel(item, t)
+  const dimensions = buildSizeLabel(item, t)
+  const material = materialLabel(item.options.material, t)
+  const thickness = item.options.thickness === undefined || item.options.thickness === null ? '—' : String(item.options.thickness)
+  const area = formatArea(item.calculated.areaDisplay, t('unit.m2'))
+  const mass = formatMass(item.calculated.massDisplay, t('unit.kg'))
+  const previewId = `spec-row-preview-${item.id}`
+  const previewLabel = t('spec.preview.showPositionPreview', { index: index + 1 })
+  const openPreview = (target: HTMLElement) => {
+    setPreviewAnchor(target.getBoundingClientRect())
+    setPreviewOpen(true)
+  }
+  const closePreview = () => {
+    setPreviewOpen(false)
+  }
 
   return (
     <tr>
-      <td className="px-3 py-2 text-center">{index + 1}</td>
-      <td className="px-3 py-2 font-extrabold text-[var(--brand-ink)]">{productLabel(item, t)}</td>
-      <td className="px-3 py-2">{buildSizeLabel(item, t)}</td>
+      <td className="spec-preview-cell-v1 px-3 py-2 text-center">
+        <button
+          type="button"
+          className="spec-pos-trigger-v1"
+          aria-label={previewLabel}
+          aria-describedby={previewId}
+          onMouseEnter={(event) => openPreview(event.currentTarget)}
+          onMouseLeave={closePreview}
+          onFocus={(event) => openPreview(event.currentTarget)}
+          onBlur={closePreview}
+        >
+          {index + 1}
+        </button>
+        <SpecRowPreview
+          id={previewId}
+          item={item}
+          position={index + 1}
+          anchorRect={previewAnchor}
+          open={previewOpen}
+          productTitle={productTitle}
+          dimensions={dimensions}
+          material={material}
+          thickness={thickness}
+          area={area}
+          mass={mass}
+        />
+      </td>
+      <td className="px-3 py-2 font-extrabold text-[var(--brand-ink)]">{productTitle}</td>
+      <td className="px-3 py-2">{dimensions}</td>
       <td className="px-3 py-2">{description}</td>
       <td className="px-3 py-2">{item.quantity}</td>
-      <td className="px-3 py-2">{materialLabel(item.options.material, t)}</td>
-      <td className="px-3 py-2">{item.options.thickness ?? '—'}</td>
-      <td className="px-3 py-2">{formatArea(item.calculated.areaDisplay, t('unit.m2'))}</td>
-      <td className="px-3 py-2">{formatMass(item.calculated.massDisplay, t('unit.kg'))}</td>
+      <td className="px-3 py-2">{material}</td>
+      <td className="px-3 py-2">{thickness}</td>
+      <td className="px-3 py-2">{area}</td>
+      <td className="px-3 py-2">{mass}</td>
       <td className="px-3 py-2">{item.comment || '—'}</td>
       <td className="px-3 py-2">
         <div className="flex gap-2">
