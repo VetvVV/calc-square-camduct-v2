@@ -1,11 +1,12 @@
 import { createEmptyProject } from '../domain/specification/itemFactory'
 import { withRecalculatedTotals } from '../domain/specification/specificationManager'
+import { sanitizeProjectForRole } from '../security/diagnosticsSanitizer'
 import type { SpecificationProject } from '../types'
 
 const STORAGE_KEY = 'calc-square-camduct-v2.project'
 
 export function saveProjectToStorage(project: SpecificationProject) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(project))
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitizeProjectForRole(project, 'guest')))
 }
 
 export function loadProjectFromStorage(): SpecificationProject {
