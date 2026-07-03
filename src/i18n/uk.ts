@@ -128,7 +128,7 @@ export const uk = {
   },
   spec: {
     title: 'Проєктна специфікація',
-    item: 'Виріб',
+    item: 'Найменування',
     sizes: 'Розміри',
     description: 'Опис',
     qty: 'К-сть',
@@ -139,6 +139,15 @@ export const uk = {
     comment: 'Коментар',
     actions: 'Дії',
     noItems: 'Позиції ще не додані. Оберіть виріб праворуч і додайте його до специфікації.',
+    preview: {
+      quantity: 'Кількість',
+      material: 'Матеріал',
+      thickness: 'Товщина',
+      area: 'Площа',
+      mass: 'Маса',
+      showPositionPreview: 'Показати превʼю позиції {{index}}',
+      positionTitle: 'Позиція №{{index}}',
+    },
   },
   unitSystem: {
     title: 'Система розмірів',

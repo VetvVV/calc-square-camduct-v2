@@ -128,7 +128,7 @@ export const ru = {
   },
   spec: {
     title: 'Проектная спецификация',
-    item: 'Изделие',
+    item: 'Наименование',
     sizes: 'Размеры',
     description: 'Описание',
     qty: 'Кол-во',
@@ -139,6 +139,15 @@ export const ru = {
     comment: 'Комментарий',
     actions: 'Действия',
     noItems: 'Позиции ещё не добавлены. Выберите изделие справа и добавьте его в спецификацию.',
+    preview: {
+      quantity: 'Количество',
+      material: 'Материал',
+      thickness: 'Толщина',
+      area: 'Площадь',
+      mass: 'Масса',
+      showPositionPreview: 'Показать превью позиции {{index}}',
+      positionTitle: 'Позиция №{{index}}',
+    },
   },
   unitSystem: {
     title: 'Система размеров',
