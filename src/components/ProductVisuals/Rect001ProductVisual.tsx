@@ -32,14 +32,14 @@ export function Rect001ProductVisual({ title = 'RECT-001 Прямоугольн�
       </g>
 
       <g className="p-dims" opacity="0" fontFamily="ui-sans-serif, system-ui, Arial, sans-serif" fontSize="15" fontWeight="600">
-        <g className="p-dim-a" stroke="var(--p-dim-a, #1455ff)" fill="var(--p-dim-a, #1455ff)">
+        <g className="p-dim-w" stroke="var(--p-dim-w, #1455ff)" fill="var(--p-dim-w, #1455ff)">
           <line className="p-dim-line" x1="74" y1="86" x2="312" y2="62" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-          <text className="p-dim-label" x="186" y="58" stroke="none">A</text>
+          <text className="p-dim-label" x="186" y="58" stroke="none">W</text>
         </g>
 
-        <g className="p-dim-b" stroke="var(--p-dim-b, #9b2fb0)" fill="var(--p-dim-b, #9b2fb0)">
+        <g className="p-dim-h" stroke="var(--p-dim-h, #9b2fb0)" fill="var(--p-dim-h, #9b2fb0)">
           <line className="p-dim-line" x1="62" y1="101" x2="62" y2="178" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-          <text className="p-dim-label" x="38" y="144" stroke="none">B</text>
+          <text className="p-dim-label" x="38" y="144" stroke="none">H</text>
         </g>
 
         <g className="p-dim-l" stroke="var(--p-dim-l, #0a8a22)" fill="var(--p-dim-l, #0a8a22)">
