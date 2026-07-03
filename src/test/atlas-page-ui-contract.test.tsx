@@ -55,4 +55,20 @@ describe('Atlas page UI contract', () => {
     expect(screen.getByAltText('Труба спирально-навивная')).toBeInTheDocument()
     expect(screen.getByAltText('Отвод 45°')).toBeInTheDocument()
   })
+
+  it('uses the inline RECT-001 SVG visual instead of the Atlas placeholder', () => {
+    const { container } = render(
+      <MemoryRouter initialEntries={['/atlas']}>
+        <AtlasPage />
+      </MemoryRouter>,
+    )
+
+    const rect001Visual = container.querySelector('.product-svg.product-svg--rect-001')
+    expect(rect001Visual).toBeInTheDocument()
+    expect(rect001Visual).toHaveAttribute('viewBox', '0 0 400 300')
+    expect(rect001Visual).toHaveAccessibleName('RECT-001 Прямоугольный воздуховод')
+
+    const rect001Card = screen.getByRole('link', { name: /Открыть расчёт: Прямоугольный воздуховод/i })
+    expect(rect001Card.querySelector('.atlas-placeholder-v1')).not.toBeInTheDocument()
+  })
 })
