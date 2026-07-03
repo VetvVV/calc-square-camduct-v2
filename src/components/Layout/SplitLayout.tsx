@@ -7,9 +7,13 @@ interface SplitLayoutProps {
 
 export function SplitLayout({ left, right }: SplitLayoutProps) {
   return (
-    <div className="grid w-full gap-3 xl:grid-cols-[minmax(0,2.45fr)_minmax(360px,0.8fr)] 2xl:grid-cols-[minmax(0,2.7fr)_minmax(380px,0.75fr)]">
-      <div className="min-w-0 space-y-3">{left}</div>
-      <aside className="min-w-0 space-y-3 xl:sticky xl:top-[116px] xl:self-start">{right}</aside>
+    <div className="workspace-split-v1">
+      <section className="workspace-split-panel-v1 workspace-split-panel-v1--specification" aria-label="Specification workspace panel">
+        <div className="workspace-split-panel-inner-v1">{left}</div>
+      </section>
+      <aside className="workspace-split-panel-v1 workspace-split-panel-v1--calculator" aria-label="Calculator workspace panel">
+        <div className="workspace-split-panel-inner-v1">{right}</div>
+      </aside>
     </div>
   )
 }

@@ -402,6 +402,49 @@ textarea {
     var(--brand-bg);
 }
 
+.workspace-split-v1 {
+  --workspace-left-width: minmax(0, 7fr);
+  --workspace-right-min: 360px;
+  --workspace-right-width: minmax(var(--workspace-right-min), 3fr);
+  display: grid;
+  grid-template-columns: var(--workspace-left-width) var(--workspace-right-width);
+  gap: 12px;
+  width: 100%;
+  min-height: calc(100vh - 132px);
+  align-items: stretch;
+}
+
+.workspace-split-panel-v1 {
+  min-width: 0;
+  min-height: 0;
+}
+
+.workspace-split-panel-inner-v1 {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+}
+
+@media (min-width: 1280px) {
+  .workspace-split-v1 {
+    height: calc(100vh - 132px);
+    overflow: hidden;
+  }
+
+  .workspace-split-panel-v1 {
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding-bottom: 2px;
+  }
+}
+
+@media (max-width: 1279px) {
+  .workspace-split-v1 {
+    grid-template-columns: 1fr;
+  }
+}
+
 .atlas-page-v1 {
   min-height: calc(100vh - 124px);
   padding: 4px 0 24px;
@@ -1911,5 +1954,10 @@ button[aria-disabled='true'].brand-action-button {
   .atlas-tile-v1:focus-visible .product-svg {
     transform: none;
   }
+}
+
+
+.workspace-v1--split {
+  max-width: none;
 }
 
