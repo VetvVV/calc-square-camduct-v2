@@ -52,8 +52,24 @@ describe('Atlas page UI contract', () => {
     expect(dimensionsLayer).toBeInTheDocument()
     expect(dimensionsLayer).toHaveAttribute('opacity', '0')
 
-    expect(screen.getByAltText('Труба спирально-навивная')).toBeInTheDocument()
     expect(screen.getByAltText('Отвод 45°')).toBeInTheDocument()
+  })
+
+  it('uses the inline R-sp-001 SVG visual in the Atlas card', () => {
+    const { container } = render(
+      <MemoryRouter initialEntries={['/atlas']}>
+        <AtlasPage />
+      </MemoryRouter>,
+    )
+
+    const rsp001Visual = container.querySelector('.product-svg.product-svg--rsp-001')
+    expect(rsp001Visual).toBeInTheDocument()
+    expect(rsp001Visual).toHaveAttribute('viewBox', '0 0 400 300')
+    expect(rsp001Visual).toHaveAccessibleName('R-sp-001 Труба спирально-навивная')
+
+    const dimensionsLayer = rsp001Visual?.querySelector('.p-dims')
+    expect(dimensionsLayer).toBeInTheDocument()
+    expect(dimensionsLayer).toHaveAttribute('opacity', '0')
   })
 
   it('uses the inline RECT-001 SVG visual instead of the Atlas placeholder', () => {
