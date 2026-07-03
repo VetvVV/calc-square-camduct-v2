@@ -13,11 +13,9 @@ export function Rect001ProductVisual({ title = 'RECT-001 Прямоугольн�
         <path d="M 74 94 L 312 70 L 342 112 L 104 136 Z" fill="var(--p-top, #f7f8fa)" />
         <path d="M 104 136 L 342 112 L 342 196 L 104 220 Z" fill="var(--p-body, #edf0f3)" />
         <path d="M 74 94 L 104 136 L 104 220 L 74 178 Z" fill="var(--p-inner, #e3e7eb)" />
-        <path d="M 84 111 L 96 138 L 96 204 L 84 176 Z" fill="#1f2328" opacity="0.05" />
       </g>
 
       <g className="p-form" stroke="var(--p-outline, #4d5156)" fill="none" strokeWidth="1.25" opacity="0.45">
-        <path d="M 88 112 L 106 138 L 106 205 L 88 177 Z" vectorEffect="non-scaling-stroke" />
         <path d="M 104 136 L 342 112" vectorEffect="non-scaling-stroke" />
         <path d="M 104 142 L 342 118" vectorEffect="non-scaling-stroke" />
         <path d="M 118 132 L 326 111" vectorEffect="non-scaling-stroke" />
@@ -28,7 +26,6 @@ export function Rect001ProductVisual({ title = 'RECT-001 Прямоугольн�
         <path d="M 74 94 L 312 70 L 342 112 L 104 136 Z" vectorEffect="non-scaling-stroke" />
         <path d="M 74 94 L 104 136 L 104 220 L 74 178 Z" vectorEffect="non-scaling-stroke" />
         <path d="M 104 136 L 342 112 L 342 196 L 104 220 Z" vectorEffect="non-scaling-stroke" />
-        <path d="M 84 111 L 96 138 L 96 204 L 84 176 Z" vectorEffect="non-scaling-stroke" />
       </g>
 
       <g className="p-dims" opacity="0" fontFamily="ui-sans-serif, system-ui, Arial, sans-serif" fontSize="15" fontWeight="600">
