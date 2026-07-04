@@ -31,6 +31,18 @@ function buildSizeLabel(item: SpecificationItem, t: (key: string) => string) {
   return '—'
 }
 
+function buildPreviewSizeLabel(item: SpecificationItem, t: (key: string) => string) {
+  const A = item.parameters.A
+  const B = item.parameters.B
+  const L = item.parameters.L
+
+  if (item.moduleKey === 'rect-duct' && typeof A === 'number' && typeof B === 'number' && typeof L === 'number') {
+    return `W ${A} × H ${B} × L ${L} ${t('unit.mm')}`
+  }
+
+  return buildSizeLabel(item, t)
+}
+
 function materialLabel(material: unknown, t: (key: string) => string) {
   return typeof material === 'string' ? t(`material.${material}`) : '—'
 }
@@ -77,6 +89,7 @@ export function SpecRow({ index, item, onRemove, onEdit, canEdit, canRemove, onL
   })
   const productTitle = productLabel(item, t)
   const dimensions = buildSizeLabel(item, t)
+  const previewDimensions = buildPreviewSizeLabel(item, t)
   const material = materialLabel(item.options.material, t)
   const thickness = item.options.thickness === undefined || item.options.thickness === null ? '—' : String(item.options.thickness)
   const area = formatArea(item.calculated.areaDisplay, t('unit.m2'))
@@ -113,7 +126,7 @@ export function SpecRow({ index, item, onRemove, onEdit, canEdit, canRemove, onL
           anchorRect={previewAnchor}
           open={previewOpen}
           productTitle={productTitle}
-          dimensions={dimensions}
+          dimensions={previewDimensions}
           material={material}
           thickness={thickness}
           area={area}

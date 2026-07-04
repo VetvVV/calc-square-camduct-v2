@@ -114,5 +114,7 @@ describe('specification row preview', () => {
     expect(visual).not.toHaveTextContent('RECT-001')
     expect(preview).toHaveTextContent('RECT-001')
     expect(preview).toHaveTextContent('Прямоугольный воздуховод')
+    expect(preview).toHaveTextContent('W 400 × H 300 × L 1000 мм')
+    expect(preview).not.toHaveTextContent('A 400 × B 300')
   })
 })
