@@ -11,8 +11,13 @@ import { Alert } from '../components/Common/Alert'
 import { useAppStore } from '../store/appStore'
 import { canUseProjectFiles, canViewSpecification } from '../roles/permissions'
 import { useTranslation } from 'react-i18next'
+import type { ModuleKey } from '../types'
 
-const supportedModules = new Set(['round-duct', 'spiral-duct', 'rect-duct'])
+const supportedModules = new Set<ModuleKey>(['round-duct', 'spiral-duct', 'rect-duct'])
+
+function isSupportedModule(value: string | null): value is ModuleKey {
+  return value !== null && supportedModules.has(value as ModuleKey)
+}
 
 export function SplitPage() {
   const { t } = useTranslation()
@@ -22,17 +27,18 @@ export function SplitPage() {
   const showSpecification = canViewSpecification(role)
   const showProjectFiles = canUseProjectFiles(role)
   const moduleFromQuery = searchParams.get('module')
-  const hasSupportedModule = Boolean(moduleFromQuery && supportedModules.has(moduleFromQuery))
+  const selectedModule = isSupportedModule(moduleFromQuery) ? moduleFromQuery : undefined
+  const hasSupportedModule = Boolean(selectedModule)
 
   useEffect(() => {
-    if (moduleFromQuery === 'round-duct' || moduleFromQuery === 'spiral-duct' || moduleFromQuery === 'rect-duct') {
-      setActiveModule(moduleFromQuery)
+    if (selectedModule) {
+      setActiveModule(selectedModule)
     }
-  }, [moduleFromQuery, setActiveModule])
+  }, [selectedModule, setActiveModule])
 
   if (!showSpecification) {
     if (hasSupportedModule) {
-      return <Navigate to={`/calculator?module=${moduleFromQuery}`} replace />
+      return <Navigate to={`/calculator?module=${selectedModule}`} replace />
     }
 
     return (
@@ -59,7 +65,7 @@ export function SplitPage() {
           {showProjectFiles ? <SpecActions /> : <SpecActions locked />}
         </>
       }
-      right={<ModuleCalculator />}
+      right={<ModuleCalculator moduleKey={selectedModule} />}
     />
   )
 }
