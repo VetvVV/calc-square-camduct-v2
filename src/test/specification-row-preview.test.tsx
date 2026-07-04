@@ -8,6 +8,16 @@ import { createEmptyProject, createSpecificationItem } from '../domain/specifica
 import { useAppStore } from '../store/appStore'
 import { useProjectStore } from '../store/projectStore'
 
+function openPreview() {
+  const previewTrigger = screen.getByRole('button', { name: 'Показать превью позиции 1' })
+  fireEvent.mouseEnter(previewTrigger)
+
+  const preview = document.body.querySelector('#spec-row-preview-preview-test-item')
+  expect(preview).toBeInTheDocument()
+
+  return preview as HTMLElement
+}
+
 describe('specification row preview', () => {
   beforeEach(async () => {
     await i18n.changeLanguage('ru')
@@ -46,11 +56,9 @@ describe('specification row preview', () => {
     expect(previewTrigger).toBeInTheDocument()
     expect(previewTrigger).toHaveAttribute('aria-describedby', 'spec-row-preview-preview-test-item')
 
-    fireEvent.mouseEnter(previewTrigger)
-
-    const preview = document.body.querySelector('#spec-row-preview-preview-test-item')
-    expect(preview).toBeInTheDocument()
+    const preview = openPreview()
     expect(preview).toHaveClass('spec-row-preview-v1')
+    expect(preview.querySelector('.product-svg--r-001')).toBeInTheDocument()
     expect(preview).toHaveTextContent('Позиция №1')
     expect(preview).toHaveTextContent('R-001')
     expect(preview).toHaveTextContent('Труба прямошовная')
@@ -78,5 +86,33 @@ describe('specification row preview', () => {
 
     fireEvent.mouseLeave(previewTrigger)
     expect(document.body.querySelector('#spec-row-preview-preview-test-item')).not.toBeInTheDocument()
+  })
+
+  it('uses the inline RECT-001 visual in the row preview instead of placeholder text', () => {
+    const project = createEmptyProject()
+    const item = createSpecificationItem('rect-duct')
+    item.id = 'preview-test-item'
+    item.quantity = 1
+    item.parameters = { A: 400, B: 300, L: 1000, Q: 1 }
+    item.options = { material: 'galvanized', thickness: 0.5 }
+    item.calculated = { areaRaw: 1.436, areaDisplay: 1.436, massRaw: 5.64, massDisplay: 5.64 }
+    project.items = [item]
+
+    useAppStore.setState({ activeModule: 'rect-duct', role: 'client', camductMode: false })
+    useProjectStore.setState({ project, editingItemId: null, editingDraft: null })
+
+    render(
+      <MemoryRouter>
+        <SpecTable />
+      </MemoryRouter>,
+    )
+
+    const preview = openPreview()
+    const visual = preview.querySelector('.spec-row-preview-visual-v1')
+
+    expect(visual?.querySelector('.product-svg--rect-001')).toBeInTheDocument()
+    expect(visual).not.toHaveTextContent('RECT-001')
+    expect(preview).toHaveTextContent('RECT-001')
+    expect(preview).toHaveTextContent('Прямоугольный воздуховод')
   })
 })
