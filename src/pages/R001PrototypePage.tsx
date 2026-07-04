@@ -50,40 +50,60 @@ function ModeSwitcher({ mode, setMode }: { mode: PrototypeMode; setMode: (mode: 
 }
 
 function PublicProductVisual({ diameter, length, holes }: { diameter: number; length: number; holes: Hole[] }) {
+  const markX = (position: number) => 120 + Math.min(0.94, Math.max(0.06, position / Math.max(length, 1))) * 300
   return (
     <div className="r001-public-visual" aria-label="Схема трубы прямошовной">
-      <svg viewBox="0 0 520 300" role="img" aria-label={`Труба прямошовная ØD ${diameter}, L ${length}`}>
-        <defs>
-          <linearGradient id="r001-public-body" x1="0" x2="1">
-            <stop offset="0" stopColor="#eef3f8" />
-            <stop offset="1" stopColor="#d9e1ea" />
-          </linearGradient>
-        </defs>
-        <ellipse cx="142" cy="150" rx="62" ry="82" fill="#f8fafc" stroke="#4d5b69" strokeWidth="3" />
-        <path d="M142 68 H382 C418 68 444 105 444 150 C444 195 418 232 382 232 H142" fill="url(#r001-public-body)" stroke="#4d5b69" strokeWidth="3" />
-        <path d="M142 68 C178 70 202 106 202 150 C202 194 178 230 142 232" fill="none" stroke="#748294" strokeWidth="2" />
-        <path d="M176 88 H392" stroke="#df7a12" strokeWidth="4" strokeLinecap="round" />
-        <line x1="142" y1="54" x2="142" y2="246" stroke="#1455ff" strokeWidth="2" />
-        <line x1="126" y1="68" x2="158" y2="68" stroke="#1455ff" strokeWidth="2" />
-        <line x1="126" y1="232" x2="158" y2="232" stroke="#1455ff" strokeWidth="2" />
-        <text x="70" y="154" fill="#1455ff" fontSize="18" fontWeight="800">
-          ØD {diameter}
-        </text>
-        <line x1="176" y1="258" x2="444" y2="258" stroke="#0a8a22" strokeWidth="2" />
-        <line x1="176" y1="246" x2="176" y2="270" stroke="#0a8a22" strokeWidth="2" />
-        <line x1="444" y1="246" x2="444" y2="270" stroke="#0a8a22" strokeWidth="2" />
-        <text x="288" y="286" fill="#0a8a22" fontSize="18" fontWeight="800">
-          L {length}
-        </text>
-        {holes.map((hole, index) => {
-          const x = 230 + index * 42
-          const y = hole.side === 'bottom' ? 188 : hole.side === 'left' ? 138 : hole.side === 'right' ? 160 : 112
+      <svg viewBox="0 0 520 300" role="img" aria-label={`Труба прямошовная D ${diameter}, L ${length}`}>
+        {/* тень */}
+        <ellipse cx="266" cy="238" rx="176" ry="12" fill="#1f2328" opacity="0.07" />
+        {/* тело */}
+        <path d="M 104 96 L 424 96 A 26 56 0 0 1 424 208 L 104 208 Z" fill="#f4f6f8" />
+        <ellipse cx="104" cy="152" rx="26" ry="56" fill="#e8ebee" />
+        <ellipse cx="107" cy="152" rx="20" ry="49" fill="#1f2328" opacity="0.05" />
+        {/* линии формы: толщина стенки, дальняя кромка, продольный шов */}
+        <g stroke="#4d5156" fill="none" strokeWidth="1.25" opacity="0.45">
+          <ellipse cx="104" cy="152" rx="20.5" ry="50" />
+          <path d="M 424 101 A 21 51 0 0 1 424 203" />
+          <line x1="118" y1="101" x2="420" y2="101" />
+          <line x1="118" y1="105" x2="420" y2="105" />
+        </g>
+        {/* акцент шва */}
+        <line x1="118" y1="103" x2="420" y2="103" stroke="#df7a12" strokeWidth="1.6" opacity="0.7" />
+        {/* контур */}
+        <g stroke="#4d5156" fill="none" strokeWidth="2" strokeLinecap="round">
+          <line x1="104" y1="96" x2="424" y2="96" />
+          <line x1="104" y1="208" x2="424" y2="208" />
+          <path d="M 424 96 A 26 56 0 0 1 424 208" />
+          <ellipse cx="104" cy="152" rx="26" ry="56" />
+        </g>
+        {/* отверстия — условные метки */}
+        {holes.map((hole) => {
+          const x = markX(hole.position)
+          const y = hole.side === 'bottom' ? 206 : hole.side === 'top' ? 98 : 152
           return hole.shape === 'rectangular' ? (
-            <rect key={hole.id} x={x} y={y} width="32" height="18" rx="3" fill="#fff8ec" stroke="#df7a12" strokeWidth="3" />
+            <rect key={hole.id} x={x - 13} y={y - 8} width="26" height="16" rx="2" fill="#fff8ec" stroke="#df7a12" strokeWidth="2.5" />
           ) : (
-            <circle key={hole.id} cx={x + 16} cy={y + 9} r="12" fill="#fff8ec" stroke="#df7a12" strokeWidth="3" />
+            <circle key={hole.id} cx={x} cy={y} r="10" fill="#fff8ec" stroke="#df7a12" strokeWidth="2.5" />
           )
         })}
+        {/* размер D */}
+        <g stroke="#1455ff" fill="#1455ff" fontSize="17" fontWeight="700">
+          <line x1="98" y1="96" x2="56" y2="96" strokeWidth="1" />
+          <line x1="98" y1="208" x2="56" y2="208" strokeWidth="1" />
+          <line x1="60" y1="105" x2="60" y2="199" strokeWidth="1" />
+          <polygon points="60,96 56,106 64,106" stroke="none" />
+          <polygon points="60,208 56,198 64,198" stroke="none" />
+          <text x="14" y="158" stroke="none">D {diameter}</text>
+        </g>
+        {/* размер L */}
+        <g stroke="#0a8a22" fill="#0a8a22" fontSize="17" fontWeight="700">
+          <line x1="104" y1="216" x2="104" y2="262" strokeWidth="1" />
+          <line x1="424" y1="216" x2="424" y2="262" strokeWidth="1" />
+          <line x1="114" y1="256" x2="414" y2="256" strokeWidth="1" />
+          <polygon points="104,256 114,252 114,260" stroke="none" />
+          <polygon points="424,256 414,252 414,260" stroke="none" />
+          <text x="240" y="249" stroke="none">L {length}</text>
+        </g>
       </svg>
       <div className="r001-public-visual-note">{holes.length ? `Отверстий: ${holes.length}` : 'Отверстия пока не добавлены'}</div>
     </div>
@@ -157,7 +177,7 @@ function PublicSpecification({ positions, holes, area, quantity, diameter, lengt
           <tr>
             <th>№</th>
             <th>Изделие</th>
-            <th>Диаметр ØD</th>
+            <th>Диаметр D</th>
             <th>Длина L</th>
             <th>Количество</th>
             <th>Материал</th>
@@ -235,7 +255,7 @@ function PublicR001Calculator({
         <PublicProductVisual diameter={diameter} length={length} holes={holes} />
         <section className="r001-public-form">
           <label>
-            ØD / Диаметр, мм
+            D / Диаметр, мм
             <input type="number" value={diameter} onChange={(event) => setDiameter(Number(event.target.value || 0))} />
           </label>
           <label>
@@ -263,7 +283,7 @@ function PublicR001Calculator({
           <div className="r001-public-result">
             <strong>Итог по позиции</strong>
             <span>
-              ØD {diameter} × L {length} мм
+              D {diameter} × L {length} мм
             </span>
             <span>Площадь: {formatNumber(result.area)} м²</span>
           </div>

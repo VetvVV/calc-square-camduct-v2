@@ -40,11 +40,12 @@ describe('R-001 public/service prototype', () => {
     render(<R001PrototypePage />)
 
     expect(screen.getByRole('heading', { name: 'Труба прямошовная' })).toBeInTheDocument()
-    expect(screen.getByLabelText('Схема трубы прямошовной')).toHaveTextContent('ØD 125')
+    expect(screen.getByLabelText('Схема трубы прямошовной')).toHaveTextContent('D 125')
     expect(screen.getByLabelText('Схема трубы прямошовной')).toHaveTextContent('L 1000')
     expect(screen.queryByText('S1')).not.toBeInTheDocument()
     expect(screen.queryByText('C1')).not.toBeInTheDocument()
     expect(screen.queryByText('точка 3/0')).not.toBeInTheDocument()
+    expect(document.body.textContent).not.toContain('Ø')
     expect(screen.queryByText('12.5/12.5')).not.toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'Добавить отверстие' }))
@@ -84,7 +85,7 @@ describe('R-001 public/service prototype', () => {
   it('syncs thickness from Public v2 into Service ON and recalculates S1', () => {
     render(<R001PrototypePage />)
 
-    fireEvent.change(screen.getByLabelText('ØD / Диаметр, мм'), { target: { value: '125' } })
+    fireEvent.change(screen.getByLabelText('D / Диаметр, мм'), { target: { value: '125' } })
     fireEvent.change(screen.getByLabelText('L / Длина, мм'), { target: { value: '1000' } })
     fireEvent.change(screen.getByLabelText('Толщина, мм'), { target: { value: '0.9' } })
 
