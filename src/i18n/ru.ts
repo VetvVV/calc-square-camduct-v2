@@ -158,9 +158,9 @@ export const ru = {
   parameter: {
     diameterLabel: 'D — Диаметр, мм',
     lengthLabel: 'L — Длина, мм',
-    widthLabel: 'A — Ширина, мм',
-    heightLabel: 'B — Высота, мм',
-    rectLengthLabel: 'C — Длина, мм',
+    widthLabel: 'W — Ширина, мм',
+    heightLabel: 'H — Высота, мм',
+    rectLengthLabel: 'L — Длина, мм',
     rectWidthService: 'A / Ширина, мм',
     rectHeightService: 'B / Высота, мм',
     rectLengthService: 'C / Длина, мм',

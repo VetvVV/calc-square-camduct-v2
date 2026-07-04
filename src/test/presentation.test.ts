@@ -33,7 +33,7 @@ describe('presentation builders', () => {
     expect(text).toContain('Спірально-навивна труба')
   })
 
-  it('builds rectangular duct description with visible C length label', async () => {
+  it('builds rectangular duct description with public W/H/L labels', async () => {
     await i18n.changeLanguage('ru')
     const text = buildDescription(i18n.t.bind(i18n), 'rect-duct', {
       A: 400,
@@ -44,8 +44,8 @@ describe('presentation builders', () => {
       lockSize: '6/30',
     })
 
-    expect(text).toContain('A 400 × B 300 × C 1000 мм')
-    expect(text).not.toContain('× L 1000')
+    expect(text).toContain('W 400 × H 300 × L 1000 мм')
+    expect(text).not.toContain('× C 1000')
   })
 
   it('formats area and mass', async () => {

@@ -158,9 +158,9 @@ export const uk = {
   parameter: {
     diameterLabel: 'D — Діаметр, мм',
     lengthLabel: 'L — Довжина, мм',
-    widthLabel: 'A — Ширина, мм',
-    heightLabel: 'B — Висота, мм',
-    rectLengthLabel: 'C — Довжина, мм',
+    widthLabel: 'W — Ширина, мм',
+    heightLabel: 'H — Висота, мм',
+    rectLengthLabel: 'L — Довжина, мм',
     rectWidthService: 'A / Ширина, мм',
     rectHeightService: 'B / Висота, мм',
     rectLengthService: 'C / Довжина, мм',

@@ -158,9 +158,9 @@ export const en = {
   parameter: {
     diameterLabel: 'D — Diameter, mm',
     lengthLabel: 'L — Length, mm',
-    widthLabel: 'A — Width, mm',
-    heightLabel: 'B — Height, mm',
-    rectLengthLabel: 'C — Length, mm',
+    widthLabel: 'W — Width, mm',
+    heightLabel: 'H — Height, mm',
+    rectLengthLabel: 'L — Length, mm',
     rectWidthService: 'A / Width, mm',
     rectHeightService: 'B / Height, mm',
     rectLengthService: 'C / Length, mm',
