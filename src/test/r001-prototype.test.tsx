@@ -40,11 +40,12 @@ describe('R-001 public/service prototype', () => {
     render(<R001PrototypePage />)
 
     expect(screen.getByRole('heading', { name: 'Труба прямошовная' })).toBeInTheDocument()
-    expect(screen.getByLabelText('Схема трубы прямошовной')).toHaveTextContent('ØD 125')
+    expect(screen.getByLabelText('Схема трубы прямошовной')).toHaveTextContent('D 125')
     expect(screen.getByLabelText('Схема трубы прямошовной')).toHaveTextContent('L 1000')
     expect(screen.queryByText('S1')).not.toBeInTheDocument()
     expect(screen.queryByText('C1')).not.toBeInTheDocument()
     expect(screen.queryByText('точка 3/0')).not.toBeInTheDocument()
+    expect(document.body.textContent).not.toContain('Ø')
     expect(screen.queryByText('12.5/12.5')).not.toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'Добавить отверстие' }))
@@ -79,5 +80,54 @@ describe('R-001 public/service prototype', () => {
     expect(within(dialog).getByRole('option', { name: 'Право' })).toBeInTheDocument()
     expect(within(dialog).getByRole('button', { name: 'Да' })).toBeInTheDocument()
     expect(within(dialog).getByRole('button', { name: 'Отменить' })).toBeInTheDocument()
+  })
+
+  it('syncs thickness from Public v2 into Service ON and recalculates S1', () => {
+    render(<R001PrototypePage />)
+
+    fireEvent.change(screen.getByLabelText('D / Диаметр, мм'), { target: { value: '125' } })
+    fireEvent.change(screen.getByLabelText('L / Длина, мм'), { target: { value: '1000' } })
+    fireEvent.change(screen.getByLabelText('Толщина, мм'), { target: { value: '0.9' } })
+
+    expect(screen.queryByText(/S1/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/14\/14/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/припуск/)).not.toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Service ON' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Деталь' }))
+
+    expect(screen.getByLabelText('Толщина')).toHaveValue('0.9')
+    expect(screen.getByLabelText('Service diagnostics')).toHaveTextContent('S1 = 14/14')
+    expect(screen.getByLabelText('Service diagnostics')).toHaveTextContent('unfoldWidth = 420.699 мм')
+  })
+
+  it('syncs thickness from Service ON back into Public v2 without exposing S1', () => {
+    render(<R001PrototypePage />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Service ON' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Деталь' }))
+    fireEvent.change(screen.getByLabelText('Толщина'), { target: { value: '0.5' } })
+    expect(screen.getByLabelText('Service diagnostics')).toHaveTextContent('S1 = 12.5/12.5')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Public v2' }))
+
+    expect(screen.getByLabelText('Толщина, мм')).toHaveValue('0.5')
+    expect(screen.queryByText(/S1/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/12\.5\/12\.5/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/припуск/)).not.toBeInTheDocument()
+  })
+
+  it('appends positions to the public specification list', () => {
+    render(<R001PrototypePage />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Добавить в спецификацию' }))
+    fireEvent.change(screen.getByLabelText('L / Длина, мм'), { target: { value: '400' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Добавить в спецификацию' }))
+
+    const rows = screen.getAllByRole('row')
+    expect(rows).toHaveLength(3)
+    expect(rows[1]).toHaveTextContent('1000')
+    expect(rows[2]).toHaveTextContent('400')
+    expect(screen.getByRole('button', { name: 'Список позиций (2)' })).toBeInTheDocument()
   })
 })
