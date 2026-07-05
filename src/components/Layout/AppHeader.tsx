@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 import { useAppStore } from '../../store/appStore'
 import { CamductToggle } from '../Calculator/CamductToggle'
 import { canViewCamductMode } from '../../roles/permissions'
@@ -18,6 +19,9 @@ export function AppHeader() {
   const setRole = useAppStore((state) => state.setRole)
   const canUseCamduct = canViewCamductMode(role)
   const [languageOpen, setLanguageOpen] = useState(false)
+  // Прототип R-001 пока без i18n: не показываем переключатель языка,
+  // чтобы не создавать ложного ожидания перевода (боевые страницы не затронуты).
+  const isPrototypeRoute = useLocation().pathname.includes('/prototype/')
   const currentLanguage = languageOptions.find((option) => option.code === i18n.language) ?? languageOptions[0]
 
   return (
@@ -45,6 +49,7 @@ export function AppHeader() {
             <option value="service">{t('role.service')}</option>
           </select>
 
+          {!isPrototypeRoute ? (
           <div
             className="brand-language-select"
             onBlur={(event) => {
@@ -83,6 +88,7 @@ export function AppHeader() {
               </div>
             ) : null}
           </div>
+          ) : null}
 
           {canUseCamduct && <CamductToggle />}
         </div>
