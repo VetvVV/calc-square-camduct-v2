@@ -226,6 +226,20 @@ textarea {
   background: #d1d5db;
 }
 
+.brand-access-badge {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  border: 1px solid rgba(148, 163, 184, 0.52);
+  border-radius: 7px;
+  background: #f8fafc;
+  padding: 0 10px;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
 .brand-table thead {
   background: var(--brand-accent);
   color: #fff;

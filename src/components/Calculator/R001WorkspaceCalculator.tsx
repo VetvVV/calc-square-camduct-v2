@@ -5,31 +5,14 @@ import { addItem } from '../../domain/specification/specificationManager'
 import { createSpecificationItem } from '../../domain/specification/itemFactory'
 import { calculateR001PrototypeDemo } from '../../prototypes/r001DemoEngine'
 import { canAddSpecItem, canViewDebugPanel } from '../../roles/permissions'
-import type { UserRole } from '../../types'
 import { AccessInvitationDialog } from '../Common/AccessInvitationDialog'
 import { R001ProductDiagram } from './R001ProductDiagram'
-
-type PrototypeAccessState = 'guest' | 'user' | 'client' | 'admin'
-
-const ACCESS_STATUS: Record<PrototypeAccessState, string> = {
-  guest: 'Ознакомительный расчёт',
-  user: 'Ознакомительный доступ',
-  client: 'Рабочий кабинет подключён',
-  admin: 'Администрирование',
-}
 
 const MATERIALS = [
   { key: 'galvanized', label: 'Оцинкованная сталь' },
   { key: 'ss430', label: 'Нержавеющая 430 техническая' },
   { key: 'ss304', label: 'Нержавеющая 304 пищевая' },
 ]
-
-function accessFromRole(role: UserRole): PrototypeAccessState {
-  if (role === 'admin' || role === 'service') return 'admin'
-  if (role === 'client') return 'client'
-  if (role === 'user') return 'user'
-  return 'guest'
-}
 
 function round3(value: number) {
   return Number(value.toFixed(3))
@@ -43,7 +26,6 @@ export function R001WorkspaceCalculator() {
   const role = useAppStore((state) => state.role)
   const project = useProjectStore((state) => state.project)
   const setProject = useProjectStore((state) => state.setProject)
-  const [access, setAccess] = useState<PrototypeAccessState>(() => accessFromRole(role))
   const [engineeringOn, setEngineeringOn] = useState(false)
   const [diameter, setDiameter] = useState(125)
   const [length, setLength] = useState(1000)
@@ -57,14 +39,13 @@ export function R001WorkspaceCalculator() {
   const [invitationOpen, setInvitationOpen] = useState(false)
   const result = useMemo(() => calculateR001PrototypeDemo({ diameter, length, thickness }), [diameter, length, thickness])
   const materialLabel = MATERIALS.find((option) => option.key === material)?.label ?? MATERIALS[0].label
-  const canAdd = canAddSpecItem(role) && access !== 'guest'
+  const canAdd = canAddSpecItem(role)
   const areaTotal = round3(result.area * quantity)
   const massRaw = result.area * quantity * (thickness / 1000) * 7850
   const description = `Труба прямошовная · D ${diameter} мм · L ${length} мм · ${quantity} шт · ${materialLabel} · ${thickness} мм`
-  const showEngineering = canViewDebugPanel(role) && access === 'admin' && engineeringOn
+  const showEngineering = canViewDebugPanel(role) && engineeringOn
 
   useEffect(() => {
-    setAccess(accessFromRole(role))
     if (!canViewDebugPanel(role)) setEngineeringOn(false)
   }, [role])
 
@@ -112,20 +93,8 @@ export function R001WorkspaceCalculator() {
         <h3>R-001 / Труба прямошовная</h3>
       </div>
 
-      <div className="r001-testmode" aria-label="Режим доступа">
-        <span className="r001-testmode-label">Режим доступа</span>
-        <div className="r001-testmode-buttons">
-          {(['guest', 'user', 'client', 'admin'] as PrototypeAccessState[]).map((state) => (
-            <button key={state} type="button" className={access === state ? 'is-active' : ''} onClick={() => setAccess(state)}>
-              {ACCESS_STATUS[state]}
-            </button>
-          ))}
-        </div>
-      </div>
-
       <div className="r001-status-bar">
         <div className="r001-status-left">
-          <span className="r001-status-chip">{ACCESS_STATUS[access]}</span>
           <span className="r001-spec-indicator">Спецификация · {project.items.length} позиций</span>
         </div>
         {canViewDebugPanel(role) ? (

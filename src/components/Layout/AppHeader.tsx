@@ -22,7 +22,7 @@ const roleAccessLabels = {
 } as const
 
 export function AppHeader() {
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
   const role = useAppStore((state) => state.role)
   const setRole = useAppStore((state) => state.setRole)
   const canUseCamduct = canViewCamductMode(role)
@@ -31,6 +31,7 @@ export function AppHeader() {
   // чтобы не создавать ложного ожидания перевода (боевые страницы не затронуты).
   const isPrototypeRoute = useLocation().pathname.includes('/prototype/')
   const currentLanguage = languageOptions.find((option) => option.code === i18n.language) ?? languageOptions[0]
+  const accessLabel = roleAccessLabels[role]
 
   return (
     <header className="brand-topbar sticky top-0 z-30">
@@ -50,12 +51,13 @@ export function AppHeader() {
             onChange={(event) => setRole(event.target.value as typeof role)}
             className="brand-select h-8 px-2"
           >
-            <option value="guest">{roleAccessLabels.guest}</option>
-            <option value="user">{roleAccessLabels.user}</option>
-            <option value="client">{roleAccessLabels.client}</option>
-            <option value="admin">{roleAccessLabels.admin}</option>
-            <option value="service">{roleAccessLabels.service}</option>
+            <option value="guest">{t('role.guest')}</option>
+            <option value="user">{t('role.user')}</option>
+            <option value="client">{t('role.client')}</option>
+            <option value="admin">{t('role.admin')}</option>
+            <option value="service">{t('role.service')}</option>
           </select>
+          <span className="brand-access-badge" aria-label="Режим доступа">{accessLabel}</span>
 
           {!isPrototypeRoute ? (
           <div

@@ -3,14 +3,16 @@ import { cleanup, render, screen, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, describe, expect, it } from 'vitest'
 import { AppHeader } from '../components/Layout/AppHeader'
+import i18n from '../i18n'
 import { useAppStore } from '../store/appStore'
 
-describe('app header access labels', () => {
+describe('app header role and access labels', () => {
   afterEach(() => {
     cleanup()
   })
 
-  it('shows public access labels instead of internal role names', () => {
+  it('shows role labels in the selector and access mode as a separate badge', async () => {
+    await i18n.changeLanguage('ru')
     useAppStore.setState({ activeModule: 'round-duct', role: 'guest', camductMode: false })
 
     render(
@@ -23,16 +25,13 @@ describe('app header access labels', () => {
     const labels = within(roleSelect).getAllByRole('option').map((option) => option.textContent)
 
     expect(labels).toEqual([
-      'Ознакомительный расчёт',
-      'Ознакомительный доступ',
-      'Рабочий кабинет подключён',
-      'Администрирование',
-      'Администрирование',
+      'Гость',
+      'Работа',
+      'Клиент',
+      'Админ',
+      'Сервис',
     ])
-    expect(labels).not.toContain('Гость')
-    expect(labels).not.toContain('Работа')
-    expect(labels).not.toContain('Клиент')
-    expect(labels).not.toContain('Сервис')
-    expect(labels).not.toContain('Админ')
+    expect(labels).not.toContain('Ознакомительный расчёт')
+    expect(screen.getByLabelText('Режим доступа')).toHaveTextContent('Ознакомительный расчёт')
   })
 })
