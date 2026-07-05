@@ -107,12 +107,12 @@ export function R001WorkspaceCalculator() {
       <div className="r001-watermark" aria-hidden="true"><span>ОПЫТНЫЙ ОБРАЗЕЦ</span></div>
 
       <div className="r001-workspace-title">
-        <span>Опытный UI-прототип</span>
+        <span>Расчётный модуль</span>
         <h3>R-001 / Труба прямошовная</h3>
       </div>
 
-      <div className="r001-testmode" aria-label="Тестовый режим прототипа">
-        <span className="r001-testmode-label">Тестовый режим прототипа</span>
+      <div className="r001-testmode" aria-label="Режим доступа">
+        <span className="r001-testmode-label">Режим доступа</span>
         <div className="r001-testmode-buttons">
           {(['guest', 'user', 'client', 'admin'] as PrototypeAccessState[]).map((state) => (
             <button key={state} type="button" className={access === state ? 'is-active' : ''} onClick={() => setAccess(state)}>

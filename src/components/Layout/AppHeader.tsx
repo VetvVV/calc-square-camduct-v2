@@ -13,8 +13,16 @@ const languageOptions = [
   { code: 'en', short: 'EN', label: 'English' },
 ] as const
 
+const roleAccessLabels = {
+  guest: 'Ознакомительный расчёт',
+  user: 'Ознакомительный доступ',
+  client: 'Рабочий кабинет подключён',
+  admin: 'Администрирование',
+  service: 'Администрирование',
+} as const
+
 export function AppHeader() {
-  const { i18n, t } = useTranslation()
+  const { i18n } = useTranslation()
   const role = useAppStore((state) => state.role)
   const setRole = useAppStore((state) => state.setRole)
   const canUseCamduct = canViewCamductMode(role)
@@ -42,11 +50,11 @@ export function AppHeader() {
             onChange={(event) => setRole(event.target.value as typeof role)}
             className="brand-select h-8 px-2"
           >
-            <option value="guest">{t('role.guest')}</option>
-            <option value="user">{t('role.user')}</option>
-            <option value="client">{t('role.client')}</option>
-            <option value="admin">{t('role.admin')}</option>
-            <option value="service">{t('role.service')}</option>
+            <option value="guest">{roleAccessLabels.guest}</option>
+            <option value="user">{roleAccessLabels.user}</option>
+            <option value="client">{roleAccessLabels.client}</option>
+            <option value="admin">{roleAccessLabels.admin}</option>
+            <option value="service">{roleAccessLabels.service}</option>
           </select>
 
           {!isPrototypeRoute ? (
