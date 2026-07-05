@@ -2733,6 +2733,20 @@ button[aria-disabled='true'].brand-action-button {
   box-shadow: none;
 }
 
+.r001-split-visual {
+  display: grid;
+  place-items: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  padding: 8px;
+}
+
+.r001-split-visual svg {
+  width: 100%;
+  max-width: 360px;
+}
+
 .r001-split-panel .r001-spec-block {
   margin-top: 2px;
 }

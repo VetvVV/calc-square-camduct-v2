@@ -7,6 +7,7 @@ import { calculateR001PrototypeDemo } from '../../prototypes/r001DemoEngine'
 import { canAddSpecItem, canViewDebugPanel } from '../../roles/permissions'
 import type { UserRole } from '../../types'
 import { AccessInvitationDialog } from '../Common/AccessInvitationDialog'
+import { R001ProductDiagram } from './R001ProductDiagram'
 
 type PrototypeAccessState = 'guest' | 'user' | 'client' | 'admin'
 
@@ -140,6 +141,9 @@ export function R001WorkspaceCalculator() {
       </div>
 
       <section className="r001-public-form" aria-label="R-001 рабочий калькулятор">
+        <div className="r001-split-visual" aria-label="Схема трубы прямошовной">
+          <R001ProductDiagram diameter={diameter} length={length} />
+        </div>
         <label className="r001-field-d">
           D / Диаметр, мм
           <input type="number" value={diameter} onKeyDown={handleNumberKeyDown} onChange={(event) => setDiameter(Number(event.target.value || 0))} />
