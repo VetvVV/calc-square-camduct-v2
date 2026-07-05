@@ -34,7 +34,7 @@ export function R001WorkspaceCalculator() {
   const [thickness, setThickness] = useState(0.5)
   const [comment, setComment] = useState('')
   const [optionsOpen, setOptionsOpen] = useState(false)
-  const [holesCount, setHolesCount] = useState(0)
+  const [holesPlaceholderOpen, setHolesPlaceholderOpen] = useState(false)
   const [added, setAdded] = useState(false)
   const [invitationOpen, setInvitationOpen] = useState(false)
   const result = useMemo(() => calculateR001PrototypeDemo({ diameter, length, thickness }), [diameter, length, thickness])
@@ -64,7 +64,7 @@ export function R001WorkspaceCalculator() {
     const item = createSpecificationItem('round-duct')
     item.quantity = quantity
     item.comment = comment
-    item.parameters = { A: diameter, B: length, holes: holesCount }
+    item.parameters = { A: diameter, B: length }
     item.options = { material, thickness, prototypeFlow: true }
     item.calculated = {
       areaRaw: result.area * quantity,
@@ -74,7 +74,6 @@ export function R001WorkspaceCalculator() {
     }
     item.moduleMetadata = {
       prototype: 'r001-public-service',
-      holesCount,
       seamType: result.seamType,
       allowance: result.allowance,
     }
@@ -153,8 +152,10 @@ export function R001WorkspaceCalculator() {
                 <div className="r001-options-body">
                   <div className="r001-options-section">
                     <span>Отверстия</span>
-                    <button type="button" onClick={() => setHolesCount((value) => value + 1)}>Добавить отверстие</button>
-                    {holesCount ? <span className="r001-options-count">Отверстий: {holesCount}</span> : null}
+                    <button type="button" onClick={() => setHolesPlaceholderOpen(true)}>Настроить отверстия</button>
+                    {holesPlaceholderOpen ? (
+                      <span className="r001-options-note">Отверстия будут добавлены после настройки параметров отверстий.</span>
+                    ) : null}
                   </div>
                 </div>
               ) : null}

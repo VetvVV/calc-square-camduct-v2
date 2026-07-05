@@ -79,6 +79,11 @@ describe('split page query module routing', () => {
 
     fireEvent.change(screen.getByLabelText('Количество'), { target: { value: '3' } })
     fireEvent.change(screen.getByLabelText('Материал'), { target: { value: 'ss304' } })
+    fireEvent.click(screen.getByRole('button', { name: /Опции/ }))
+    expect(screen.queryByText(/Отверстий: 0/)).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Настроить отверстия' }))
+    expect(screen.getByText('Отверстия будут добавлены после настройки параметров отверстий.')).toBeInTheDocument()
+    expect(screen.queryByText(/Отверстий:/)).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Добавить в проект' }))
 
     const project = useProjectStore.getState().project
@@ -89,6 +94,7 @@ describe('split page query module routing', () => {
     expect(project.items[0].options.thickness).toBe(0.5)
     expect(project.items[0].parameters.A).toBe(125)
     expect(project.items[0].parameters.B).toBe(1000)
+    expect(project.items[0].parameters.holes).toBeUndefined()
     expect(screen.getByRole('button', { name: 'Добавлено в проект' })).toBeInTheDocument()
   })
 })
