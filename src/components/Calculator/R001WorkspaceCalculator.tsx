@@ -14,12 +14,80 @@ const MATERIALS = [
   { key: 'ss304', label: 'Нержавеющая 304 пищевая' },
 ]
 
+type HoleShape = 'round' | 'rectangular'
+type HoleSide = 'top' | 'bottom' | 'left' | 'right'
+
+interface R001Hole {
+  id: number
+  shape: HoleShape
+  side: HoleSide
+  size1: number
+  size2?: number
+  position: number
+}
+
 function round3(value: number) {
   return Number(value.toFixed(3))
 }
 
 function round2(value: number) {
   return Number(value.toFixed(2))
+}
+
+function R001HoleModal({ onClose, onAdd }: { onClose: () => void; onAdd: (hole: Omit<R001Hole, 'id'>) => void }) {
+  const [shape, setShape] = useState<HoleShape>('rectangular')
+  const [side, setSide] = useState<HoleSide>('top')
+  const [size1, setSize1] = useState(200)
+  const [size2, setSize2] = useState(100)
+  const [position, setPosition] = useState(500)
+
+  return (
+    <div className="r001-modal-backdrop">
+      <section className="r001-modal" aria-modal="true" role="dialog" aria-labelledby="r001-workspace-hole-title">
+        <h3 id="r001-workspace-hole-title">Отверстие</h3>
+        <label>
+          Форма отверстия
+          <select value={shape} onChange={(event) => setShape(event.target.value as HoleShape)}>
+            <option value="round">Круглое</option>
+            <option value="rectangular">Прямоугольное</option>
+          </select>
+        </label>
+        <label>
+          Сторона
+          <select value={side} onChange={(event) => setSide(event.target.value as HoleSide)}>
+            <option value="top">Верх</option>
+            <option value="bottom">Низ</option>
+            <option value="left">Левая</option>
+            <option value="right">Правая</option>
+          </select>
+        </label>
+        <label>
+          Размер 1, мм
+          <input type="number" value={size1} onChange={(event) => setSize1(Number(event.target.value || 0))} />
+        </label>
+        {shape === 'rectangular' ? (
+          <label>
+            Размер 2, мм
+            <input type="number" value={size2} onChange={(event) => setSize2(Number(event.target.value || 0))} />
+          </label>
+        ) : null}
+        <label>
+          Положение по длине, мм
+          <input type="number" value={position} onChange={(event) => setPosition(Number(event.target.value || 0))} />
+        </label>
+        <div className="r001-modal-actions">
+          <button type="button" onClick={onClose}>Отменить</button>
+          <button
+            type="button"
+            className="r001-primary"
+            onClick={() => onAdd({ shape, side, size1, size2: shape === 'rectangular' ? size2 : undefined, position })}
+          >
+            Добавить
+          </button>
+        </div>
+      </section>
+    </div>
+  )
 }
 
 export function R001WorkspaceCalculator() {
@@ -34,7 +102,8 @@ export function R001WorkspaceCalculator() {
   const [thickness, setThickness] = useState(0.5)
   const [comment, setComment] = useState('')
   const [optionsOpen, setOptionsOpen] = useState(false)
-  const [holesPlaceholderOpen, setHolesPlaceholderOpen] = useState(false)
+  const [holeOpen, setHoleOpen] = useState(false)
+  const [holes, setHoles] = useState<R001Hole[]>([])
   const [added, setAdded] = useState(false)
   const [invitationOpen, setInvitationOpen] = useState(false)
   const result = useMemo(() => calculateR001PrototypeDemo({ diameter, length, thickness }), [diameter, length, thickness])
@@ -55,6 +124,10 @@ export function R001WorkspaceCalculator() {
     event.currentTarget.blur()
   }
 
+  const addHole = (hole: Omit<R001Hole, 'id'>) => {
+    setHoles((current) => [...current, { ...hole, id: current.length + 1 }])
+  }
+
   const handleAdd = () => {
     if (!canAdd) {
       setInvitationOpen(true)
@@ -64,7 +137,7 @@ export function R001WorkspaceCalculator() {
     const item = createSpecificationItem('round-duct')
     item.quantity = quantity
     item.comment = comment
-    item.parameters = { A: diameter, B: length }
+    item.parameters = { A: diameter, B: length, holes: holes.length }
     item.options = { material, thickness, prototypeFlow: true }
     item.calculated = {
       areaRaw: result.area * quantity,
@@ -74,6 +147,8 @@ export function R001WorkspaceCalculator() {
     }
     item.moduleMetadata = {
       prototype: 'r001-public-service',
+      holes,
+      holesCount: holes.length,
       seamType: result.seamType,
       allowance: result.allowance,
     }
@@ -111,7 +186,7 @@ export function R001WorkspaceCalculator() {
       <section className="r001-public-form" aria-label="R-001 рабочий калькулятор">
         <div className="r001-split-input-row">
           <div className="r001-split-visual" aria-label="Схема трубы прямошовной">
-            <R001ProductDiagram diameter={diameter} length={length} />
+            <R001ProductDiagram diameter={diameter} length={length} holes={holes} />
           </div>
 
           <div className="r001-split-fields">
@@ -152,10 +227,8 @@ export function R001WorkspaceCalculator() {
                 <div className="r001-options-body">
                   <div className="r001-options-section">
                     <span>Отверстия</span>
-                    <button type="button" onClick={() => setHolesPlaceholderOpen(true)}>Настроить отверстия</button>
-                    {holesPlaceholderOpen ? (
-                      <span className="r001-options-note">Отверстия будут добавлены после настройки параметров отверстий.</span>
-                    ) : null}
+                    <button type="button" onClick={() => setHoleOpen(true)}>Добавить отверстие</button>
+                    {holes.length ? <span className="r001-options-count">Отверстий: {holes.length}</span> : null}
                   </div>
                 </div>
               ) : null}
@@ -177,6 +250,7 @@ export function R001WorkspaceCalculator() {
         </div>
       </section>
 
+      {holeOpen ? <R001HoleModal onClose={() => setHoleOpen(false)} onAdd={(hole) => { addHole(hole); setHoleOpen(false) }} /> : null}
       <AccessInvitationDialog open={invitationOpen} onClose={() => setInvitationOpen(false)} />
     </div>
   )
