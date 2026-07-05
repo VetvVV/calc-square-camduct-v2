@@ -2,9 +2,9 @@ import { useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useAppStore } from '../../store/appStore'
 import type { ModuleKey } from '../../types'
-import { RoundDuctCalculator } from './RoundDuctCalculator'
 import { SpiralDuctCalculator } from './SpiralDuctCalculator'
 import { RectDuctCalculator } from './RectDuctCalculator'
+import { R001WorkspaceCalculator } from './R001WorkspaceCalculator'
 
 interface ModuleCalculatorProps {
   moduleKey?: ModuleKey
@@ -24,7 +24,7 @@ export function ModuleCalculator({ moduleKey }: ModuleCalculatorProps = {}) {
   }, [moduleFromQuery, moduleKey, storeModule])
 
   if (activeModule === 'round-duct') {
-    return <RoundDuctCalculator />
+    return <R001WorkspaceCalculator />
   }
 
   if (activeModule === 'spiral-duct') {

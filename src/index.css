@@ -2660,3 +2660,79 @@ button[aria-disabled='true'].brand-action-button {
 @media (prefers-reduced-motion: reduce) {
   .r001-add-project:active { transform: none; }
 }
+
+/* ===== R-001 prototype in split workspace ===== */
+.r001-split-panel {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.r001-split-panel .r001-watermark {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.75;
+}
+
+.r001-split-panel .r001-watermark span {
+  font-size: clamp(24px, 3vw, 48px);
+}
+
+.r001-split-panel .r001-testmode,
+.r001-split-panel .r001-status-bar,
+.r001-split-panel .r001-workspace-title,
+.r001-split-panel .r001-public-form {
+  position: relative;
+  z-index: 1;
+}
+
+.r001-split-panel .r001-workspace-title {
+  display: grid;
+  gap: 3px;
+  border: 1px solid rgba(214, 205, 183, 0.9);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 12px 14px;
+}
+
+.r001-split-panel .r001-workspace-title span {
+  color: var(--brand-accent);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.r001-split-panel .r001-workspace-title h3 {
+  margin: 0;
+  color: #334155;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.r001-split-panel .r001-testmode,
+.r001-split-panel .r001-status-bar {
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.r001-split-panel .r001-testmode-buttons,
+.r001-split-panel .r001-status-left,
+.r001-split-panel .r001-status-right {
+  width: 100%;
+}
+
+.r001-split-panel .r001-testmode-buttons button,
+.r001-split-panel .r001-soft-action,
+.r001-split-panel .r001-eng-toggle {
+  flex: 1 1 140px;
+}
+
+.r001-split-panel .r001-public-form {
+  box-shadow: none;
+}
+
+.r001-split-panel .r001-spec-block {
+  margin-top: 2px;
+}
