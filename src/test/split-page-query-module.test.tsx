@@ -37,11 +37,16 @@ describe('split page query module routing', () => {
   })
 
   it('keeps round and spiral query modules openable in split', () => {
-    const { unmount } = renderSplit('/split?module=round-duct')
+    const { container, unmount } = renderSplit('/split?module=round-duct')
     expect(screen.getByText('R-001 / Труба прямошовная')).toBeInTheDocument()
     expect(screen.getByText('Расчётный модуль')).toBeInTheDocument()
     expect(screen.getByText('ОПЫТНЫЙ ОБРАЗЕЦ')).toBeInTheDocument()
     expect(screen.getByLabelText('Режим доступа')).toBeInTheDocument()
+    const inputRow = container.querySelector('.r001-split-input-row')
+    expect(inputRow).toBeInTheDocument()
+    expect(inputRow?.firstElementChild).toHaveClass('r001-split-visual')
+    expect(inputRow?.lastElementChild).toHaveClass('r001-split-fields')
+    expect(container.querySelector('.r001-spec-block')).toBeInTheDocument()
     expect(screen.getByLabelText('Схема трубы прямошовной')).toHaveTextContent('D 125')
     expect(screen.getByLabelText('Схема трубы прямошовной')).toHaveTextContent('L 1000')
     expect(screen.getByLabelText('Схема трубы прямошовной')).not.toHaveTextContent('Ø')

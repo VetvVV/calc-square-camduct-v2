@@ -141,51 +141,56 @@ export function R001WorkspaceCalculator() {
       </div>
 
       <section className="r001-public-form" aria-label="R-001 рабочий калькулятор">
-        <div className="r001-split-visual" aria-label="Схема трубы прямошовной">
-          <R001ProductDiagram diameter={diameter} length={length} />
-        </div>
-        <label className="r001-field-d">
-          D / Диаметр, мм
-          <input type="number" value={diameter} onKeyDown={handleNumberKeyDown} onChange={(event) => setDiameter(Number(event.target.value || 0))} />
-        </label>
-        <label className="r001-field-l">
-          L / Длина, мм
-          <input type="number" value={length} onKeyDown={handleNumberKeyDown} onChange={(event) => setLength(Number(event.target.value || 0))} />
-        </label>
-        <label>
-          Количество
-          <input type="number" min={1} value={quantity} onKeyDown={handleNumberKeyDown} onChange={(event) => setQuantity(Math.max(1, Number(event.target.value || 1)))} />
-        </label>
-        <label>
-          Материал
-          <select value={material} onChange={(event) => setMaterial(event.target.value)}>
-            {MATERIALS.map((option) => (
-              <option key={option.key} value={option.key}>{option.label}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Толщина, мм
-          <select value={thickness} onChange={(event) => setThickness(Number(event.target.value))}>
-            <option value={0.5}>0.5</option>
-            <option value={0.7}>0.7</option>
-            <option value={0.9}>0.9</option>
-          </select>
-        </label>
+        <div className="r001-split-input-row">
+          <div className="r001-split-visual" aria-label="Схема трубы прямошовной">
+            <R001ProductDiagram diameter={diameter} length={length} />
+          </div>
 
-        <div className="r001-options">
-          <button type="button" className="r001-options-head" aria-expanded={optionsOpen} onClick={() => setOptionsOpen((value) => !value)}>
-            Опции {optionsOpen ? '▾' : '▸'}
-          </button>
-          {optionsOpen ? (
-            <div className="r001-options-body">
-              <div className="r001-options-section">
-                <span>Отверстия</span>
-                <button type="button" onClick={() => setHolesCount((value) => value + 1)}>Добавить отверстие</button>
-                {holesCount ? <span className="r001-options-count">Отверстий: {holesCount}</span> : null}
+          <div className="r001-split-fields">
+            <label className="r001-field-d">
+              D / Диаметр, мм
+              <input type="number" value={diameter} onKeyDown={handleNumberKeyDown} onChange={(event) => setDiameter(Number(event.target.value || 0))} />
+            </label>
+            <label className="r001-field-l">
+              L / Длина, мм
+              <input type="number" value={length} onKeyDown={handleNumberKeyDown} onChange={(event) => setLength(Number(event.target.value || 0))} />
+            </label>
+            <label>
+              Количество
+              <input type="number" min={1} value={quantity} onKeyDown={handleNumberKeyDown} onChange={(event) => setQuantity(Math.max(1, Number(event.target.value || 1)))} />
+            </label>
+            <label>
+              Материал
+              <select value={material} onChange={(event) => setMaterial(event.target.value)}>
+                {MATERIALS.map((option) => (
+                  <option key={option.key} value={option.key}>{option.label}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Толщина, мм
+              <select value={thickness} onChange={(event) => setThickness(Number(event.target.value))}>
+                <option value={0.5}>0.5</option>
+                <option value={0.7}>0.7</option>
+                <option value={0.9}>0.9</option>
+              </select>
+            </label>
+
+            <div className="r001-options">
+              <button type="button" className="r001-options-head" aria-expanded={optionsOpen} onClick={() => setOptionsOpen((value) => !value)}>
+                Опции {optionsOpen ? '▾' : '▸'}
+              </button>
+              {optionsOpen ? (
+                <div className="r001-options-body">
+                  <div className="r001-options-section">
+                    <span>Отверстия</span>
+                    <button type="button" onClick={() => setHolesCount((value) => value + 1)}>Добавить отверстие</button>
+                    {holesCount ? <span className="r001-options-count">Отверстий: {holesCount}</span> : null}
+                  </div>
+                </div>
+              ) : null}
               </div>
-            </div>
-          ) : null}
+          </div>
         </div>
 
         <div className="r001-spec-block">

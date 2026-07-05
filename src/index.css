@@ -2733,9 +2733,23 @@ button[aria-disabled='true'].brand-action-button {
   box-shadow: none;
 }
 
+.r001-split-input-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.9fr) minmax(0, 1.1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.r001-split-fields {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
 .r001-split-visual {
   display: grid;
   place-items: center;
+  align-self: stretch;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   background: #fff;
@@ -2749,4 +2763,10 @@ button[aria-disabled='true'].brand-action-button {
 
 .r001-split-panel .r001-spec-block {
   margin-top: 2px;
+}
+
+@media (max-width: 1280px) {
+  .r001-split-input-row {
+    grid-template-columns: 1fr;
+  }
 }
