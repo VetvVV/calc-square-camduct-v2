@@ -33,5 +33,35 @@ describe('app header role and access labels', () => {
     ])
     expect(labels).not.toContain('Ознакомительный расчёт')
     expect(screen.getByLabelText('Режим доступа')).toHaveTextContent('Ознакомительный расчёт')
+    expect(screen.getByLabelText('Текущий язык')).toHaveTextContent('RU')
+    expect(screen.queryByRole('button', { name: 'RU' })).not.toBeInTheDocument()
+  })
+
+  it('keeps the active language switcher on non R-001 routes', async () => {
+    await i18n.changeLanguage('ru')
+    useAppStore.setState({ activeModule: 'round-duct', role: 'guest', camductMode: false })
+
+    render(
+      <MemoryRouter initialEntries={['/atlas']}>
+        <AppHeader />
+      </MemoryRouter>,
+    )
+
+    expect(screen.queryByLabelText('Текущий язык')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'RU' })).toBeInTheDocument()
+  })
+
+  it('shows a static language badge on the R-001 prototype route', async () => {
+    await i18n.changeLanguage('ru')
+    useAppStore.setState({ activeModule: 'round-duct', role: 'guest', camductMode: false })
+
+    render(
+      <MemoryRouter initialEntries={['/prototype/r001']}>
+        <AppHeader />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByLabelText('Текущий язык')).toHaveTextContent('RU')
+    expect(screen.queryByRole('button', { name: 'RU' })).not.toBeInTheDocument()
   })
 })

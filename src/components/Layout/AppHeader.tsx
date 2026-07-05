@@ -27,9 +27,9 @@ export function AppHeader() {
   const setRole = useAppStore((state) => state.setRole)
   const canUseCamduct = canViewCamductMode(role)
   const [languageOpen, setLanguageOpen] = useState(false)
-  // Прототип R-001 пока без i18n: не показываем переключатель языка,
-  // чтобы не создавать ложного ожидания перевода (боевые страницы не затронуты).
-  const isPrototypeRoute = useLocation().pathname.includes('/prototype/')
+  const location = useLocation()
+  const splitModule = new URLSearchParams(location.search).get('module')
+  const isR001Route = location.pathname.includes('/prototype/r001') || (location.pathname === '/split' && splitModule === 'round-duct')
   const currentLanguage = languageOptions.find((option) => option.code === i18n.language) ?? languageOptions[0]
   const accessLabel = roleAccessLabels[role]
 
@@ -59,7 +59,9 @@ export function AppHeader() {
           </select>
           <span className="brand-access-badge" aria-label="Режим доступа">{accessLabel}</span>
 
-          {!isPrototypeRoute ? (
+          {isR001Route ? (
+            <span className="brand-language-static" aria-label="Текущий язык">RU</span>
+          ) : (
           <div
             className="brand-language-select"
             onBlur={(event) => {
@@ -98,7 +100,7 @@ export function AppHeader() {
               </div>
             ) : null}
           </div>
-          ) : null}
+          )}
 
           {canUseCamduct && <CamductToggle />}
         </div>

@@ -1362,6 +1362,20 @@ textarea {
   color: var(--brand-accent-dark);
 }
 
+.brand-language-static {
+  display: inline-flex;
+  min-width: 52px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  border-radius: 7px;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 900;
+}
+
 .brand-language-menu {
   position: absolute;
   right: 0;
