@@ -49,7 +49,6 @@ describe('formula cards page', () => {
     expect(screen.getAllByText('Источник есть, формула не извлечена').length).toBeGreaterThan(0)
     expect(screen.getAllByText('По компонентам').length).toBeGreaterThan(0)
     expect(screen.getAllByText('По аналогии').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('Нужна сверка с CAMduct').length).toBeGreaterThan(0)
 
     const details = screen.getByRole('heading', { name: 'Карточка выбранного изделия' }).closest('section')
     expect(details).not.toBeNull()
@@ -82,6 +81,27 @@ describe('formula cards page', () => {
     expect(within(details!).getByText('Методичка основная 30.09.2021: раздел “Отводы сегментные круглого сечения (колено круглое)”.')).toBeInTheDocument()
     expect(within(details!).getByText('Формула восстановлена по Excel-базе, сформированной на основе CAMduct. Не является условной.')).toBeInTheDocument()
     expect(within(details!).getByText('Перенести формулу в расчётный engine и покрыть тестами.')).toBeInTheDocument()
+
+    const centeredTransitionRow = screen.getByText('KRG-003').closest('tr')
+    expect(centeredTransitionRow).not.toBeNull()
+    fireEvent.click(centeredTransitionRow!)
+
+    expect(centeredTransitionRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Переход круглый центральный')).toBeInTheDocument()
+    expect(within(details!).getAllByText('Проверена').length).toBeGreaterThan(0)
+    expect(within(details!).getByText('Методики переходов круг-в-круг + Excel-базы CAMduct')).toBeInTheDocument()
+    expect(within(details!).getByText('Для KRG-003: e = 0, k = 1.0065.')).toBeInTheDocument()
+
+    const offsetTransitionRow = screen.getByText('KRG-004').closest('tr')
+    expect(offsetTransitionRow).not.toBeNull()
+    fireEvent.click(offsetTransitionRow!)
+
+    expect(offsetTransitionRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Переход круглый со смещением / односторонний')).toBeInTheDocument()
+    expect(within(details!).getAllByText('Проверена').length).toBeGreaterThan(0)
+    expect(within(details!).getByText('Методики переходов круг-в-круг + Excel-базы CAMduct')).toBeInTheDocument()
+    expect(within(details!).getByText('Односторонний переход: e = (D1 − D2) / 2.')).toBeInTheDocument()
+    expect(within(details!).getByText('Переход со смещением: e = ручной ввод.')).toBeInTheDocument()
   })
 
   it('shows formula navigation only for roles that can view formula details', async () => {
