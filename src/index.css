@@ -1540,6 +1540,13 @@ textarea {
   font-weight: 800;
 }
 
+.formula-registry-hint-v1 {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .formula-registry-table-wrap-v1 {
   overflow-x: auto;
   border: 1px solid rgba(148, 163, 184, 0.34);
@@ -1588,6 +1595,26 @@ textarea {
   border-bottom: 0;
 }
 
+.formula-registry-table-v1 tbody tr {
+  position: relative;
+  cursor: pointer;
+}
+
+.formula-registry-table-v1 tbody tr:hover,
+.formula-registry-table-v1 tbody tr:focus-visible {
+  outline: none;
+  background: rgba(255, 248, 236, 0.48);
+}
+
+.formula-registry-table-v1 tbody tr.is-selected {
+  background: rgba(255, 248, 236, 0.72);
+  box-shadow: inset 4px 0 0 var(--brand-accent);
+}
+
+.formula-registry-table-v1 tbody tr.is-selected td:first-child {
+  color: var(--brand-accent);
+}
+
 .formula-status-v1 {
   display: inline-flex;
   align-items: center;
@@ -1602,6 +1629,30 @@ textarea {
   white-space: nowrap;
 }
 
+.formula-status-v1--checked {
+  border-color: rgba(22, 163, 74, 0.36);
+  background: rgba(240, 253, 244, 0.92);
+  color: #166534;
+}
+
+.formula-status-v1--conditional {
+  border-color: rgba(223, 122, 18, 0.34);
+  background: rgba(255, 248, 236, 0.95);
+  color: #9a5b08;
+}
+
+.formula-status-v1--clean-only {
+  border-color: rgba(37, 99, 235, 0.3);
+  background: rgba(239, 246, 255, 0.95);
+  color: #1d4ed8;
+}
+
+.formula-status-v1--needs-check {
+  border-color: rgba(148, 163, 184, 0.45);
+  background: rgba(248, 250, 252, 0.95);
+  color: #64748b;
+}
+
 .formula-cards-grid-v1 {
   display: grid;
   gap: 14px;
@@ -1613,6 +1664,14 @@ textarea {
   gap: 14px;
   align-content: start;
   padding: 18px;
+}
+
+.formula-card-v1--selected {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.formula-card-v1--selected > header {
+  grid-column: 1 / -1;
 }
 
 .formula-card-v1 h2 {
@@ -1653,6 +1712,10 @@ textarea {
 
 @media (max-width: 760px) {
   .formula-cards-grid-v1 {
+    grid-template-columns: 1fr;
+  }
+
+  .formula-card-v1--selected {
     grid-template-columns: 1fr;
   }
 }
