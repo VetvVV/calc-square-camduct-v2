@@ -67,6 +67,29 @@ describe('formula cards page', () => {
     expect(within(details!).getByText('да')).toBeInTheDocument()
     expect(within(details!).getByText('Разложить изделие на компоненты и сверить с CAMduct.')).toBeInTheDocument()
 
+    const rectangularDuctRow = screen.getByText('PRM-001').closest('tr')
+    expect(rectangularDuctRow).not.toBeNull()
+    fireEvent.click(rectangularDuctRow!)
+
+    expect(rectangularDuctRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Воздуховод прямоугольный')).toBeInTheDocument()
+    expect(within(details!).getAllByText('Проверена').length).toBeGreaterThan(0)
+    expect(within(details!).getByText('Sчистовая = 2 × (W + H) × L / 1_000_000')).toBeInTheDocument()
+    expect(within(details!).getByText('Sполная = Pполный × L / 1_000_000')).toBeInTheDocument()
+    expect(within(details!).getByText('если L ≤ 200 мм: Z1 = 0, Z2 = 15')).toBeInTheDocument()
+    expect(within(details!).getByText('если L > 200 мм и s ≤ 0.9 мм: Z1 = 6, Z2 = 30')).toBeInTheDocument()
+    expect(within(details!).getByText('если L > 200 мм и s > 0.9 мм: Z1 = 5, Z2 = 27')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Старый калькулятор прямоугольных воздуховодов: duct_calculator.html / Калькулятор_прямоугольных_воздуховодов.html.',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Альтернативные источники / справочные формулы')).toBeInTheDocument()
+    expect(within(details!).getByText('S = 2 × (Ш + В) × Д × n')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(/СПВА — внешний справочный источник и не заменяет основную формулу старого калькулятора/),
+    ).toBeInTheDocument()
+
     const elbowRow = screen.getByText('KRG-002').closest('tr')
     expect(elbowRow).not.toBeNull()
     fireEvent.click(elbowRow!)
