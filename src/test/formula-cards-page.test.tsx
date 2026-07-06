@@ -429,6 +429,31 @@ describe('formula cards page', () => {
       within(details!).getByText('Следующее действие: подтвердить по CAMduct, не задваивается ли основной ствол и как считаются две зоны отверстий.'),
     ).toBeInTheDocument()
 
+    const roundDuckRow = screen.getByText('KRG-016').closest('tr')
+    expect(roundDuckRow).not.toBeNull()
+    fireEvent.click(roundDuckRow!)
+
+    expect(roundDuckRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Утка круглая')).toBeInTheDocument()
+    expect(within(details!).getByText('По компонентам')).toBeInTheDocument()
+    expect(within(details!).getByText('KRG-016 — круглая утка: изделие для смещения оси круглого воздуховода.')).toBeInTheDocument()
+    expect(within(details!).getByText('Не считать KRG-016 простой трубой, простым переходом KRG-004 или прямой копией KRG-004.')).toBeInTheDocument()
+    expect(within(details!).getByText('Если утка сохраняет диаметр: Dвход = Dвыход = D')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Компонентная схема, требующая подтверждения CAMduct: Sчистовая = Sотвод1 + Sсредняя_вставка + Sотвод2'),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Если оба отвода одинаковые: Sчистовая = 2 × Sотвод + Sсредняя_вставка')).toBeInTheDocument()
+    expect(within(details!).getByText('Sсредняя_вставка = π × D × Lсредняя')).toBeInTheDocument()
+    expect(within(details!).getByText('Если CAMduct считает утку как единый offset-фитинг: Sчистовая = Sразвёртка_утки_CAMduct')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Главное отличие от KRG-004: KRG-004 — переход круглый со смещением, где может меняться диаметр; KRG-016 — утка для смещения оси круглого воздуховода, чаще всего при сохранении диаметра.'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Следующее действие: подтвердить по CAMduct: утка считается как два отвода + средняя вставка или как отдельная развёртка; уточнить D, смещение, угол, среднюю длину, сегменты, швы и припуски.',
+      ),
+    ).toBeInTheDocument()
+
     const deflectorRow = screen.getByText('KRG-018').closest('tr')
     expect(deflectorRow).not.toBeNull()
     fireEvent.click(deflectorRow!)
