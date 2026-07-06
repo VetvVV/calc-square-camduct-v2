@@ -1653,7 +1653,7 @@ textarea {
   color: #64748b;
 }
 
-.formula-state-v1--not-found {
+.formula-state-v1--source-pending {
   border-color: rgba(148, 163, 184, 0.45);
   background: rgba(248, 250, 252, 0.95);
   color: #64748b;
@@ -1669,6 +1669,18 @@ textarea {
   border-color: rgba(223, 122, 18, 0.34);
   background: rgba(255, 248, 236, 0.95);
   color: #9a5b08;
+}
+
+.formula-state-v1--analogy {
+  border-color: rgba(14, 165, 233, 0.32);
+  background: rgba(240, 249, 255, 0.95);
+  color: #0369a1;
+}
+
+.formula-state-v1--components {
+  border-color: rgba(124, 58, 237, 0.3);
+  background: rgba(245, 243, 255, 0.95);
+  color: #5b21b6;
 }
 
 .formula-state-v1--checked {

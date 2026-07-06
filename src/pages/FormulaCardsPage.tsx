@@ -27,8 +27,10 @@ const formulaStateClassByName = {
   Проверена: 'checked',
   Условная: 'conditional',
   'Только Sчистовая': 'clean-only',
-  'Не найдена в источниках': 'not-found',
+  'Источник есть, формула не извлечена': 'source-pending',
   'Нужен вывод формулы': 'derive',
+  'По аналогии': 'analogy',
+  'По компонентам': 'components',
   'Нужна сверка с CAMduct': 'camduct-check',
 }
 
@@ -134,6 +136,7 @@ export function FormulaCardsPage() {
           <FormulaList title="Sполная" lines={selectedCard.fullAreaLines} />
           <FormulaList title="Статус" lines={selectedCard.statusLines} />
           <FormulaList title="Состояние формулы" lines={[selectedCard.formulaState]} />
+          <FormulaList title="Источник найден" lines={[selectedCard.sourceFound ? 'да' : 'нет']} />
           <FormulaList title="Источник" lines={selectedCard.sourceLines} />
           <FormulaList title="Следующее действие" lines={[selectedCard.nextAction]} />
           {selectedCard.notes ? <FormulaList title="Что проверить / примечание" lines={selectedCard.notes} /> : null}
