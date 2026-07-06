@@ -1,4 +1,11 @@
 export type FormulaRegistryStatus = 'Проверена' | 'Только Sчистовая' | 'Условная' | 'Требует уточнения'
+export type FormulaDiscoveryState =
+  | 'Проверена'
+  | 'Условная'
+  | 'Только Sчистовая'
+  | 'Не найдена в источниках'
+  | 'Нужен вывод формулы'
+  | 'Нужна сверка с CAMduct'
 
 export interface FormulaRegistryItem {
   code: string
@@ -7,7 +14,9 @@ export interface FormulaRegistryItem {
   cleanArea: string
   fullArea: string
   status: FormulaRegistryStatus
+  formulaState: FormulaDiscoveryState
   source: string
+  nextAction: string
 }
 
 export interface FormulaDetailCard extends FormulaRegistryItem {
@@ -19,11 +28,37 @@ export interface FormulaDetailCard extends FormulaRegistryItem {
   notes?: string[]
 }
 
-const requiresCheck = 'требует уточнения'
-const emptyArea = requiresCheck
-const sourceDraft = 'Черновой реестр docs/formula-cards.md'
+type FormulaRegistrySeed = Omit<FormulaRegistryItem, 'formulaState' | 'nextAction'> &
+  Partial<Pick<FormulaRegistryItem, 'formulaState' | 'nextAction'>>
 
-export const formulaRegistry: FormulaRegistryItem[] = [
+const notFoundArea = 'не найдена в источниках'
+const componentCleanArea = 'по компонентам; требует вывода'
+const camductAllowanceArea = 'требует CAMduct-проверки припусков'
+const requiresCheck = 'требует уточнения'
+const emptyArea = notFoundArea
+const sourceDraft = 'Черновой реестр docs/formula-cards.md'
+const nextUse = 'Можно использовать как рабочую формулу.'
+const nextCamduct = 'Проверить на тестовом размере в CAMduct.'
+const nextFindOrDerive = 'Найти формулу в методичке / старом калькуляторе или вывести по геометрии.'
+const nextDecompose = 'Разложить изделие на компоненты и сверить с CAMduct.'
+
+const componentFormulaCodes = new Set([
+  'KRG-005',
+  'KRG-008',
+  'KRG-015',
+  'PRM-004',
+  'PRM-005',
+  'PRM-006',
+  'PRM-009',
+  'KMB-001',
+  'KMB-002',
+  'KMB-003',
+  'KMB-005',
+  'KMB-006',
+  'KMB-007',
+])
+
+const formulaRegistrySeed: FormulaRegistrySeed[] = [
   {
     code: 'KRG-001',
     title: 'Воздуховод круглый / труба прямошовная',
@@ -377,6 +412,59 @@ export const formulaRegistry: FormulaRegistryItem[] = [
   },
 ]
 
+function getFormulaState(item: FormulaRegistrySeed): FormulaDiscoveryState {
+  if (item.formulaState) {
+    return item.formulaState
+  }
+
+  if (item.status === 'Проверена') {
+    return 'Проверена'
+  }
+
+  if (item.status === 'Только Sчистовая') {
+    return 'Только Sчистовая'
+  }
+
+  if (item.fullArea !== notFoundArea || item.cleanArea !== notFoundArea) {
+    return 'Нужна сверка с CAMduct'
+  }
+
+  if (componentFormulaCodes.has(item.code)) {
+    return 'Нужен вывод формулы'
+  }
+
+  return 'Не найдена в источниках'
+}
+
+function getNextAction(formulaState: FormulaDiscoveryState) {
+  if (formulaState === 'Проверена') {
+    return nextUse
+  }
+
+  if (formulaState === 'Нужна сверка с CAMduct' || formulaState === 'Условная' || formulaState === 'Только Sчистовая') {
+    return nextCamduct
+  }
+
+  if (formulaState === 'Нужен вывод формулы') {
+    return nextDecompose
+  }
+
+  return nextFindOrDerive
+}
+
+export const formulaRegistry: FormulaRegistryItem[] = formulaRegistrySeed.map((item) => {
+  const formulaState = getFormulaState(item)
+  const usesComponentModel = formulaState === 'Нужен вывод формулы'
+
+  return {
+    ...item,
+    cleanArea: usesComponentModel && item.cleanArea === notFoundArea ? componentCleanArea : item.cleanArea,
+    fullArea: usesComponentModel && item.fullArea === notFoundArea ? camductAllowanceArea : item.fullArea,
+    formulaState,
+    nextAction: item.nextAction ?? getNextAction(formulaState),
+  }
+})
+
 const formulaKnownDetailCards: FormulaDetailCard[] = [
   {
     ...formulaRegistry[0],
@@ -445,10 +533,9 @@ export const formulaDetailCards: FormulaDetailCard[] = formulaRegistry.map((item
   return {
     ...item,
     parameters: [requiresCheck],
-    cleanAreaLines: [requiresCheck],
-    fullAreaLines: [requiresCheck],
+    cleanAreaLines: [item.cleanArea],
+    fullAreaLines: [item.fullArea],
     statusLines: [item.status],
     sourceLines: [item.source],
-    notes: ['Формула и производственные допущения требуют уточнения.'],
   }
 })

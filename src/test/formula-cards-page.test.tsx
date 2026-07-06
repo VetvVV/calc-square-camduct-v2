@@ -44,6 +44,10 @@ describe('formula cards page', () => {
     expect(screen.getAllByText('Требует уточнения').length).toBeGreaterThan(0)
     expect(screen.getAllByText('Условная').length).toBeGreaterThan(0)
     expect(screen.getAllByText('Проверена').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Состояние формулы').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Не найдена в источниках').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Нужен вывод формулы').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Нужна сверка с CAMduct').length).toBeGreaterThan(0)
 
     const details = screen.getByRole('heading', { name: 'Карточка выбранного изделия' }).closest('section')
     expect(details).not.toBeNull()
@@ -57,8 +61,10 @@ describe('formula cards page', () => {
     expect(targetRow).toHaveAttribute('aria-selected', 'true')
     expect(within(details!).getAllByText('KMB-007').length).toBeGreaterThan(0)
     expect(within(details!).getByText('Жироуловитель')).toBeInTheDocument()
-    expect(within(details!).getAllByText('требует уточнения').length).toBeGreaterThan(0)
-    expect(within(details!).getByText('Что проверить / примечание')).toBeInTheDocument()
+    expect(within(details!).getByText('по компонентам; требует вывода')).toBeInTheDocument()
+    expect(within(details!).getByText('требует CAMduct-проверки припусков')).toBeInTheDocument()
+    expect(within(details!).getByText('Нужен вывод формулы')).toBeInTheDocument()
+    expect(within(details!).getByText('Разложить изделие на компоненты и сверить с CAMduct.')).toBeInTheDocument()
   })
 
   it('shows formula navigation only for roles that can view formula details', async () => {

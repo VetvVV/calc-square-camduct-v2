@@ -1653,6 +1653,42 @@ textarea {
   color: #64748b;
 }
 
+.formula-state-v1--not-found {
+  border-color: rgba(148, 163, 184, 0.45);
+  background: rgba(248, 250, 252, 0.95);
+  color: #64748b;
+}
+
+.formula-state-v1--derive {
+  border-color: rgba(234, 88, 12, 0.34);
+  background: rgba(255, 247, 237, 0.95);
+  color: #9a3412;
+}
+
+.formula-state-v1--camduct-check {
+  border-color: rgba(223, 122, 18, 0.34);
+  background: rgba(255, 248, 236, 0.95);
+  color: #9a5b08;
+}
+
+.formula-state-v1--checked {
+  border-color: rgba(22, 163, 74, 0.36);
+  background: rgba(240, 253, 244, 0.92);
+  color: #166534;
+}
+
+.formula-state-v1--conditional {
+  border-color: rgba(223, 122, 18, 0.34);
+  background: rgba(255, 248, 236, 0.95);
+  color: #9a5b08;
+}
+
+.formula-state-v1--clean-only {
+  border-color: rgba(37, 99, 235, 0.3);
+  background: rgba(239, 246, 255, 0.95);
+  color: #1d4ed8;
+}
+
 .formula-cards-grid-v1 {
   display: grid;
   gap: 14px;
