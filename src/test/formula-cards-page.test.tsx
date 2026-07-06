@@ -69,6 +69,19 @@ describe('formula cards page', () => {
     expect(within(details!).getByText('Источник найден')).toBeInTheDocument()
     expect(within(details!).getByText('да')).toBeInTheDocument()
     expect(within(details!).getByText('Разложить изделие на компоненты и сверить с CAMduct.')).toBeInTheDocument()
+
+    const elbowRow = screen.getByText('KRG-002').closest('tr')
+    expect(elbowRow).not.toBeNull()
+    fireEvent.click(elbowRow!)
+
+    expect(elbowRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getAllByText('KRG-002').length).toBeGreaterThan(0)
+    expect(within(details!).getByText('Отвод круглый')).toBeInTheDocument()
+    expect(within(details!).getAllByText('Проверена').length).toBeGreaterThan(0)
+    expect(within(details!).getByText('Excel-база отвода по данным CAMduct + методичка.')).toBeInTheDocument()
+    expect(within(details!).getByText('Методичка основная 30.09.2021: раздел “Отводы сегментные круглого сечения (колено круглое)”.')).toBeInTheDocument()
+    expect(within(details!).getByText('Формула восстановлена по Excel-базе, сформированной на основе CAMduct. Не является условной.')).toBeInTheDocument()
+    expect(within(details!).getByText('Перенести формулу в расчётный engine и покрыть тестами.')).toBeInTheDocument()
   })
 
   it('shows formula navigation only for roles that can view formula details', async () => {
