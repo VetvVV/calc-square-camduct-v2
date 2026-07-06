@@ -30,6 +30,7 @@ const formulaStateClassByName = {
   'Источник есть, формула не извлечена': 'source-pending',
   'Нужен вывод формулы': 'derive',
   'По аналогии': 'analogy',
+  'По аналогии с KRG-005': 'analogy',
   'По компонентам': 'components',
   'Нужна сверка с CAMduct': 'camduct-check',
 }

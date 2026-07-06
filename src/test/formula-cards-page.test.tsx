@@ -116,6 +116,20 @@ describe('formula cards page', () => {
     expect(within(details!).getByText('Sврезка_седловая — площадь врезки по переменной длине седловой линии.')).toBeInTheDocument()
     expect(within(details!).getByText('Формула восстановлена по Excel-базе, сформированной на основе CAMduct. Не является условной.')).toBeInTheDocument()
     expect(within(details!).getByText('Следующее действие: при внедрении в engine реализовать расчёт пересечения двух цилиндров и покрыть тестами по Excel-базе CAMduct.')).toBeInTheDocument()
+
+    const customTeeRow = screen.getByText('KRG-006').closest('tr')
+    expect(customTeeRow).not.toBeNull()
+    fireEvent.click(customTeeRow!)
+
+    expect(customTeeRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Тройник нестандартный круглый')).toBeInTheDocument()
+    expect(within(details!).getByText('По аналогии с KRG-005')).toBeInTheDocument()
+    expect(within(details!).getByText('KRG-005 + методичка тройника круглого + Excel-база CAMduct.')).toBeInTheDocument()
+    expect(within(details!).getByText('Sствол = π × D × L1')).toBeInTheDocument()
+    expect(within(details!).getByText('Sотверстие_ствол — площадь области на цилиндрической развёртке ствола, которая попадает внутрь цилиндра врезки.')).toBeInTheDocument()
+    expect(within(details!).getByText('Sврезка_седловая — площадь врезки по седловой развёртке, то есть по переменной длине Lэфф(φ), полученной из линии пересечения двух цилиндров.')).toBeInTheDocument()
+    expect(within(details!).getByText('KRG-006 использует ту же базовую геометрию пересечения цилиндров, что KRG-005; нестандартность задаётся параметрами угла, положения, диаметров и длин.')).toBeInTheDocument()
+    expect(within(details!).getByText('Внедрить расчёт нестандартного пересечения цилиндров в engine и покрыть тестами по Excel-базе CAMduct.')).toBeInTheDocument()
   })
 
   it('shows formula navigation only for roles that can view formula details', async () => {
