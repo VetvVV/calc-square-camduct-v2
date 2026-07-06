@@ -16,9 +16,11 @@ export interface FormulaDetailCard extends FormulaRegistryItem {
   fullAreaLines: string[]
   statusLines: string[]
   sourceLines: string[]
+  notes?: string[]
 }
 
-const emptyArea = '—'
+const requiresCheck = 'требует уточнения'
+const emptyArea = requiresCheck
 const sourceDraft = 'Черновой реестр docs/formula-cards.md'
 
 export const formulaRegistry: FormulaRegistryItem[] = [
@@ -375,7 +377,7 @@ export const formulaRegistry: FormulaRegistryItem[] = [
   },
 ]
 
-export const formulaDetailCards: FormulaDetailCard[] = [
+const formulaKnownDetailCards: FormulaDetailCard[] = [
   {
     ...formulaRegistry[0],
     parameters: ['D — диаметр, мм', 'L — длина, мм', 't — толщина металла, мм'],
@@ -400,7 +402,7 @@ export const formulaDetailCards: FormulaDetailCard[] = [
   {
     ...formulaRegistry[3],
     parameters: ['D1, D2 — диаметры, мм', 'L — табличная длина, мм', 'e — смещение осей, мм', 'S1, C1, C2 — припуски', 'k = 1.00311'],
-    cleanAreaLines: ['—'],
+    cleanAreaLines: [requiresCheck],
     fullAreaLines: ['l = √((R2 − R1)² + L² + e²)', 'Sполная = [π × (R1 + R2) × l + S1 × l + C1 × π × D1 + C2 × π × D2] / 1 000 000 × k'],
     statusLines: ['Sполная — подтверждена методикой, требует сверки табличной длины L и припусков по базе'],
     sourceLines: ['Методички переходов круг-в-круг / CAMduct-базы Киев'],
@@ -416,7 +418,7 @@ export const formulaDetailCards: FormulaDetailCard[] = [
   {
     ...formulaRegistry[28],
     parameters: ['A, B, L — основной воздуховод, мм', 'a, b — отверстие / врезка, мм', 'Hв — высота врезки, мм', 'Zconn — припуск', 'N — количество замков'],
-    cleanAreaLines: ['—'],
+    cleanAreaLines: [requiresCheck],
     fullAreaLines: ['Sосн = 2 × (A + B) × L / 1 000 000', 'Sотв = a × b / 1 000 000', 'Sврезки = (Pврезки + 15 × N) × (Hв + Zconn) / 1 000 000', 'Sполная = Sосн − ΣSотв + ΣSврезки'],
     statusLines: ['Sполная — подтверждена старым калькулятором, требует сверки с CAMduct'],
     sourceLines: ['Старый калькулятор воздуховода с прямоугольными врезками CAMduct v4.2'],
@@ -424,9 +426,29 @@ export const formulaDetailCards: FormulaDetailCard[] = [
   {
     ...formulaRegistry[35],
     parameters: ['A, B, L — основной прямоугольный воздуховод, мм', 'Dв — диаметр круглой врезки, мм', 'Hв — высота врезки, мм', 'Zconn — припуск'],
-    cleanAreaLines: ['—'],
+    cleanAreaLines: [requiresCheck],
     fullAreaLines: ['Sосн = 2 × (Aadj + Badj) × Ladj / 1 000 000', 'Sотв = π × Dв² / 4 / 1 000 000', 'Sврезки = (π × Dв + 8) × (Hв + Zconn) / 1 000 000', 'Sполная = Sосн − ΣSотв + ΣSврезки'],
     statusLines: ['Sполная — подтверждена старым калькулятором, требует сверки с CAMduct'],
     sourceLines: ['Старый калькулятор круглой врезки CAMduct v4.8'],
   },
 ]
+
+const knownDetailByCode = new Map(formulaKnownDetailCards.map((card) => [card.code, card]))
+
+export const formulaDetailCards: FormulaDetailCard[] = formulaRegistry.map((item) => {
+  const knownDetail = knownDetailByCode.get(item.code)
+
+  if (knownDetail) {
+    return knownDetail
+  }
+
+  return {
+    ...item,
+    parameters: [requiresCheck],
+    cleanAreaLines: [requiresCheck],
+    fullAreaLines: [requiresCheck],
+    statusLines: [item.status],
+    sourceLines: [item.source],
+    notes: ['Формула и производственные допущения требуют уточнения.'],
+  }
+})

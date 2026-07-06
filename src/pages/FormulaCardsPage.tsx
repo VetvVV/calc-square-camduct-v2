@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react'
 import { formulaDetailCards, formulaRegistry } from '../data/formulaCards'
 import { useAppStore } from '../store/appStore'
 import { canViewFormulaDetails } from '../roles/permissions'
@@ -15,9 +16,19 @@ function FormulaList({ title, lines }: { title: string; lines: string[] }) {
   )
 }
 
+const statusClassByName = {
+  Проверена: 'checked',
+  Условная: 'conditional',
+  'Только Sчистовая': 'clean-only',
+  'Требует уточнения': 'needs-check',
+}
+
 export function FormulaCardsPage() {
   const role = useAppStore((state) => state.role)
   const canView = canViewFormulaDetails(role)
+  const [selectedCode, setSelectedCode] = useState('KRG-001')
+  const detailByCode = useMemo(() => new Map(formulaDetailCards.map((card) => [card.code, card])), [])
+  const selectedCard = detailByCode.get(selectedCode) ?? formulaDetailCards[0]
 
   if (!canView) {
     return (
@@ -42,6 +53,7 @@ export function FormulaCardsPage() {
           <h2 id="formula-registry-title">Контрольный реестр каталога</h2>
           <p>{formulaRegistry.length} изделий</p>
         </div>
+        <p className="formula-registry-hint-v1">Нажмите на строку изделия, чтобы открыть карточку формулы ниже.</p>
 
         <div className="formula-registry-table-wrap-v1">
           <table className="formula-registry-table-v1">
@@ -58,14 +70,26 @@ export function FormulaCardsPage() {
             </thead>
             <tbody>
               {formulaRegistry.map((item) => (
-                <tr key={item.code}>
+                <tr
+                  aria-selected={item.code === selectedCode}
+                  className={item.code === selectedCode ? 'is-selected' : undefined}
+                  key={item.code}
+                  onClick={() => setSelectedCode(item.code)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault()
+                      setSelectedCode(item.code)
+                    }
+                  }}
+                  tabIndex={0}
+                >
                   <td>{item.code}</td>
                   <td>{item.title}</td>
                   <td>{item.category}</td>
                   <td>{item.cleanArea}</td>
                   <td>{item.fullArea}</td>
                   <td>
-                    <span className={`formula-status-v1 formula-status-v1--${item.status.replace(/\s+/g, '-').toLowerCase()}`}>
+                    <span className={`formula-status-v1 formula-status-v1--${statusClassByName[item.status]}`}>
                       {item.status}
                     </span>
                   </td>
@@ -79,27 +103,24 @@ export function FormulaCardsPage() {
 
       <section className="formula-details-v1" aria-labelledby="formula-details-title">
         <div className="formula-registry-head-v1">
-          <h2 id="formula-details-title">Карточки с формулами</h2>
-          <p>{formulaDetailCards.length} карточек</p>
+          <h2 id="formula-details-title">Карточка выбранного изделия</h2>
+          <p>{selectedCard.code}</p>
         </div>
 
-        <div className="formula-cards-grid-v1">
-          {formulaDetailCards.map((card) => (
-            <article className="formula-card-v1" key={card.code}>
-              <header>
-                <span>{card.code}</span>
-                <h2>{card.title}</h2>
-                <p>{card.category}</p>
-              </header>
+        <article className="formula-card-v1 formula-card-v1--selected" key={selectedCard.code}>
+          <header>
+            <span>{selectedCard.code}</span>
+            <h2>{selectedCard.title}</h2>
+            <p>{selectedCard.category}</p>
+          </header>
 
-              <FormulaList title="Параметры" lines={card.parameters} />
-              <FormulaList title="Sчистовая" lines={card.cleanAreaLines} />
-              <FormulaList title="Sполная" lines={card.fullAreaLines} />
-              <FormulaList title="Статус" lines={card.statusLines} />
-              <FormulaList title="Источник" lines={card.sourceLines} />
-            </article>
-          ))}
-        </div>
+          <FormulaList title="Параметры" lines={selectedCard.parameters} />
+          <FormulaList title="Sчистовая" lines={selectedCard.cleanAreaLines} />
+          <FormulaList title="Sполная" lines={selectedCard.fullAreaLines} />
+          <FormulaList title="Статус" lines={selectedCard.statusLines} />
+          <FormulaList title="Источник" lines={selectedCard.sourceLines} />
+          {selectedCard.notes ? <FormulaList title="Что проверить / примечание" lines={selectedCard.notes} /> : null}
+        </article>
       </section>
     </section>
   )
