@@ -519,6 +519,37 @@ describe('formula cards page', () => {
       ),
     ).toBeInTheDocument()
 
+    const couplingRow = screen.getByText('KRG-019').closest('tr')
+    expect(couplingRow).not.toBeNull()
+    fireEvent.click(couplingRow!)
+
+    expect(couplingRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Муфта')).toBeInTheDocument()
+    expect(within(details!).getByText('По аналогии')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'KRG-019 — наружная круглая муфта: отдельный соединительный элемент, который надевается снаружи на две трубы.',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Не считать KRG-019 ниппелем: KRG-010 вставляется внутрь труб, а муфта надевается снаружи.'),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Sчистовая = π × D × L')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Если центральный внутренний зиг требует дополнительной развёртки или припуска: Sполная = Sчистовая + Sзиг/припуск + подтверждённые технологические добавки',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('СПВА: прямого отдельного соответствия для круглой муфты не добавлено.'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Следующее действие: подтвердить по CAMduct, как муфта отличается от ниппеля по посадке, зигу/упору, длине, швам и припускам.',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).queryByText('Альтернативные источники / справочные формулы')).not.toBeInTheDocument()
+
     fireEvent.click(screen.getByRole('button', { name: 'Закрыть' }))
     expect(screen.queryByRole('dialog', { name: 'Карточка выбранного изделия' })).not.toBeInTheDocument()
   })
