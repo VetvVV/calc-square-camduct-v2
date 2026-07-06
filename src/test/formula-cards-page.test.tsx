@@ -396,6 +396,40 @@ describe('formula cards page', () => {
       ),
     ).toBeInTheDocument()
     expect(within(details!).getByText('Следующее действие: подтвердить параметры и состав KRG-014 по CAMduct.')).toBeInTheDocument()
+
+    const crossRow = screen.getByText('KRG-015').closest('tr')
+    expect(crossRow).not.toBeNull()
+    fireEvent.click(crossRow!)
+
+    expect(crossRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Крестовина круглая')).toBeInTheDocument()
+    expect(within(details!).getByText('По компонентам')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'KRG-015 — составное изделие: основной круглый ствол и две круглые врезки / два ответвления, если источники подтверждают такой состав.',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Не считать KRG-015 простой трубой и не копировать KRG-005 напрямую без проверки.')).toBeInTheDocument()
+    expect(within(details!).getByText('Sствол = π × D × L')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Sчистовая = Sствол − Sотверстия_ствол + Sврезка1_седловая + Sврезка2_седловая'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Если зоны отверстий пересекаются/накладываются: Sотверстия_ствол = S(область_отверстие1 ∪ область_отверстие2)'),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Для каждой врезки: Sврезка_i_седловая = ∫ r_i × Lэфф_i(φ) dφ')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Если KRG-015 считается как комбинация двух KRG-005: Sчистовая = Sлогика_KRG-005_ветка1 + Sлогика_KRG-005_ветка2 − корректировка_общего_ствола',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Не считать KRG-015 как S = Sтройник1 + Sтройник2 без корректировки общего ствола.')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Главный риск компонентного подхода: простая сумма двух тройников может дважды посчитать общий ствол.'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Следующее действие: подтвердить по CAMduct, не задваивается ли основной ствол и как считаются две зоны отверстий.'),
+    ).toBeInTheDocument()
   })
 
   it('shows formula navigation only for roles that can view formula details', async () => {
