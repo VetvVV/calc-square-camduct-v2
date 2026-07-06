@@ -130,6 +130,20 @@ describe('formula cards page', () => {
     expect(within(details!).getByText('Sврезка_седловая — площадь врезки по седловой развёртке, то есть по переменной длине Lэфф(φ), полученной из линии пересечения двух цилиндров.')).toBeInTheDocument()
     expect(within(details!).getByText('KRG-006 использует ту же базовую геометрию пересечения цилиндров, что KRG-005; нестандартность задаётся параметрами угла, положения, диаметров и длин.')).toBeInTheDocument()
     expect(within(details!).getByText('Внедрить расчёт нестандартного пересечения цилиндров в engine и покрыть тестами по Excel-базе CAMduct.')).toBeInTheDocument()
+
+    const capRow = screen.getByText('KRG-007').closest('tr')
+    expect(capRow).not.toBeNull()
+    fireEvent.click(capRow!)
+
+    expect(capRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Заглушка круглая')).toBeInTheDocument()
+    expect(within(details!).getByText('Условная — прямой CAMduct/Excel-формулы в найденных источниках пока нет.')).toBeInTheDocument()
+    expect(within(details!).getByText('Нужен вывод формулы')).toBeInTheDocument()
+    expect(within(details!).getByText('Sчистовая = Sдиск + Sобечайка')).toBeInTheDocument()
+    expect(within(details!).getByText('Sдиск = π × D² / 4')).toBeInTheDocument()
+    expect(within(details!).getByText('Методичка: заглушка состоит из обечайки и круглого основания.')).toBeInTheDocument()
+    expect(within(details!).getByText('Не считать формулу проверенной до подтверждения CAMduct/Excel.')).toBeInTheDocument()
+    expect(within(details!).getByText('Подтвердить наличие бурта/отбортовки по CAMduct и покрыть тестами.')).toBeInTheDocument()
   })
 
   it('shows formula navigation only for roles that can view formula details', async () => {
