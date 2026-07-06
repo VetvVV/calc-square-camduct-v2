@@ -306,6 +306,38 @@ describe('formula cards page', () => {
         'Следующее действие: подтвердить по CAMduct: вычитание отверстий в заглушках, длину патрубков 50/50, швы/замки и припуски; затем покрыть тестами.',
       ),
     ).toBeInTheDocument()
+
+    const umbrellaRow = screen.getByText('KRG-012').closest('tr')
+    expect(umbrellaRow).not.toBeNull()
+    fireEvent.click(umbrellaRow!)
+
+    expect(umbrellaRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Зонт круглый')).toBeInTheDocument()
+    expect(within(details!).getByText('Нужен вывод формулы')).toBeInTheDocument()
+    expect(within(details!).getByText('Не считать KRG-012 круглой заглушкой без подтверждения источником.')).toBeInTheDocument()
+    expect(within(details!).getByText('Если зонт — конический колпак без отверстия: Sконус = π × R × l')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Если зонт — усечённый конус с посадочным отверстием: Sусечённый_конус = π × (Rнаруж + Rвнутр) × l',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Для усечённого конуса: l = √((Rнаруж − Rвнутр)² + H²)')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Если есть посадочный цилиндрический патрубок: Sпатрубок = π × Dпосадочный × hпатрубка'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Базово для зонта с усечённым конусом и патрубком: Sчистовая = Sусечённый_конус + Sпатрубок'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Если стойки/крепления входят в расчёт CAMduct: Sкрепления = сумма площадей металлических креплений по источнику'),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Не переносить S1 из KRG-001 автоматически без подтверждения для KRG-012.')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Посадочный патрубок, круглая крышка/диск, стойки/крепления и технологические припуски не входят в Sчистовая без подтверждения источником.',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Следующее действие: подтвердить параметры и состав KRG-012 по CAMduct.')).toBeInTheDocument()
   })
 
   it('shows formula navigation only for roles that can view formula details', async () => {
