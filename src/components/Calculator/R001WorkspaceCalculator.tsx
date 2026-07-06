@@ -24,6 +24,7 @@ interface R001Hole {
   size1: number
   size2?: number
   position: number
+  quantity: number
 }
 
 function round3(value: number) {
@@ -34,12 +35,24 @@ function round2(value: number) {
   return Number(value.toFixed(2))
 }
 
+function holeLabel(hole: R001Hole) {
+  const size = hole.shape === 'round'
+    ? `круглое D ${hole.size1} мм`
+    : `прямоугольное ${hole.size1}×${hole.size2 ?? hole.size1} мм`
+  return `${size} × ${hole.quantity}`
+}
+
+function holesDescription(holes: R001Hole[]) {
+  return holes.length ? `Отверстия: ${holes.map(holeLabel).join('; ')}` : ''
+}
+
 function R001HoleModal({ onClose, onAdd }: { onClose: () => void; onAdd: (hole: Omit<R001Hole, 'id'>) => void }) {
   const [shape, setShape] = useState<HoleShape>('rectangular')
   const [side, setSide] = useState<HoleSide>('top')
   const [size1, setSize1] = useState(200)
   const [size2, setSize2] = useState(100)
   const [position, setPosition] = useState(500)
+  const [quantity, setQuantity] = useState(1)
 
   return (
     <div className="r001-modal-backdrop">
@@ -62,15 +75,19 @@ function R001HoleModal({ onClose, onAdd }: { onClose: () => void; onAdd: (hole: 
           </select>
         </label>
         <label>
-          Размер 1, мм
+          {shape === 'round' ? 'Диаметр, мм' : 'Ширина, мм'}
           <input type="number" value={size1} onChange={(event) => setSize1(Number(event.target.value || 0))} />
         </label>
         {shape === 'rectangular' ? (
           <label>
-            Размер 2, мм
+            Высота, мм
             <input type="number" value={size2} onChange={(event) => setSize2(Number(event.target.value || 0))} />
           </label>
         ) : null}
+        <label>
+          Количество
+          <input type="number" min={1} value={quantity} onChange={(event) => setQuantity(Math.max(1, Number(event.target.value || 1)))} />
+        </label>
         <label>
           Положение по длине, мм
           <input type="number" value={position} onChange={(event) => setPosition(Number(event.target.value || 0))} />
@@ -80,7 +97,7 @@ function R001HoleModal({ onClose, onAdd }: { onClose: () => void; onAdd: (hole: 
           <button
             type="button"
             className="r001-primary"
-            onClick={() => onAdd({ shape, side, size1, size2: shape === 'rectangular' ? size2 : undefined, position })}
+            onClick={() => onAdd({ shape, side, size1, size2: shape === 'rectangular' ? size2 : undefined, position, quantity })}
           >
             Добавить
           </button>
@@ -112,6 +129,7 @@ export function R001WorkspaceCalculator() {
   const areaTotal = round3(result.area * quantity)
   const massRaw = result.area * quantity * (thickness / 1000) * 7850
   const description = `Труба прямошовная · D ${diameter} мм · L ${length} мм · ${quantity} шт · ${materialLabel} · ${thickness} мм`
+  const holesText = holesDescription(holes)
   const showEngineering = canViewDebugPanel(role) && engineeringOn
 
   useEffect(() => {
@@ -128,6 +146,14 @@ export function R001WorkspaceCalculator() {
     setHoles((current) => [...current, { ...hole, id: current.length + 1 }])
   }
 
+  const updateHole = (id: number, patch: Partial<R001Hole>) => {
+    setHoles((current) => current.map((hole) => (hole.id === id ? { ...hole, ...patch } : hole)))
+  }
+
+  const removeHole = (id: number) => {
+    setHoles((current) => current.filter((hole) => hole.id !== id))
+  }
+
   const handleAdd = () => {
     if (!canAdd) {
       setInvitationOpen(true)
@@ -135,9 +161,10 @@ export function R001WorkspaceCalculator() {
     }
 
     const item = createSpecificationItem('round-duct')
+    const holesCount = holes.reduce((total, hole) => total + hole.quantity, 0)
     item.quantity = quantity
     item.comment = comment
-    item.parameters = { A: diameter, B: length, holes: holes.length }
+    item.parameters = { A: diameter, B: length, holes: holesCount }
     item.options = { material, thickness, prototypeFlow: true }
     item.calculated = {
       areaRaw: result.area * quantity,
@@ -148,7 +175,8 @@ export function R001WorkspaceCalculator() {
     item.moduleMetadata = {
       prototype: 'r001-public-service',
       holes,
-      holesCount: holes.length,
+      holesCount,
+      holesDescription: holesText,
       seamType: result.seamType,
       allowance: result.allowance,
     }
@@ -228,8 +256,52 @@ export function R001WorkspaceCalculator() {
                   <div className="r001-options-section">
                     <span>Отверстия</span>
                     <button type="button" onClick={() => setHoleOpen(true)}>Добавить отверстие</button>
-                    {holes.length ? <span className="r001-options-count">Отверстий: {holes.length}</span> : null}
+                    {holes.length ? <span className="r001-options-count">Отверстий: {holes.reduce((total, hole) => total + hole.quantity, 0)}</span> : null}
                   </div>
+                  {holes.length ? (
+                    <div className="r001-hole-list">
+                      {holes.map((hole, index) => (
+                        <div key={hole.id} className="r001-hole-card">
+                          <strong>Отверстие {index + 1}</strong>
+                          <label>
+                            Тип
+                            <select value={hole.shape} onChange={(event) => updateHole(hole.id, { shape: event.target.value as HoleShape })}>
+                              <option value="round">Круглое</option>
+                              <option value="rectangular">Прямоугольное</option>
+                            </select>
+                          </label>
+                          <label>
+                            Сторона
+                            <select value={hole.side} onChange={(event) => updateHole(hole.id, { side: event.target.value as HoleSide })}>
+                              <option value="top">Верх</option>
+                              <option value="bottom">Низ</option>
+                              <option value="left">Левая</option>
+                              <option value="right">Правая</option>
+                            </select>
+                          </label>
+                          <label>
+                            {hole.shape === 'round' ? 'Диаметр, мм' : 'Ширина, мм'}
+                            <input type="number" value={hole.size1} onChange={(event) => updateHole(hole.id, { size1: Number(event.target.value || 0) })} />
+                          </label>
+                          {hole.shape === 'rectangular' ? (
+                            <label>
+                              Высота, мм
+                              <input type="number" value={hole.size2 ?? hole.size1} onChange={(event) => updateHole(hole.id, { size2: Number(event.target.value || 0) })} />
+                            </label>
+                          ) : null}
+                          <label>
+                            Количество
+                            <input type="number" min={1} value={hole.quantity} onChange={(event) => updateHole(hole.id, { quantity: Math.max(1, Number(event.target.value || 1)) })} />
+                          </label>
+                          <label>
+                            Положение по длине, мм
+                            <input type="number" value={hole.position} onChange={(event) => updateHole(hole.id, { position: Number(event.target.value || 0) })} />
+                          </label>
+                          <button type="button" className="r001-hole-remove" onClick={() => removeHole(hole.id)}>Удалить отверстие</button>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
               ) : null}
               </div>
@@ -240,6 +312,7 @@ export function R001WorkspaceCalculator() {
           <div className="r001-spec-area">Площадь: <strong>{areaTotal.toFixed(3)} м²</strong></div>
           {showEngineering ? <div className="r001-spec-area">Масса: <strong>{round2(massRaw).toFixed(2)} кг</strong></div> : null}
           <div className="r001-spec-description">{description}</div>
+          {holesText ? <div className="r001-spec-description">{holesText}</div> : null}
           <label className="r001-comment-field">
             Комментарий
             <textarea value={comment} onChange={(event) => setComment(event.target.value)} />
