@@ -90,6 +90,32 @@ describe('formula cards page', () => {
       within(details!).getByText(/СПВА — внешний справочный источник и не заменяет основную формулу старого калькулятора/),
     ).toBeInTheDocument()
 
+    const rectangularElbowRow = screen.getByText('PRM-002').closest('tr')
+    expect(rectangularElbowRow).not.toBeNull()
+    fireEvent.click(rectangularElbowRow!)
+
+    expect(rectangularElbowRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getAllByText('PRM-002').length).toBeGreaterThan(0)
+    expect(within(details!).getByText('Отвод прямоугольный')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Условная — прямой проверенный CAMduct/старый калькулятор по PRM-002 в текущем реестре не найден.'),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Нужен вывод формулы')).toBeInTheDocument()
+    expect(within(details!).queryByText(/^Проверена$/)).not.toBeInTheDocument()
+    expect(within(details!).getByText('Если отвод считается по средней длине дуги: Lдуги = αрад × Rср')).toBeInTheDocument()
+    expect(within(details!).getByText('Sчистовая = 2 × (W + H) × Lдуги / 1_000_000')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Если Rнаруж − Rвнутр = W, секторная формула сводится к Sчистовая = 2 × (W + H) × Lдуги.'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Подтвердить по CAMduct, PRM-002 считается как гладкий радиусный отвод или сегментный отвод.',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Альтернативные источники / справочные формулы')).toBeInTheDocument()
+    expect(within(details!).getByText('S = 2 × (Ш + В) × Lдуги × n')).toBeInTheDocument()
+    expect(within(details!).getByText(/СПВА — внешний справочный источник, не заменяет CAMduct/)).toBeInTheDocument()
+
     const elbowRow = screen.getByText('KRG-002').closest('tr')
     expect(elbowRow).not.toBeNull()
     fireEvent.click(elbowRow!)
