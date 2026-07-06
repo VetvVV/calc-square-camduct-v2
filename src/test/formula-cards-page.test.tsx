@@ -454,6 +454,31 @@ describe('formula cards page', () => {
       ),
     ).toBeInTheDocument()
 
+    const checkValveRow = screen.getByText('KRG-017').closest('tr')
+    expect(checkValveRow).not.toBeNull()
+    fireEvent.click(checkValveRow!)
+
+    expect(checkValveRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Обратный клапан круглый')).toBeInTheDocument()
+    expect(within(details!).getByText('По аналогии')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('KRG-017 — круглый обратный клапан: пропускает поток в одну сторону и закрывается при обратном потоке.'),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Не считать KRG-017 простой трубой и не считать его обычным дросселем KRG-013.')).toBeInTheDocument()
+    expect(within(details!).getByText('Базовая конструктивная структура: Sчистовая = Sкорпус + Sстворка')).toBeInTheDocument()
+    expect(within(details!).getByText('Sкорпус = π × D × L')).toBeInTheDocument()
+    expect(within(details!).getByText('Если створка считается круглым диском: Sстворка = π × dстворки² / 4')).toBeInTheDocument()
+    expect(within(details!).getByText('Если внутренняя створка не входит в площадь металла по CAMduct: Sчистовая = Sкорпус')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Подтвердить, входят ли фланцы/торцевые соединения обратного клапана в площадь KRG-017 или только в спецификацию.'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Главное отличие от KRG-013: KRG-013 — регулирующая заслонка; KRG-017 — обратный клапан, который закрывается при обратном потоке.'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Следующее действие: подтвердить по CAMduct, входит ли внутренняя створка в площадь и как считаются корпус, торцевые соединения, ось/механизм и припуски.'),
+    ).toBeInTheDocument()
+
     const deflectorRow = screen.getByText('KRG-018').closest('tr')
     expect(deflectorRow).not.toBeNull()
     fireEvent.click(deflectorRow!)
