@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAppStore } from '../../store/appStore'
-import { canViewSpecification } from '../../roles/permissions'
+import { canViewFormulaDetails, canViewSpecification } from '../../roles/permissions'
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   ['brand-nav-link px-2.5 py-1.5 transition-colors', isActive ? 'is-active' : ''].join(' ')
@@ -10,6 +10,7 @@ export function NavBar() {
   const { t } = useTranslation()
   const role = useAppStore((state) => state.role)
   const showProjectNavigation = canViewSpecification(role)
+  const showFormulaNavigation = canViewFormulaDetails(role)
 
   return (
     <div className="border-b border-slate-200 bg-white/75">
@@ -30,6 +31,11 @@ export function NavBar() {
                 {t('nav.specification')}
               </NavLink>
             </>
+          ) : null}
+          {showFormulaNavigation ? (
+            <NavLink to="/formulas" className={linkClass}>
+              {t('nav.formulas')}
+            </NavLink>
           ) : null}
         </nav>
       </div>

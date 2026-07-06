@@ -9,6 +9,7 @@ export const en = {
     atlas: 'Atlas',
     split: 'Workspace',
     specification: 'Specification',
+    formulas: 'Formulas',
   },
   role: {
     guest: 'Guest',

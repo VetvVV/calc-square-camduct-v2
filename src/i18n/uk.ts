@@ -9,6 +9,7 @@ export const uk = {
     atlas: 'Атлас',
     split: 'Робоча зона',
     specification: 'Специфікація',
+    formulas: 'Формули',
   },
   role: {
     guest: 'Гість',

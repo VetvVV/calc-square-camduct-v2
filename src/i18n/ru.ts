@@ -9,6 +9,7 @@ export const ru = {
     atlas: 'Атлас',
     split: 'Рабочая зона',
     specification: 'Спецификация',
+    formulas: 'Формулы',
   },
   role: {
     guest: 'Гость',

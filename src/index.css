@@ -1460,6 +1460,115 @@ textarea {
   }
 }
 
+.formula-cards-page-v1 {
+  display: grid;
+  gap: 16px;
+  width: min(100%, 1480px);
+  margin: 0 auto;
+}
+
+.formula-cards-head-v1,
+.formula-cards-denied-v1,
+.formula-card-v1 {
+  border: 1px solid rgba(148, 163, 184, 0.34);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 14px 30px -24px rgba(31, 35, 40, 0.32);
+}
+
+.formula-cards-head-v1 {
+  padding: 18px 20px;
+}
+
+.formula-cards-head-v1 p,
+.formula-card-v1 > header span {
+  margin: 0 0 5px;
+  color: var(--brand-accent);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.formula-cards-head-v1 h1,
+.formula-card-v1 h2 {
+  margin: 0;
+  color: var(--brand-ink);
+}
+
+.formula-cards-head-v1 h1 {
+  font-size: 28px;
+}
+
+.formula-cards-head-v1 span {
+  display: block;
+  margin-top: 8px;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.formula-cards-denied-v1 {
+  padding: 18px 20px;
+  color: #475569;
+  font-weight: 800;
+}
+
+.formula-cards-grid-v1 {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+}
+
+.formula-card-v1 {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  padding: 18px;
+}
+
+.formula-card-v1 h2 {
+  font-size: 20px;
+  line-height: 1.22;
+}
+
+.formula-card-v1 > header p {
+  margin: 7px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.formula-card-v1 section {
+  display: grid;
+  gap: 6px;
+}
+
+.formula-card-v1 h3 {
+  margin: 0;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.formula-card-v1 ul {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding-left: 18px;
+  color: #475569;
+  font-family: 'Exo 2', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+@media (max-width: 760px) {
+  .formula-cards-grid-v1 {
+    grid-template-columns: 1fr;
+  }
+}
+
 .calculator-page-toolbar-v1 {
   display: flex;
   flex-wrap: wrap;
