@@ -262,6 +262,50 @@ describe('formula cards page', () => {
         'Следующее действие: подтвердить по CAMduct длину ниппеля, посадочный диаметр, наружный зиг, припуски и отличие от муфты; затем покрыть тестами.',
       ),
     ).toBeInTheDocument()
+
+    const silencerRow = screen.getByText('KRG-011').closest('tr')
+    expect(silencerRow).not.toBeNull()
+    fireEvent.click(silencerRow!)
+
+    expect(silencerRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Шумоглушитель круглый')).toBeInTheDocument()
+    expect(within(details!).getByText('Нужен вывод формулы')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'KRG-011 — составное изделие: наружный корпус, две торцевые заглушки и два проходных патрубка подключения.',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Sчистовая = Sкорпус_наружный + Sзаглушки + Sпатрубки_подключения')).toBeInTheDocument()
+    expect(within(details!).getByText('Sкорпус_наружный = π × Dкорпуса × Lкорпуса')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Если заглушка плоская и отверстие под патрубок вырезается: Sзаглушка = π × Dкорпуса² / 4 − π × dподкл² / 4',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Если отверстия в заглушках не вычитаются по CAMduct: Sзаглушки = 2 × (π × Dкорпуса² / 4)'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Lпатрубка = Lнаружу + Lвнутрь; типовое проверяемое правило: 50 мм наружу + 50 мм внутрь = 100 мм',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Для двух патрубков: Sпатрубки_подключения = 2 × Sпатрубок')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Не считать KRG-011 простой трубой KRG-001: это составное изделие с корпусом, заглушками и проходными патрубками.',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Утеплитель, шумопоглотитель и сетка не включаются в формулу площади листового металла KRG-011; это будущие компоненты BOM/спецификации без добавления массы в этой карточке.',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Следующее действие: подтвердить по CAMduct: вычитание отверстий в заглушках, длину патрубков 50/50, швы/замки и припуски; затем покрыть тестами.',
+      ),
+    ).toBeInTheDocument()
   })
 
   it('shows formula navigation only for roles that can view formula details', async () => {
