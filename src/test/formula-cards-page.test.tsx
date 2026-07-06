@@ -436,6 +436,7 @@ describe('formula cards page', () => {
     expect(roundDuckRow).toHaveAttribute('aria-selected', 'true')
     expect(within(details!).getByText('Утка круглая')).toBeInTheDocument()
     expect(within(details!).getByText('По компонентам')).toBeInTheDocument()
+    expect(within(details!).queryByText(/^Проверена$/)).not.toBeInTheDocument()
     expect(within(details!).getByText('KRG-016 — круглая утка: изделие для смещения оси круглого воздуховода.')).toBeInTheDocument()
     expect(within(details!).getByText('Не считать KRG-016 простой трубой, простым переходом KRG-004 или прямой копией KRG-004.')).toBeInTheDocument()
     expect(within(details!).getByText('Если утка сохраняет диаметр: Dвход = Dвыход = D')).toBeInTheDocument()
@@ -453,6 +454,14 @@ describe('formula cards page', () => {
         'Следующее действие: подтвердить по CAMduct: утка считается как два отвода + средняя вставка или как отдельная развёртка; уточнить D, смещение, угол, среднюю длину, сегменты, швы и припуски.',
       ),
     ).toBeInTheDocument()
+    expect(within(details!).getByText('Альтернативные источники / справочные формулы')).toBeInTheDocument()
+    expect(within(details!).getByText('СПВА — калькулятор площади воздуховодов и фасонных изделий')).toBeInTheDocument()
+    expect(within(details!).getByText('https://spva.kz/raschet-ploshchadi-vozduhovodov-i-fasonnyh-izdeliy')).toBeInTheDocument()
+    expect(within(details!).getByText('S = π × D × √(Д² + С²) × 1.15 × n')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(/не подтверждает CAMduct-состав “два отвода \+ средняя вставка” или “единая развёртка”/),
+    ).toBeInTheDocument()
+    expect(screen.getAllByRole('heading', { name: 'Карточка выбранного изделия' })).toHaveLength(1)
 
     const checkValveRow = screen.getByText('KRG-017').closest('tr')
     expect(checkValveRow).not.toBeNull()
