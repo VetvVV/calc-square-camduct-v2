@@ -226,6 +226,42 @@ describe('formula cards page', () => {
         'Следующее действие: подтвердить в CAMduct состав KRG-009: только седло или седло с патрубком, способ задания наружной границы седла и припуски; затем покрыть тестами.',
       ),
     ).toBeInTheDocument()
+
+    const nippleRow = screen.getByText('KRG-010').closest('tr')
+    expect(nippleRow).not.toBeNull()
+    fireEvent.click(nippleRow!)
+
+    expect(nippleRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Ниппель круглый')).toBeInTheDocument()
+    expect(within(details!).getByText('Нужен вывод формулы')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('KRG-010 — внутренний соединительный элемент: ниппель вставляется внутрь соединяемых труб.'),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Sчистовая = π × dниппеля × L')).toBeInTheDocument()
+    expect(within(details!).getByText('Если источник задаёт уменьшенный посадочный диаметр: dниппеля = Dном − Δпосадки')).toBeInTheDocument()
+    expect(within(details!).getByText('L = Lлевая + Lправая + зона_зига')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Если CAMduct учитывает зиг как добавку к развёртке: Sполная = π × dниппеля × (L + Δзиг) + технологические припуски',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Не переносить S1 из KRG-001 автоматически без подтверждения для KRG-010.'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Не смешивать KRG-010 с KRG-019: ниппель вставляется внутрь трубы, муфта надевается снаружи.'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('У ниппеля зиг прокатывается наружу и расположен посередине как ограничитель упора.'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Муфтовое соединение противоположно: муфта надевается снаружи на трубы, а зиг прокатывается внутрь.'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Следующее действие: подтвердить по CAMduct длину ниппеля, посадочный диаметр, наружный зиг, припуски и отличие от муфты; затем покрыть тестами.',
+      ),
+    ).toBeInTheDocument()
   })
 
   it('shows formula navigation only for roles that can view formula details', async () => {
