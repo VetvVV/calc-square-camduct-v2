@@ -102,6 +102,20 @@ describe('formula cards page', () => {
     expect(within(details!).getByText('Методики переходов круг-в-круг + Excel-базы CAMduct')).toBeInTheDocument()
     expect(within(details!).getByText('Односторонний переход: e = (D1 − D2) / 2.')).toBeInTheDocument()
     expect(within(details!).getByText('Переход со смещением: e = ручной ввод.')).toBeInTheDocument()
+
+    const teeRow = screen.getByText('KRG-005').closest('tr')
+    expect(teeRow).not.toBeNull()
+    fireEvent.click(teeRow!)
+
+    expect(teeRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Тройник круглый')).toBeInTheDocument()
+    expect(within(details!).getAllByText('Проверена').length).toBeGreaterThan(0)
+    expect(within(details!).getByText('Excel-база тройника круглого по данным CAMduct + методичка.')).toBeInTheDocument()
+    expect(within(details!).getByText('Sчистовая = Sствол − Sотверстие_ствол + Sврезка_седловая')).toBeInTheDocument()
+    expect(within(details!).getByText('Sотверстие_ствол — площадь участка поверхности ствола, попадающего в пересечение с цилиндром врезки.')).toBeInTheDocument()
+    expect(within(details!).getByText('Sврезка_седловая — площадь врезки по переменной длине седловой линии.')).toBeInTheDocument()
+    expect(within(details!).getByText('Формула восстановлена по Excel-базе, сформированной на основе CAMduct. Не является условной.')).toBeInTheDocument()
+    expect(within(details!).getByText('Следующее действие: при внедрении в engine реализовать расчёт пересечения двух цилиндров и покрыть тестами по Excel-базе CAMduct.')).toBeInTheDocument()
   })
 
   it('shows formula navigation only for roles that can view formula details', async () => {
