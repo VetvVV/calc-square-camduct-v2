@@ -16,6 +16,30 @@ function FormulaList({ title, lines }: { title: string; lines: string[] }) {
   )
 }
 
+function FormulaAlternativeList({
+  alternatives,
+}: {
+  alternatives: NonNullable<(typeof formulaDetailCards)[number]['alternativeFormulas']>
+}) {
+  return (
+    <section className="formula-alternatives-v1">
+      <h3>Альтернативные источники / справочные формулы</h3>
+      <ul>
+        {alternatives.map((alternative) => (
+          <li key={`${alternative.source}-${alternative.formula}`}>
+            <strong>{alternative.source}</strong>
+            <a href={alternative.sourceUrl} rel="noreferrer" target="_blank">
+              {alternative.sourceUrl}
+            </a>
+            <code>{alternative.formula}</code>
+            <span>{alternative.note}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
 const statusClassByName = {
   Проверена: 'checked',
   Условная: 'conditional',
@@ -176,6 +200,7 @@ export function FormulaCardsPage() {
             <FormulaList title="Состояние формулы" lines={[selectedCard.formulaState]} />
             <FormulaList title="Источник найден" lines={[selectedCard.sourceFound ? 'да' : 'нет']} />
             <FormulaList title="Источник" lines={selectedCard.sourceLines} />
+            {selectedCard.alternativeFormulas ? <FormulaAlternativeList alternatives={selectedCard.alternativeFormulas} /> : null}
             <FormulaList title="Следующее действие" lines={[selectedCard.nextAction]} />
             {selectedCard.notes ? <FormulaList title="Что проверить / примечание" lines={selectedCard.notes} /> : null}
           </article>
