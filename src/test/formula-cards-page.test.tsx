@@ -30,7 +30,7 @@ describe('formula cards page', () => {
     expect(screen.getByRole('heading', { name: 'Формулы / инженерная справка' })).toBeInTheDocument()
     expect(screen.getByText('Главный показатель для расхода материала — Sполная. Масса и количество здесь не считаются.')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Контрольный реестр каталога' })).toBeInTheDocument()
-    expect(screen.getByText('Нажмите на строку изделия, чтобы открыть карточку формулы ниже.')).toBeInTheDocument()
+    expect(screen.getByText('Нажмите на строку изделия, чтобы открыть карточку формулы рядом с реестром.')).toBeInTheDocument()
     expect(screen.getByText(`${formulaRegistry.length} изделий`)).toBeInTheDocument()
 
     for (const code of ['KRG-001', 'KRG-019', 'PRM-001', 'PRM-013', 'KMB-001', 'KMB-007']) {
@@ -49,16 +49,14 @@ describe('formula cards page', () => {
     expect(screen.getAllByText('Источник есть, формула не извлечена').length).toBeGreaterThan(0)
     expect(screen.getAllByText('По компонентам').length).toBeGreaterThan(0)
     expect(screen.getAllByText('По аналогии').length).toBeGreaterThan(0)
-
-    const details = screen.getByRole('heading', { name: 'Карточка выбранного изделия' }).closest('section')
-    expect(details).not.toBeNull()
-    expect(within(details!).getAllByText('KRG-001').length).toBeGreaterThan(0)
-    expect(within(details!).queryByText('KMB-004')).not.toBeInTheDocument()
+    expect(screen.queryByRole('dialog', { name: 'Карточка выбранного изделия' })).not.toBeInTheDocument()
 
     const targetRow = screen.getByText('KMB-007').closest('tr')
     expect(targetRow).not.toBeNull()
     fireEvent.click(targetRow!)
 
+    const details = screen.getByRole('dialog', { name: 'Карточка выбранного изделия' })
+    expect(screen.getAllByRole('heading', { name: 'Карточка выбранного изделия' })).toHaveLength(1)
     expect(targetRow).toHaveAttribute('aria-selected', 'true')
     expect(within(details!).getAllByText('KMB-007').length).toBeGreaterThan(0)
     expect(within(details!).getByText('Жироуловитель')).toBeInTheDocument()
@@ -430,6 +428,9 @@ describe('formula cards page', () => {
     expect(
       within(details!).getByText('Следующее действие: подтвердить по CAMduct, не задваивается ли основной ствол и как считаются две зоны отверстий.'),
     ).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Закрыть' }))
+    expect(screen.queryByRole('dialog', { name: 'Карточка выбранного изделия' })).not.toBeInTheDocument()
   })
 
   it('shows formula navigation only for roles that can view formula details', async () => {
