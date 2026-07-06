@@ -186,6 +186,46 @@ describe('formula cards page', () => {
         'Подтвердить в CAMduct варианты KRG-008: цельный патрубок, кольцо под отбортовку, прямоугольная пластина, угловая врезка с овальным отверстием/буртом; затем покрыть тестами.',
       ),
     ).toBeInTheDocument()
+
+    const saddleRow = screen.getByText('KRG-009').closest('tr')
+    expect(saddleRow).not.toBeNull()
+    fireEvent.click(saddleRow!)
+
+    expect(saddleRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Седло')).toBeInTheDocument()
+    expect(within(details!).getByText('Нужен вывод формулы')).toBeInTheDocument()
+    expect(within(details!).getByText('Методичка по седлу + геометрия пересечения двух цилиндров.')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Если KRG-009 является только седловым основанием/накладкой: Sчистовая = Sседло'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Если KRG-009 включает патрубок: Sчистовая = Sседло + Sпатрубок_седловой'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Sотверстие_ствол = ∬ R dθ dx по области точек P(x, θ), которые находятся внутри цилиндра врезки.',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Sседло — площадь основания на поверхности круглого ствола вокруг линии пересечения ствола и врезки.',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Если патрубок входит в KRG-009: Sпатрубок_седловой = ∫ r × Lэфф(φ) dφ.',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Открытый вопрос: как CAMduct задаёт наружную границу седла — равномерным отступом по развёртке, габаритным увеличением, табличной формой или другим производственным правилом.',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Следующее действие: подтвердить в CAMduct состав KRG-009: только седло или седло с патрубком, способ задания наружной границы седла и припуски; затем покрыть тестами.',
+      ),
+    ).toBeInTheDocument()
   })
 
   it('shows formula navigation only for roles that can view formula details', async () => {
