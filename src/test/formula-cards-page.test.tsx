@@ -366,6 +366,36 @@ describe('formula cards page', () => {
       ),
     ).toBeInTheDocument()
     expect(within(details!).getByText('Следующее действие: подтвердить параметры и состав KRG-013 по CAMduct.')).toBeInTheDocument()
+
+    const flangeRow = screen.getByText('KRG-014').closest('tr')
+    expect(flangeRow).not.toBeNull()
+    fireEvent.click(flangeRow!)
+
+    expect(flangeRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Фланец круглый')).toBeInTheDocument()
+    expect(within(details!).getByText('Нужен вывод формулы')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'KRG-014 — отдельная деталь торцевого соединения: круглый фланец, соединяющий фланец-к-фланцу.',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Не считать KRG-014 простой трубой, ниппелем, муфтой, рейкой или шинорейкой.')).toBeInTheDocument()
+    expect(within(details!).getByText('Dнаруж = Dвнутр + 2 × bфланца')).toBeInTheDocument()
+    expect(within(details!).getByText('Sкольцо = π × (Dнаруж² − Dвнутр²) / 4')).toBeInTheDocument()
+    expect(within(details!).getByText('Если CAMduct вычитает крепёжные отверстия: Sотверстия = n × π × dотв² / 4')).toBeInTheDocument()
+    expect(within(details!).getByText('Если крепёжные отверстия вычитаются: Sчистовая = Sкольцо − Sотверстия')).toBeInTheDocument()
+    expect(within(details!).getByText('Если CAMduct не вычитает крепёжные отверстия: Sчистовая = Sкольцо')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Если фланец считается только спецификационной деталью: Sчистовая = 0 для площади основного воздуховода; фланец должен идти в будущую BOM/спецификацию.',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Не вычитать крепёжные отверстия и не добавлять бурт/отбортовку без подтверждения CAMduct/методичкой.',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Следующее действие: подтвердить параметры и состав KRG-014 по CAMduct.')).toBeInTheDocument()
   })
 
   it('shows formula navigation only for roles that can view formula details', async () => {
