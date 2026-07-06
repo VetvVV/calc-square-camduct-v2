@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 import { useAppStore } from '../../store/appStore'
 import { CamductToggle } from '../Calculator/CamductToggle'
 import { canViewCamductMode } from '../../roles/permissions'
@@ -12,13 +13,25 @@ const languageOptions = [
   { code: 'en', short: 'EN', label: 'English' },
 ] as const
 
+const roleAccessLabels = {
+  guest: 'Ознакомительный расчёт',
+  user: 'Ознакомительный доступ',
+  client: 'Рабочий кабинет подключён',
+  admin: 'Администрирование',
+  service: 'Администрирование',
+} as const
+
 export function AppHeader() {
   const { i18n, t } = useTranslation()
   const role = useAppStore((state) => state.role)
   const setRole = useAppStore((state) => state.setRole)
   const canUseCamduct = canViewCamductMode(role)
   const [languageOpen, setLanguageOpen] = useState(false)
+  const location = useLocation()
+  const splitModule = new URLSearchParams(location.search).get('module')
+  const isR001Route = location.pathname.includes('/prototype/r001') || (location.pathname === '/split' && splitModule === 'round-duct')
   const currentLanguage = languageOptions.find((option) => option.code === i18n.language) ?? languageOptions[0]
+  const accessLabel = roleAccessLabels[role]
 
   return (
     <header className="brand-topbar sticky top-0 z-30">
@@ -44,7 +57,11 @@ export function AppHeader() {
             <option value="admin">{t('role.admin')}</option>
             <option value="service">{t('role.service')}</option>
           </select>
+          <span className="brand-access-badge" aria-label="Режим доступа">{accessLabel}</span>
 
+          {isR001Route ? (
+            <span className="brand-language-static" aria-label="Текущий язык">RU</span>
+          ) : (
           <div
             className="brand-language-select"
             onBlur={(event) => {
@@ -83,6 +100,7 @@ export function AppHeader() {
               </div>
             ) : null}
           </div>
+          )}
 
           {canUseCamduct && <CamductToggle />}
         </div>

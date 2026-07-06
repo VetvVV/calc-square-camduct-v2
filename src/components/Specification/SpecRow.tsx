@@ -53,6 +53,11 @@ function productLabel(item: SpecificationItem, t: (key: string) => string) {
   return t('product.rectDuct')
 }
 
+function buildHolesDescription(item: SpecificationItem) {
+  const description = item.moduleMetadata?.holesDescription
+  return typeof description === 'string' && description.length > 0 ? description : ''
+}
+
 export function SpecRow({ index, item, onRemove, onEdit, canEdit, canRemove, onLockedAction }: SpecRowProps) {
   const { i18n, t } = useTranslation()
   const [previewOpen, setPreviewOpen] = useState(false)
@@ -74,7 +79,7 @@ export function SpecRow({ index, item, onRemove, onEdit, canEdit, canRemove, onL
       ? (item.moduleMetadata.rectangularDuct as { lockLabelKey?: string; lockSize?: string; layout?: string; russianLocks?: number })
       : undefined
 
-  const description = buildDescription(i18n.t.bind(i18n), item.moduleKey, {
+  const baseDescription = buildDescription(i18n.t.bind(i18n), item.moduleKey, {
     A: typeof item.parameters.A === 'number' ? item.parameters.A : 0,
     B: typeof item.parameters.B === 'number' ? item.parameters.B : 0,
     L: typeof item.parameters.L === 'number' ? item.parameters.L : 0,
@@ -87,6 +92,8 @@ export function SpecRow({ index, item, onRemove, onEdit, canEdit, canRemove, onL
     layout: rectMeta?.layout,
     russianLocks: rectMeta?.russianLocks,
   })
+  const holesDescription = buildHolesDescription(item)
+  const description = holesDescription ? `${baseDescription} · ${holesDescription}` : baseDescription
   const productTitle = productLabel(item, t)
   const dimensions = buildSizeLabel(item, t)
   const previewDimensions = buildPreviewSizeLabel(item, t)
