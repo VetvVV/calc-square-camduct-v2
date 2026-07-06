@@ -23,6 +23,15 @@ const statusClassByName = {
   'Требует уточнения': 'needs-check',
 }
 
+const formulaStateClassByName = {
+  Проверена: 'checked',
+  Условная: 'conditional',
+  'Только Sчистовая': 'clean-only',
+  'Не найдена в источниках': 'not-found',
+  'Нужен вывод формулы': 'derive',
+  'Нужна сверка с CAMduct': 'camduct-check',
+}
+
 export function FormulaCardsPage() {
   const role = useAppStore((state) => state.role)
   const canView = canViewFormulaDetails(role)
@@ -65,6 +74,7 @@ export function FormulaCardsPage() {
                 <th>Sчистовая</th>
                 <th>Sполная</th>
                 <th>Статус</th>
+                <th>Состояние формулы</th>
                 <th>Источник</th>
               </tr>
             </thead>
@@ -93,6 +103,11 @@ export function FormulaCardsPage() {
                       {item.status}
                     </span>
                   </td>
+                  <td>
+                    <span className={`formula-status-v1 formula-state-v1--${formulaStateClassByName[item.formulaState]}`}>
+                      {item.formulaState}
+                    </span>
+                  </td>
                   <td>{item.source}</td>
                 </tr>
               ))}
@@ -118,7 +133,9 @@ export function FormulaCardsPage() {
           <FormulaList title="Sчистовая" lines={selectedCard.cleanAreaLines} />
           <FormulaList title="Sполная" lines={selectedCard.fullAreaLines} />
           <FormulaList title="Статус" lines={selectedCard.statusLines} />
+          <FormulaList title="Состояние формулы" lines={[selectedCard.formulaState]} />
           <FormulaList title="Источник" lines={selectedCard.sourceLines} />
+          <FormulaList title="Следующее действие" lines={[selectedCard.nextAction]} />
           {selectedCard.notes ? <FormulaList title="Что проверить / примечание" lines={selectedCard.notes} /> : null}
         </article>
       </section>
