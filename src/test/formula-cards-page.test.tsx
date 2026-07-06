@@ -429,6 +429,37 @@ describe('formula cards page', () => {
       within(details!).getByText('Следующее действие: подтвердить по CAMduct, не задваивается ли основной ствол и как считаются две зоны отверстий.'),
     ).toBeInTheDocument()
 
+    const deflectorRow = screen.getByText('KRG-018').closest('tr')
+    expect(deflectorRow).not.toBeNull()
+    fireEvent.click(deflectorRow!)
+
+    expect(deflectorRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Дефлектор')).toBeInTheDocument()
+    expect(within(details!).getByText('Нужен вывод формулы')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('KRG-018 — составное изделие: переход / диффузор, цилиндр, зонт, кронштейны и фланец.'),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Активная габаритная схема: “Дефлектор ЦАГИ”.')).toBeInTheDocument()
+    expect(within(details!).getByText('d2 = 1.7 × d — диаметр зонта по активной схеме “Дефлектор ЦАГИ”, мм')).toBeInTheDocument()
+    expect(within(details!).getByText('lпереход = √(h² + ((d1 − d) / 2)²)')).toBeInTheDocument()
+    expect(within(details!).getByText('Sпереход = π × (d + d1) / 2 × lпереход')).toBeInTheDocument()
+    expect(within(details!).getByText('Sцилиндр = π × D × H')).toBeInTheDocument()
+    expect(within(details!).getByText('Sзонт = π × Rзонта × lзонта')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Если фланец/посадочная часть считается как цилиндрический участок: Sфланец = π × d × Hфланца'),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Sкронштейны = сумма площадей кронштейнов по CAMduct/методичке')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Проверить по CAMduct, какой коэффициент диаметра зонта используется для KRG-018: 1.7d по листу “Дефлектор ЦАГИ” или 1.5d из старого/общего листа “Дефлекторы”.',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Следующее действие: подтвердить по CAMduct состав KRG-018: переход, цилиндр, зонт, фланец, кронштейны, коэффициент диаметра зонта 1.7d/1.5d, швы/замки и припуски; затем покрыть тестами.',
+      ),
+    ).toBeInTheDocument()
+
     fireEvent.click(screen.getByRole('button', { name: 'Закрыть' }))
     expect(screen.queryByRole('dialog', { name: 'Карточка выбранного изделия' })).not.toBeInTheDocument()
   })
