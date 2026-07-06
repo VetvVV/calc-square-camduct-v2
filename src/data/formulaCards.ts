@@ -3,8 +3,10 @@ export type FormulaDiscoveryState =
   | 'Проверена'
   | 'Условная'
   | 'Только Sчистовая'
-  | 'Не найдена в источниках'
+  | 'Источник есть, формула не извлечена'
   | 'Нужен вывод формулы'
+  | 'По аналогии'
+  | 'По компонентам'
   | 'Нужна сверка с CAMduct'
 
 export interface FormulaRegistryItem {
@@ -15,6 +17,7 @@ export interface FormulaRegistryItem {
   fullArea: string
   status: FormulaRegistryStatus
   formulaState: FormulaDiscoveryState
+  sourceFound: boolean
   source: string
   nextAction: string
 }
@@ -28,19 +31,21 @@ export interface FormulaDetailCard extends FormulaRegistryItem {
   notes?: string[]
 }
 
-type FormulaRegistrySeed = Omit<FormulaRegistryItem, 'formulaState' | 'nextAction'> &
-  Partial<Pick<FormulaRegistryItem, 'formulaState' | 'nextAction'>>
+type FormulaRegistrySeed = Omit<FormulaRegistryItem, 'formulaState' | 'sourceFound' | 'nextAction'> &
+  Partial<Pick<FormulaRegistryItem, 'formulaState' | 'sourceFound' | 'nextAction'>>
 
-const notFoundArea = 'не найдена в источниках'
+const extractedMissingArea = 'источник есть, формула не извлечена'
 const componentCleanArea = 'по компонентам; требует вывода'
 const camductAllowanceArea = 'требует CAMduct-проверки припусков'
+const analogyArea = 'по аналогии; требует проверки'
 const requiresCheck = 'требует уточнения'
-const emptyArea = notFoundArea
-const sourceDraft = 'Черновой реестр docs/formula-cards.md'
+const emptyArea = extractedMissingArea
+const sourceDraft = 'Google Sheet / загруженные источники / docs/formula-cards.md'
 const nextUse = 'Можно использовать как рабочую формулу.'
 const nextCamduct = 'Проверить на тестовом размере в CAMduct.'
-const nextFindOrDerive = 'Найти формулу в методичке / старом калькуляторе или вывести по геометрии.'
+const nextExtract = 'Извлечь формулу из загруженного источника или восстановить повреждённый фрагмент.'
 const nextDecompose = 'Разложить изделие на компоненты и сверить с CAMduct.'
+const nextAnalogy = 'Проверить аналогию с базовым изделием и сверить на тестовом размере.'
 
 const componentFormulaCodes = new Set([
   'KRG-005',
@@ -57,6 +62,8 @@ const componentFormulaCodes = new Set([
   'KMB-006',
   'KMB-007',
 ])
+
+const analogyFormulaCodes = new Set(['KRG-010', 'KRG-019'])
 
 const formulaRegistrySeed: FormulaRegistrySeed[] = [
   {
@@ -318,6 +325,7 @@ const formulaRegistrySeed: FormulaRegistrySeed[] = [
     cleanArea: emptyArea,
     fullArea: 'Sполная = Sосн − ΣSотв + ΣSврезки',
     status: 'Условная',
+    formulaState: 'Условная',
     source: 'Старый калькулятор воздуховода с прямоугольными врезками CAMduct v4.2',
   },
   {
@@ -381,6 +389,7 @@ const formulaRegistrySeed: FormulaRegistrySeed[] = [
     cleanArea: emptyArea,
     fullArea: 'Sполная = Sосн − ΣSотв + ΣSврезки',
     status: 'Условная',
+    formulaState: 'Условная',
     source: 'Старый калькулятор круглой врезки CAMduct v4.8',
   },
   {
@@ -425,15 +434,19 @@ function getFormulaState(item: FormulaRegistrySeed): FormulaDiscoveryState {
     return 'Только Sчистовая'
   }
 
-  if (item.fullArea !== notFoundArea || item.cleanArea !== notFoundArea) {
+  if (componentFormulaCodes.has(item.code)) {
+    return 'По компонентам'
+  }
+
+  if (analogyFormulaCodes.has(item.code)) {
+    return 'По аналогии'
+  }
+
+  if (item.fullArea !== extractedMissingArea || item.cleanArea !== extractedMissingArea) {
     return 'Нужна сверка с CAMduct'
   }
 
-  if (componentFormulaCodes.has(item.code)) {
-    return 'Нужен вывод формулы'
-  }
-
-  return 'Не найдена в источниках'
+  return 'Источник есть, формула не извлечена'
 }
 
 function getNextAction(formulaState: FormulaDiscoveryState) {
@@ -445,22 +458,30 @@ function getNextAction(formulaState: FormulaDiscoveryState) {
     return nextCamduct
   }
 
-  if (formulaState === 'Нужен вывод формулы') {
+  if (formulaState === 'По компонентам' || formulaState === 'Нужен вывод формулы') {
     return nextDecompose
   }
 
-  return nextFindOrDerive
+  if (formulaState === 'По аналогии') {
+    return nextAnalogy
+  }
+
+  return nextExtract
 }
 
 export const formulaRegistry: FormulaRegistryItem[] = formulaRegistrySeed.map((item) => {
   const formulaState = getFormulaState(item)
-  const usesComponentModel = formulaState === 'Нужен вывод формулы'
+  const usesComponentModel = formulaState === 'По компонентам' || formulaState === 'Нужен вывод формулы'
+  const usesAnalogyModel = formulaState === 'По аналогии'
 
   return {
     ...item,
-    cleanArea: usesComponentModel && item.cleanArea === notFoundArea ? componentCleanArea : item.cleanArea,
-    fullArea: usesComponentModel && item.fullArea === notFoundArea ? camductAllowanceArea : item.fullArea,
+    cleanArea: usesComponentModel && item.cleanArea === extractedMissingArea ? componentCleanArea : item.cleanArea,
+    fullArea: usesComponentModel && item.fullArea === extractedMissingArea ? camductAllowanceArea : item.fullArea,
+    ...(usesAnalogyModel && item.cleanArea === extractedMissingArea ? { cleanArea: analogyArea } : {}),
+    ...(usesAnalogyModel && item.fullArea === extractedMissingArea ? { fullArea: analogyArea } : {}),
     formulaState,
+    sourceFound: item.sourceFound ?? true,
     nextAction: item.nextAction ?? getNextAction(formulaState),
   }
 })
