@@ -338,6 +338,34 @@ describe('formula cards page', () => {
       ),
     ).toBeInTheDocument()
     expect(within(details!).getByText('Следующее действие: подтвердить параметры и состав KRG-012 по CAMduct.')).toBeInTheDocument()
+
+    const damperRow = screen.getByText('KRG-013').closest('tr')
+    expect(damperRow).not.toBeNull()
+    fireEvent.click(damperRow!)
+
+    expect(damperRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Дроссель круглый')).toBeInTheDocument()
+    expect(within(details!).getByText('Нужен вывод формулы')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'KRG-013 — составное изделие: круглый корпус и внутренняя поворотная заслонка / диск, если она входит в площадь металла.',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Sкорпус = π × D × L')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Если CAMduct включает диск заслонки в площадь: Sчистовая = Sкорпус + Sзаслонка'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Если CAMduct не включает диск заслонки в площадь листового металла: Sчистовая = Sкорпус'),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Если заслонка считается как круглый диск: Sзаслонка = π × dзаслонки² / 4')).toBeInTheDocument()
+    expect(within(details!).getByText('Если зазор не подтверждён: dзаслонки = D как условное допущение до проверки CAMduct.')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Ось, ручка, крепёж и механизм регулировки не включаются в площадь листового металла без прямого подтверждения; это будущие компоненты BOM/спецификации.',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Следующее действие: подтвердить параметры и состав KRG-013 по CAMduct.')).toBeInTheDocument()
   })
 
   it('shows formula navigation only for roles that can view formula details', async () => {
