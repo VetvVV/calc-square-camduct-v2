@@ -144,6 +144,48 @@ describe('formula cards page', () => {
     expect(within(details!).getByText('Методичка: заглушка состоит из обечайки и круглого основания.')).toBeInTheDocument()
     expect(within(details!).getByText('Не считать формулу проверенной до подтверждения CAMduct/Excel.')).toBeInTheDocument()
     expect(within(details!).getByText('Подтвердить наличие бурта/отбортовки по CAMduct и покрыть тестами.')).toBeInTheDocument()
+
+    const roundInsetRow = screen.getByText('KRG-008').closest('tr')
+    expect(roundInsetRow).not.toBeNull()
+    fireEvent.click(roundInsetRow!)
+
+    expect(roundInsetRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getByText('Врезка круглая')).toBeInTheDocument()
+    expect(within(details!).getByText('Нужен вывод формулы')).toBeInTheDocument()
+    expect(within(details!).queryByText('По аналогии с KRG-005')).not.toBeInTheDocument()
+    expect(within(details!).getByText('Вариант 1: Sпатрубок = π × d × H')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Если отбортовка q входит в развёртку патрубка: Sполная = π × d × (H + q) + технологические припуски',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Вариант 2: Sкольцо = π × ((d + 2 × bкольца)² − d²) / 4')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Вариант 3: если отверстие вырезается из пластины, Sчистовая = Sпатрубок + Sпластина − Sотверстие',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Вариант 4: Dмал = d; Dбол = d / sin(α)')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Вариант 4: Sотверстие_овал = π × Dмал × Dбол / 4 = π × d² / (4 × sin(α))'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Вариант 4: Sкольцо_овал = π × Dмал_наруж × Dбол_наруж / 4 − π × Dмал_внутр × Dбол_внутр / 4',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).queryByText('Sврезка_седловая = ∫ r × Lэфф(φ) dφ')).not.toBeInTheDocument()
+    expect(within(details!).getByText('Методичка: врезку сваривают по шву S2(Fa)/S2(Ma), накатывают зиг и формируют отбортовку 10 мм.')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'KRG-008 имеет варианты конструкции: цельный патрубок на сварке, патрубок с отдельным кольцом под отбортовку, патрубок на прямоугольной пластине, а также угловая врезка, где отверстие на пластине становится овальным/эллиптическим. Выбор варианта, включение отбортовки/кольца/пластины и способ расчёта овального бурта должны быть подтверждены по CAMduct.',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Подтвердить в CAMduct варианты KRG-008: цельный патрубок, кольцо под отбортовку, прямоугольная пластина, угловая врезка с овальным отверстием/буртом; затем покрыть тестами.',
+      ),
+    ).toBeInTheDocument()
   })
 
   it('shows formula navigation only for roles that can view formula details', async () => {
