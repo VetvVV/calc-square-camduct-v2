@@ -1,9 +1,11 @@
 import { type KeyboardEvent, type ReactNode, useMemo, useState } from 'react'
 import { useAppStore } from '../../store/appStore'
 import { useProjectStore } from '../../store/projectStore'
+import type { ModuleCalculationOutput } from '../../types'
+import { calculateRoundDuct } from '../../domain/calculators'
 import { addItem } from '../../domain/specification/specificationManager'
 import { createSpecificationItem } from '../../domain/specification/itemFactory'
-import { calculateR001PrototypeDemo } from '../../prototypes/r001DemoEngine'
+import { camductChecks } from '../../domain/verification/camductChecks'
 import { canAddSpecItem, canViewDebugPanel } from '../../roles/permissions'
 import { AccessInvitationDialog } from '../Common/AccessInvitationDialog'
 import { R001ProductDiagram } from './R001ProductDiagram'
@@ -16,7 +18,8 @@ const MATERIALS = [
 
 type HoleShape = 'round' | 'rectangular'
 type HoleSide = 'top' | 'bottom' | 'left' | 'right'
-type ServiceTab = 'dimensions' | 'options' | 'detail' | 'connectors'
+type ServiceTab = 'product' | 'unfold' | 'worklist' | 'verification'
+type EndConnection = 'none' | 'flange' | 'bandage'
 
 interface R001Hole {
   id: number
@@ -26,10 +29,6 @@ interface R001Hole {
   size2?: number
   position: number
   quantity: number
-}
-
-function round3(value: number) {
-  return Number(value.toFixed(3))
 }
 
 function round2(value: number) {
@@ -49,6 +48,31 @@ function holesDescription(holes: R001Hole[]) {
 
 function formatNumber(value: number, digits = 3) {
   return value.toFixed(digits)
+}
+
+function formatMaybeNumber(value: unknown, digits = 3) {
+  return typeof value === 'number' ? formatNumber(value, digits) : 'нет данных'
+}
+
+function connectionLabel(value: EndConnection) {
+  if (value === 'flange') return 'Фланец'
+  if (value === 'bandage') return 'Бандаж'
+  return 'Нет'
+}
+
+function toleranceLabel(abs?: number, pct?: number) {
+  const parts = []
+  if (typeof abs === 'number') parts.push(`abs ${abs}`)
+  if (typeof pct === 'number') parts.push(`${pct}%`)
+  return parts.length ? parts.join(' / ') : 'не задан'
+}
+
+function statusLabel(status: string) {
+  if (status === 'baseline') return 'engine baseline'
+  if (status === 'pending') return 'ожидает CAMduct-эталон'
+  if (status === 'confirmed') return 'confirmed CAMduct'
+  if (status === 'mismatch') return 'mismatch'
+  return status
 }
 
 function R001HoleModal({ onClose, onAdd }: { onClose: () => void; onAdd: (hole: Omit<R001Hole, 'id'>) => void }) {
@@ -198,10 +222,134 @@ function ServiceVisualWorkspace({
 }) {
   return (
     <div className="r001-visual-workspace">
-      <ServiceViewPanel title="Вид 1"><ServiceSideView length={length} seamType={seamType} c1={c1} c2={c2} /></ServiceViewPanel>
-      <ServiceViewPanel title="Вид 2"><ServiceEndView diameter={diameter} seamAngle={seamAngle} /></ServiceViewPanel>
-      <ServiceViewPanel title="Вид 3"><ServiceBottomView length={length} /></ServiceViewPanel>
+      <ServiceViewPanel title="Вид сбоку"><ServiceSideView length={length} seamType={seamType} c1={c1} c2={c2} /></ServiceViewPanel>
+      <ServiceViewPanel title="Торец"><ServiceEndView diameter={diameter} seamAngle={seamAngle} /></ServiceViewPanel>
+      <ServiceViewPanel title="План"><ServiceBottomView length={length} /></ServiceViewPanel>
       <ServiceViewPanel title="Изометрия"><ServiceIsoView seamType={seamType} c1={c1} c2={c2} /></ServiceViewPanel>
+    </div>
+  )
+}
+
+function RoundUnfoldPanel({
+  diameter,
+  length,
+  quantity,
+  output,
+}: {
+  diameter: number
+  length: number
+  quantity: number
+  output: ModuleCalculationOutput
+}) {
+  const roundMeta = output.moduleMetadata
+  const circumference = Math.PI * diameter
+  const allowance = roundMeta.lockAllowance
+  const calculatedLength = roundMeta.calculatedLength
+  const unfoldWidth = typeof allowance === 'number' ? circumference + allowance : null
+
+  return (
+    <section className="r001-camduct-unfold" aria-label="Развёртка листа">
+      <div className="r001-unfold-sheet" aria-hidden="true">
+        <div className="r001-unfold-seam" />
+        <span className="r001-unfold-x">X / L {formatMaybeNumber(calculatedLength, 0)} мм</span>
+        <span className="r001-unfold-y">Y / πD + S1 {unfoldWidth !== null ? formatNumber(unfoldWidth, 1) : 'нет данных'} мм</span>
+      </div>
+      <dl className="r001-camduct-metrics">
+        <div><dt>πD</dt><dd>{formatNumber(circumference, 1)} мм</dd></div>
+        <div><dt>S1</dt><dd>{formatMaybeNumber(allowance, 0)} мм</dd></div>
+        <div><dt>L</dt><dd>{length} мм</dd></div>
+        <div><dt>Lрасч</dt><dd>{formatMaybeNumber(calculatedLength, 0)} мм</dd></div>
+        <div><dt>Sчистовая</dt><dd>{formatNumber((circumference * length * quantity) / 1_000_000)} м²</dd></div>
+        <div><dt>Sполная</dt><dd>{formatNumber(output.calculated.areaDisplay)} м²</dd></div>
+      </dl>
+    </section>
+  )
+}
+
+function RoundWorkListPanel({
+  diameter,
+  length,
+  quantity,
+  materialLabel,
+  thickness,
+  c1,
+  c2,
+  output,
+}: {
+  diameter: number
+  length: number
+  quantity: number
+  materialLabel: string
+  thickness: number
+  c1: EndConnection
+  c2: EndConnection
+  output: ModuleCalculationOutput
+}) {
+  return (
+    <div className="r001-camduct-worklist">
+      <table>
+        <thead>
+          <tr>
+            <th>Код</th>
+            <th>Изделие</th>
+            <th>Кол-во</th>
+            <th>Материал</th>
+            <th>Толщина</th>
+            <th>A/D</th>
+            <th>B/L</th>
+            <th>C1/C2</th>
+            <th>Площадь</th>
+            <th>Статус</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>KRG-001</td>
+            <td>Воздуховод круглый / труба прямошовная</td>
+            <td>{quantity}</td>
+            <td>{materialLabel}</td>
+            <td>{thickness} мм</td>
+            <td>{diameter} мм</td>
+            <td>{length} мм</td>
+            <td>{connectionLabel(c1)} / {connectionLabel(c2)}</td>
+            <td>{formatNumber(output.calculated.areaDisplay)} м²</td>
+            <td>рассчитано engine</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+function RoundVerificationPanel() {
+  const checks = camductChecks.filter((check) => check.calculatorKey === 'round-duct' || check.productCode === 'KRG-001')
+
+  if (!checks.length) {
+    return (
+      <div className="r001-camduct-empty">
+        CAMduct-сверка будет доступна после подключения базы эталонов.
+      </div>
+    )
+  }
+
+  return (
+    <div className="r001-camduct-checks" aria-label="CAMduct verification checks">
+      {checks.map((check) => (
+        <article key={check.id} className={`r001-camduct-check is-${check.status}`}>
+          <header>
+            <strong>{check.id}</strong>
+            <span>{statusLabel(check.status)}</span>
+          </header>
+          <dl>
+            <div><dt>expectedSource</dt><dd>{check.expectedSource ?? 'нет'}</dd></div>
+            <div><dt>expectedResult</dt><dd>{check.expectedResult ?? 'нет CAMduct-эталона'}</dd></div>
+            <div><dt>tolerance</dt><dd>{toleranceLabel(check.toleranceAbs, check.tolerancePct)}</dd></div>
+            <div><dt>testRef</dt><dd>{check.testRef ?? 'нет'}</dd></div>
+            <div><dt>evidence</dt><dd>{check.screenshotRef ?? check.evidenceRef ?? 'нет'}</dd></div>
+          </dl>
+          {check.comment ? <p>{check.comment}</p> : null}
+        </article>
+      ))}
     </div>
   )
 }
@@ -216,7 +364,13 @@ function R001ServicePanel({
   quantity,
   setQuantity,
   materialLabel,
-  result,
+  material,
+  setMaterial,
+  c1,
+  setC1,
+  c2,
+  setC2,
+  output,
 }: {
   diameter: number
   setDiameter: (value: number) => void
@@ -227,85 +381,94 @@ function R001ServicePanel({
   quantity: number
   setQuantity: (value: number) => void
   materialLabel: string
-  result: ReturnType<typeof calculateR001PrototypeDemo>
+  material: string
+  setMaterial: (value: string) => void
+  c1: EndConnection
+  setC1: (value: EndConnection) => void
+  c2: EndConnection
+  setC2: (value: EndConnection) => void
+  output: ModuleCalculationOutput
 }) {
-  const [tab, setTab] = useState<ServiceTab>('dimensions')
-  const [seamAngle, setSeamAngle] = useState(90)
-  const [c1, setC1] = useState('Нет')
-  const [c2, setC2] = useState('Нет')
+  const [tab, setTab] = useState<ServiceTab>('product')
+  const [seamAngle] = useState(90)
+  const roundMeta = output.moduleMetadata
+  const allowance = typeof roundMeta.lockAllowance === 'number' ? roundMeta.lockAllowance : null
+  const seamType = roundMeta.welded ? 'сварка / 8 мм' : allowance === 28 ? '14/14' : allowance === 25 ? '12.5/12.5' : 'нет данных'
+
+  const tabs: Array<[ServiceTab, string]> = [
+    ['product', 'Изделие'],
+    ['unfold', 'Развёртка'],
+    ['worklist', 'Список работы'],
+    ['verification', 'CAMduct-сверка'],
+  ]
 
   return (
-    <div className="r001-service-shell" aria-label="KRG-001 service view">
-      <div className="r001-service-toolbar" aria-label="CAMduct toolbar">
-        {['Быстрый запуск', 'Инфо работы', 'Список работы', 'Развертка'].map((tool) => (
-          <button key={tool} type="button">
-            <span aria-hidden="true">▣</span>
-            {tool}
+    <div className="r001-service-shell" aria-label="KRG-001 CAMduct-style service view">
+      <header className="r001-service-header">
+        <div>
+          <span>CAMduct-style engineering panel</span>
+          <h3>KRG-001 / Воздуховод круглый / труба прямошовная</h3>
+        </div>
+        <div className="r001-service-badges">
+          <span>Service ON</span>
+          <span>расчёт engine</span>
+        </div>
+      </header>
+
+      <div className="r001-service-tabs" role="tablist" aria-label="CAMduct-style tabs">
+        {tabs.map(([key, label]) => (
+          <button
+            key={key}
+            type="button"
+            role="tab"
+            aria-selected={tab === key}
+            className={tab === key ? 'is-active' : ''}
+            onClick={() => setTab(key)}
+          >
+            {label}
           </button>
         ))}
       </div>
 
+      {tab === 'product' ? (
       <div className="r001-service-main">
-        <ServiceVisualWorkspace diameter={diameter} length={length} seamAngle={seamAngle} seamType={result.seamType} c1={c1} c2={c2} />
+        <ServiceVisualWorkspace diameter={diameter} length={length} seamAngle={seamAngle} seamType={seamType} c1={connectionLabel(c1)} c2={connectionLabel(c2)} />
 
         <aside className="r001-service-panel">
-          <div className="r001-tabs">
-            {[
-              ['dimensions', 'Размеры'],
-              ['options', 'Опции'],
-              ['detail', 'Деталь'],
-              ['connectors', 'Соединители'],
-            ].map(([key, label]) => (
-              <button key={key} type="button" className={tab === key ? 'is-active' : ''} onClick={() => setTab(key as ServiceTab)}>
-                {label}
-              </button>
-            ))}
+          <div className="r001-service-fields">
+            <label>A / D / Диаметр, мм<input type="number" value={diameter} onChange={(event) => setDiameter(Number(event.target.value || 0))} /></label>
+            <label>B / L / Длина, мм<input type="number" value={length} onChange={(event) => setLength(Number(event.target.value || 0))} /></label>
+            <label>C1<select value={c1} onChange={(event) => setC1(event.target.value as EndConnection)}><option value="none">Нет</option><option value="flange">Фланец</option><option value="bandage">Бандаж</option></select></label>
+            <label>C2<select value={c2} onChange={(event) => setC2(event.target.value as EndConnection)}><option value="none">Нет</option><option value="flange">Фланец</option><option value="bandage">Бандаж</option></select></label>
+            <label>Материал<select value={material} onChange={(event) => setMaterial(event.target.value)}>{MATERIALS.map((option) => <option key={option.key} value={option.key}>{option.label}</option>)}</select></label>
+            <label>Толщина<select value={thickness} onChange={(event) => setThickness(Number(event.target.value))}><option value={0.5}>0.5</option><option value={0.7}>0.7</option><option value={0.9}>0.9</option></select></label>
+            <label>Количество<input type="number" min={1} value={quantity} onChange={(event) => setQuantity(Math.max(1, Number(event.target.value || 1)))} /></label>
+            <label>S1 / припуск / замок<input value={`${seamType} / ${allowance ?? 'нет данных'} мм`} readOnly /></label>
           </div>
-
-          {tab === 'dimensions' ? (
-            <div className="r001-service-table">
-              <label><span>A</span><span>Диаметр</span><input type="number" value={diameter} onChange={(event) => setDiameter(Number(event.target.value || 0))} /></label>
-              <label><span>B</span><span>Базовая длина</span><input type="number" value={length} onChange={(event) => setLength(Number(event.target.value || 0))} /></label>
-              <label><span>C</span><span>Левое удлинение</span><input type="number" value={0} disabled readOnly /></label>
-              <label><span>D</span><span>Правое удлинение</span><input type="number" value={0} disabled readOnly /></label>
-            </div>
-          ) : null}
-
-          {tab === 'options' ? (
-            <div className="r001-service-fields">
-              <label>Расположение шва<select value={seamAngle} onChange={(event) => setSeamAngle(Number(event.target.value))}><option value={0}>0</option><option value={90}>90</option><option value={180}>180</option><option value={270}>270</option></select></label>
-              <label>Тип диаметра<select defaultValue="nominal"><option value="nominal">номинальный</option><option value="inside">внутренний</option><option value="outside">внешний</option></select></label>
-            </div>
-          ) : null}
-
-          {tab === 'detail' ? (
-            <div className="r001-service-fields">
-              <label>Изделие<input value="труба 14" readOnly /></label>
-              <label>Код<input value="KRG-001" readOnly /></label>
-              <label>Материал<input value={materialLabel} readOnly /></label>
-              <label>Толщина<select value={thickness} onChange={(event) => setThickness(Number(event.target.value))}><option value={0.5}>0.5</option><option value={0.7}>0.7</option><option value={0.9}>0.9</option></select></label>
-              <label>Количество<input type="number" min={1} value={quantity} onChange={(event) => setQuantity(Math.max(1, Number(event.target.value || 1)))} /></label>
-              <label>Спецификация<input value="DW144-LV" readOnly /></label>
-            </div>
-          ) : null}
-
-          {tab === 'connectors' ? (
-            <div className="r001-service-fields">
-              <label>C1<select value={c1} onChange={(event) => setC1(event.target.value)}><option>Нет</option><option>Фланец</option><option>Бандаж</option></select></label>
-              <label>C2<select value={c2} onChange={(event) => setC2(event.target.value)}><option>Нет</option><option>Фланец</option><option>Бандаж</option></select></label>
-              <label>S1<input value={result.seamType} readOnly /></label>
-              <label>D1<input value="Нет" readOnly /></label>
-              <label>D2<input value="Нет" readOnly /></label>
-            </div>
-          ) : null}
+          <div className="r001-service-result">
+            <span>Площадь</span>
+            <strong>{formatNumber(output.calculated.areaDisplay)} м²</strong>
+            <small>trace: {output.trace?.formulaKey ?? 'доступно в runtime diagnostics'}</small>
+          </div>
         </aside>
       </div>
+      ) : null}
+
+      {tab === 'unfold' ? (
+        <RoundUnfoldPanel diameter={diameter} length={length} quantity={quantity} output={output} />
+      ) : null}
+
+      {tab === 'worklist' ? (
+        <RoundWorkListPanel diameter={diameter} length={length} quantity={quantity} materialLabel={materialLabel} thickness={thickness} c1={c1} c2={c2} output={output} />
+      ) : null}
+
+      {tab === 'verification' ? <RoundVerificationPanel /> : null}
 
       <div className="r001-service-diagnostics" aria-label="Service diagnostics">
-        <span>S1 = {result.seamType}</span>
-        <span>allowance = {result.allowance} мм</span>
-        <span>unfoldWidth = {formatNumber(result.unfoldWidth)} мм</span>
-        <span>area = {formatNumber(result.area)} м²</span>
+        <span>S1 = {seamType}</span>
+        <span>allowance = {allowance ?? 'нет данных'} мм</span>
+        <span>Lрасч = {formatMaybeNumber(roundMeta.calculatedLength, 0)} мм</span>
+        <span>area = {formatNumber(output.calculated.areaDisplay)} м²</span>
       </div>
     </div>
   )
@@ -321,17 +484,22 @@ export function R001WorkspaceCalculator() {
   const [quantity, setQuantity] = useState(1)
   const [material, setMaterial] = useState(MATERIALS[0].key)
   const [thickness, setThickness] = useState(0.5)
+  const [c1, setC1] = useState<EndConnection>('none')
+  const [c2, setC2] = useState<EndConnection>('none')
   const [comment, setComment] = useState('')
   const [optionsOpen, setOptionsOpen] = useState(false)
   const [holeOpen, setHoleOpen] = useState(false)
   const [holes, setHoles] = useState<R001Hole[]>([])
   const [added, setAdded] = useState(false)
   const [invitationOpen, setInvitationOpen] = useState(false)
-  const result = useMemo(() => calculateR001PrototypeDemo({ diameter, length, thickness }), [diameter, length, thickness])
+  const result = useMemo(
+    () => calculateRoundDuct({ A: diameter, B: length, quantity, C1: c1, C2: c2, thickness }),
+    [c1, c2, diameter, length, quantity, thickness],
+  )
   const materialLabel = MATERIALS.find((option) => option.key === material)?.label ?? MATERIALS[0].label
   const canAdd = canAddSpecItem(role)
-  const areaTotal = round3(result.area * quantity)
-  const massRaw = result.area * quantity * (thickness / 1000) * 7850
+  const areaTotal = result.calculated.areaDisplay
+  const massRaw = typeof result.calculated.massRaw === 'number' ? result.calculated.massRaw : 0
   const description = `Воздуховод круглый / труба прямошовная · D ${diameter} мм · L ${length} мм · ${quantity} шт · ${materialLabel} · ${thickness} мм`
   const holesText = holesDescription(holes)
   const showEngineering = canViewDebugPanel(role) && camductMode
@@ -367,7 +535,7 @@ export function R001WorkspaceCalculator() {
     item.parameters = { A: diameter, B: length, holes: holesCount }
     item.options = { material, thickness, prototypeFlow: true }
     item.calculated = {
-      areaRaw: result.area * quantity,
+      areaRaw: result.calculated.areaRaw,
       areaDisplay: areaTotal,
       massRaw,
       massDisplay: round2(massRaw),
@@ -377,8 +545,10 @@ export function R001WorkspaceCalculator() {
       holes,
       holesCount,
       holesDescription: holesText,
-      seamType: result.seamType,
-      allowance: result.allowance,
+      endConnections: { C1: c1, C2: c2 },
+      roundDuct: result.moduleMetadata.roundSections,
+      seamType: result.moduleMetadata.welded ? 'welded' : 'lock',
+      allowance: result.moduleMetadata.lockAllowance,
     }
 
     setProject(addItem(project, item))
@@ -412,7 +582,13 @@ export function R001WorkspaceCalculator() {
           quantity={quantity}
           setQuantity={setQuantity}
           materialLabel={materialLabel}
-          result={result}
+          material={material}
+          setMaterial={setMaterial}
+          c1={c1}
+          setC1={setC1}
+          c2={c2}
+          setC2={setC2}
+          output={result}
         />
       ) : (
       <section className="r001-public-form" aria-label="KRG-001 рабочий калькулятор">

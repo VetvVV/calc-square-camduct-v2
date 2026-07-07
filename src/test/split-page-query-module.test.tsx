@@ -148,15 +148,54 @@ describe('split page query module routing', () => {
 
     renderSplit('/split?module=round-duct')
 
-    const serviceView = screen.getByLabelText('KRG-001 service view')
+    const serviceView = screen.getByLabelText('KRG-001 CAMduct-style service view')
     expect(serviceView).toBeInTheDocument()
-    expect(screen.getByLabelText('CAMduct toolbar')).toHaveTextContent('Быстрый запуск')
-    expect(within(serviceView).getByRole('button', { name: 'Размеры' })).toBeInTheDocument()
-    expect(within(serviceView).getByRole('button', { name: 'Соединители' })).toBeInTheDocument()
+    expect(within(serviceView).getByText('CAMduct-style engineering panel')).toBeInTheDocument()
+    expect(within(serviceView).getByText('Service ON')).toBeInTheDocument()
+    expect(within(serviceView).getByRole('tab', { name: 'Изделие' })).toHaveAttribute('aria-selected', 'true')
+    expect(within(serviceView).getByRole('tab', { name: 'Развёртка' })).toBeInTheDocument()
+    expect(within(serviceView).getByRole('tab', { name: 'Список работы' })).toBeInTheDocument()
+    expect(within(serviceView).getByRole('tab', { name: 'CAMduct-сверка' })).toBeInTheDocument()
+    expect(within(serviceView).getByText('Вид сбоку')).toBeInTheDocument()
+    expect(within(serviceView).getByText('Торец')).toBeInTheDocument()
+    expect(within(serviceView).getByText('План')).toBeInTheDocument()
+    expect(within(serviceView).getByText('Изометрия')).toBeInTheDocument()
     expect(screen.getByLabelText('Service diagnostics')).toHaveTextContent('S1 = 12.5/12.5')
     expect(screen.getByLabelText('Service diagnostics')).toHaveTextContent('allowance = 25 мм')
-    expect(within(serviceView).getAllByText('A').length).toBeGreaterThan(0)
-    expect(within(serviceView).getByText('Базовая длина')).toBeInTheDocument()
+    expect(within(serviceView).getByText('A / D / Диаметр, мм')).toBeInTheDocument()
+    expect(within(serviceView).getByText('B / L / Длина, мм')).toBeInTheDocument()
     expect(screen.queryByLabelText('KRG-001 рабочий калькулятор')).not.toBeInTheDocument()
+  })
+
+  it('shows unfold and CAMduct verification tabs only in service engineering mode', () => {
+    useAppStore.setState({ activeModule: 'round-duct', role: 'service', camductMode: true })
+
+    const { unmount } = renderSplit('/split?module=round-duct')
+    const serviceView = screen.getByLabelText('KRG-001 CAMduct-style service view')
+
+    fireEvent.click(within(serviceView).getByRole('tab', { name: 'Развёртка' }))
+    expect(screen.getByLabelText('Развёртка листа')).toHaveTextContent('Sполная')
+
+    fireEvent.click(within(serviceView).getByRole('tab', { name: 'CAMduct-сверка' }))
+    expect(screen.getByLabelText('CAMduct verification checks')).toHaveTextContent('KRG-001-round-duct-A250-B1000-baseline')
+    expect(screen.getByLabelText('CAMduct verification checks')).toHaveTextContent('engine baseline')
+    expect(screen.getByLabelText('CAMduct verification checks')).not.toHaveTextContent('fake confirmed')
+
+    unmount()
+    useAppStore.setState({ activeModule: 'round-duct', role: 'client', camductMode: false })
+    renderSplit('/split?module=round-duct')
+
+    expect(screen.queryByLabelText('KRG-001 CAMduct-style service view')).not.toBeInTheDocument()
+    expect(screen.queryByRole('tab', { name: 'CAMduct-сверка' })).not.toBeInTheDocument()
+    expect(screen.getByLabelText('KRG-001 рабочий калькулятор')).toBeInTheDocument()
+  })
+
+  it('allows admin to see the CAMduct-style engineering panel when service mode is on', () => {
+    useAppStore.setState({ activeModule: 'round-duct', role: 'admin', camductMode: true })
+
+    renderSplit('/split?module=round-duct')
+
+    expect(screen.getByLabelText('KRG-001 CAMduct-style service view')).toBeInTheDocument()
+    expect(screen.getByRole('tab', { name: 'CAMduct-сверка' })).toBeInTheDocument()
   })
 })
