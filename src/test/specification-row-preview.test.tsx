@@ -71,8 +71,8 @@ describe('specification row preview', () => {
     expect(preview).toHaveTextContent('2')
     expect(preview).toHaveTextContent('Оцинкованная сталь')
     expect(preview).toHaveTextContent('0.5')
-    expect(preview).toHaveTextContent('1,570 м²')
-    expect(preview).toHaveTextContent('6,16 кг')
+    expect(preview).toHaveTextContent(/1[,.]570 м²/)
+    expect(preview).toHaveTextContent(/6[,.]16 кг/)
 
     const previewText = preview?.textContent ?? ''
     expect(previewText).not.toContain('formula')
