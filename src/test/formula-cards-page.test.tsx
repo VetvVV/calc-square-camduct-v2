@@ -464,6 +464,39 @@ describe('formula cards page', () => {
     expect(within(details!).queryByText(/^Проверена$/)).not.toBeInTheDocument()
     expect(within(details!).queryByText('Альтернативные источники / справочные формулы')).not.toBeInTheDocument()
 
+    const rectangularAdapterRow = screen.getByText('KMB-006').closest('tr')
+    expect(rectangularAdapterRow).not.toBeNull()
+    fireEvent.click(rectangularAdapterRow!)
+
+    expect(rectangularAdapterRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getAllByText('KMB-006').length).toBeGreaterThan(0)
+    expect(within(details!).getByText('Адаптер прямоугольный')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'KMB-006 — прямоугольный адаптер: изделие связано с прямоугольным сечением, но его CAMduct-смысл требует подтверждения.',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Не смешивать KMB-006 с PRM-001, PRM-004, PRM-008, PRM-009, PRM-010 или KMB-005.'),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('KMB-006 не должен автоматически считаться простым PRM-001.')).toBeInTheDocument()
+    expect(within(details!).getByText('Sчистовая = 2 × (W + H) × L / 1_000_000')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Это совпадает с геометрией PRM-001, но не делать статус “Проверена” только по аналогии.'),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Если адаптер является переходом W1/H1 → W2/H2:')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Не фиксировать переходную формулу как формулу KMB-006 без подтверждения CAMduct.'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Рамку/площадку не считать проверенной формулой без подтверждения: CAMduct может считать её как отдельную деталь, BOM или торцевое соединение.'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Прямой СПВА-аналог для KMB-006 не зафиксирован; СПВА не добавлен как прямой источник.'),
+    ).toBeInTheDocument()
+    expect(within(details!).queryByText(/^Проверена$/)).not.toBeInTheDocument()
+    expect(within(details!).queryByText('Альтернативные источники / справочные формулы')).not.toBeInTheDocument()
+
     const elbowRow = screen.getByText('KRG-002').closest('tr')
     expect(elbowRow).not.toBeNull()
     fireEvent.click(elbowRow!)
