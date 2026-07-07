@@ -41,7 +41,7 @@ describe('formula cards page', () => {
       expect(screen.getAllByText(code).length).toBeGreaterThan(0)
     }
 
-    expect(screen.getAllByText('Требует уточнения').length).toBeGreaterThan(0)
+    expect(screen.queryByText('Требует уточнения')).not.toBeInTheDocument()
     expect(screen.getAllByText('Условная').length).toBeGreaterThan(0)
     expect(screen.getAllByText('Проверена').length).toBeGreaterThan(0)
     expect(screen.getAllByText('Состояние формулы').length).toBeGreaterThan(0)
@@ -60,12 +60,38 @@ describe('formula cards page', () => {
     expect(targetRow).toHaveAttribute('aria-selected', 'true')
     expect(within(details!).getAllByText('KMB-007').length).toBeGreaterThan(0)
     expect(within(details!).getByText('Жироуловитель')).toBeInTheDocument()
-    expect(within(details!).getByText('по компонентам; требует вывода')).toBeInTheDocument()
-    expect(within(details!).getByText('требует CAMduct-проверки припусков')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'KMB-007 — жироуловитель: вентиляционное изделие/узел для воздуховода, а не сантехнический жироуловитель.',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Не использовать источники по водоотведению/канализации как формулу воздуховодного изделия.')).toBeInTheDocument()
+    expect(within(details!).getByText('Не смешивать KMB-007 с PRM-001, PRM-011, PRM-013, KMB-006 или PRM-008.')).toBeInTheDocument()
+    expect(within(details!).getByText('KMB-007 не должен автоматически считаться простым PRM-001.')).toBeInTheDocument()
+    expect(within(details!).getByText('Sкорпус_чистовая = 2 × (W + H) × L / 1_000_000')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Sчистовая = Sкорпус + Sпатрубки_вход/выход + Sкрышка/ревизия + Sперегородки/лабиринт + Sлоток/поддон + Sрамки/посадочные элементы + Sфильтры/кассеты',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Фильтры, кассеты, сетки, ручки, крепёж, уплотнения и обслуживаемые элементы могут быть BOM, а не площадью развёртки.'),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Sпатрубок_прямоугольный = 2 × (Wпатрубка + Hпатрубка) × Lпатрубка / 1_000_000')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Не считать KMB-007 простым PRM-001 и не копировать PRM-011/PRM-013 без подтверждения.'),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Прямой СПВА-аналог для KMB-007 не зафиксирован; СПВА не добавлен как прямой источник.')).toBeInTheDocument()
     expect(within(details!).getByText('По компонентам')).toBeInTheDocument()
     expect(within(details!).getByText('Источник найден')).toBeInTheDocument()
     expect(within(details!).getByText('да')).toBeInTheDocument()
-    expect(within(details!).getByText('Разложить изделие на компоненты и сверить с CAMduct.')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Подтвердить по CAMduct состав жироуловителя: корпус, патрубки, крышку/ревизию, фильтры/кассеты, перегородки, лоток, C1/C2, швы/замки и припуски; затем покрыть тестами.',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).queryByText(/^Проверена$/)).not.toBeInTheDocument()
+    expect(within(details!).queryByText('Альтернативные источники / справочные формулы')).not.toBeInTheDocument()
 
     const rectangularDuctRow = screen.getByText('PRM-001').closest('tr')
     expect(rectangularDuctRow).not.toBeNull()
