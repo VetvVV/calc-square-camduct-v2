@@ -142,4 +142,21 @@ describe('split page query module routing', () => {
     expect(screen.getAllByText(/Отверстия: прямоугольное 220×110 мм × 2/).length).toBeGreaterThanOrEqual(2)
     expect(screen.getByRole('button', { name: 'Добавлено в проект' })).toBeInTheDocument()
   })
+
+  it('restores the R-001 service view when CAMduct mode is on for service roles', () => {
+    useAppStore.setState({ activeModule: 'round-duct', role: 'service', camductMode: true })
+
+    renderSplit('/split?module=round-duct')
+
+    const serviceView = screen.getByLabelText('R-001 service view')
+    expect(serviceView).toBeInTheDocument()
+    expect(screen.getByLabelText('CAMduct toolbar')).toHaveTextContent('Быстрый запуск')
+    expect(within(serviceView).getByRole('button', { name: 'Размеры' })).toBeInTheDocument()
+    expect(within(serviceView).getByRole('button', { name: 'Соединители' })).toBeInTheDocument()
+    expect(screen.getByLabelText('Service diagnostics')).toHaveTextContent('S1 = 12.5/12.5')
+    expect(screen.getByLabelText('Service diagnostics')).toHaveTextContent('allowance = 25 мм')
+    expect(within(serviceView).getAllByText('A').length).toBeGreaterThan(0)
+    expect(within(serviceView).getByText('Базовая длина')).toBeInTheDocument()
+    expect(screen.queryByLabelText('R-001 рабочий калькулятор')).not.toBeInTheDocument()
+  })
 })

@@ -90,7 +90,7 @@ describe('formula registry integrity', () => {
     expect(detailText('KMB-004')).toContain('круглую ветку')
 
     expect(detailByCode.get('KMB-005')?.status).not.toBe('Проверена')
-    expect(detailText('KMB-005')).toContain('не считать KMB-005 простым KRG-001')
+    expect(detailText('KMB-005').toLowerCase()).toContain('kmb-005 не должен автоматически считаться простым krg-001')
 
     expect(detailByCode.get('KMB-006')?.status).not.toBe('Проверена')
     expect(detailText('KMB-006')).toContain('Не считать KMB-006 простым PRM-001')
