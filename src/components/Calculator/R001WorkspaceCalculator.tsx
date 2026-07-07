@@ -1,4 +1,4 @@
-import { type KeyboardEvent, useEffect, useMemo, useState } from 'react'
+import { type KeyboardEvent, type ReactNode, useMemo, useState } from 'react'
 import { useAppStore } from '../../store/appStore'
 import { useProjectStore } from '../../store/projectStore'
 import { addItem } from '../../domain/specification/specificationManager'
@@ -16,6 +16,7 @@ const MATERIALS = [
 
 type HoleShape = 'round' | 'rectangular'
 type HoleSide = 'top' | 'bottom' | 'left' | 'right'
+type ServiceTab = 'dimensions' | 'options' | 'detail' | 'connectors'
 
 interface R001Hole {
   id: number
@@ -44,6 +45,10 @@ function holeLabel(hole: R001Hole) {
 
 function holesDescription(holes: R001Hole[]) {
   return holes.length ? `Отверстия: ${holes.map(holeLabel).join('; ')}` : ''
+}
+
+function formatNumber(value: number, digits = 3) {
+  return value.toFixed(digits)
 }
 
 function R001HoleModal({ onClose, onAdd }: { onClose: () => void; onAdd: (hole: Omit<R001Hole, 'id'>) => void }) {
@@ -107,11 +112,210 @@ function R001HoleModal({ onClose, onAdd }: { onClose: () => void; onAdd: (hole: 
   )
 }
 
+function ServiceViewPanel({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section className="r001-view-panel">
+      <h3>{title}</h3>
+      <div>{children}</div>
+    </section>
+  )
+}
+
+function ServiceSideView({ length, seamType, c1, c2 }: { length: number; seamType: string; c1: string; c2: string }) {
+  return (
+    <svg viewBox="0 0 320 180" role="img" aria-label="Вид 1 - боковой">
+      <rect x="40" y="62" width="230" height="58" fill="#ffffff" stroke="#2457b8" strokeWidth="2" />
+      <line x1="40" y1="70" x2="270" y2="70" stroke="#d22d2d" strokeWidth="3" />
+      <text x="118" y="52" fill="#8a6d00" fontSize="13" fontWeight="800">S1 {seamType}</text>
+      <line x1="40" y1="140" x2="270" y2="140" stroke="#a6a6a6" strokeWidth="1" />
+      <text x="148" y="156" fill="#111" fontSize="13" fontWeight="700">B {length}</text>
+      <text x="14" y="86" fill="#111" fontSize="12" fontWeight="700">C1</text>
+      <text x="278" y="86" fill="#111" fontSize="12" fontWeight="700">C2</text>
+      <text x="8" y="102" fill="#555" fontSize="10">{c1}</text>
+      <text x="274" y="102" fill="#555" fontSize="10">{c2}</text>
+    </svg>
+  )
+}
+
+function ServiceEndView({ diameter, seamAngle }: { diameter: number; seamAngle: number }) {
+  const angle = ((seamAngle - 90) * Math.PI) / 180
+  const cx = 160
+  const cy = 90
+  const radius = 56
+
+  return (
+    <svg viewBox="0 0 320 180" role="img" aria-label="Вид 2 - торец">
+      <circle cx={cx} cy={cy} r={radius} fill="#ffffff" stroke="#2457b8" strokeWidth="2" />
+      <circle cx={cx} cy={cy} r={radius - 9} fill="none" stroke="#a6a6a6" strokeWidth="1" />
+      <line x1={cx} y1={cy} x2={cx + radius * Math.cos(angle)} y2={cy + radius * Math.sin(angle)} stroke="#d22d2d" strokeWidth="3" />
+      <text x={cx - 8} y={cy + 5} fill="#111" fontSize="13" fontWeight="700">A</text>
+      <text x="16" y="24" fill="#555" fontSize="11">шов: {seamAngle}°</text>
+      <text x="16" y="164" fill="#555" fontSize="11">A {diameter}</text>
+    </svg>
+  )
+}
+
+function ServiceBottomView({ length }: { length: number }) {
+  return (
+    <svg viewBox="0 0 320 180" role="img" aria-label="Вид 3 - нижний">
+      <rect x="40" y="70" width="230" height="44" fill="#ffffff" stroke="#2457b8" strokeWidth="2" />
+      <line x1="40" y1="92" x2="270" y2="92" stroke="#a6a6a6" strokeDasharray="5 4" strokeWidth="1" />
+      <text x="140" y="146" fill="#111" fontSize="13" fontWeight="700">B {length}</text>
+    </svg>
+  )
+}
+
+function ServiceIsoView({ seamType, c1, c2 }: { seamType: string; c1: string; c2: string }) {
+  return (
+    <svg viewBox="0 0 320 180" role="img" aria-label="Изометрия">
+      <path d="M78 66 L222 50 A15 32 0 0 1 222 114 L78 130 Z" fill="#ffffff" stroke="#2457b8" strokeWidth="2" />
+      <ellipse cx="78" cy="98" rx="15" ry="32" fill="#dbe6ff" stroke="#2457b8" strokeWidth="2" />
+      <line x1="84" y1="68" x2="219" y2="52" stroke="#d22d2d" strokeWidth="3" />
+      <text x="128" y="40" fill="#8a6d00" fontSize="13" fontWeight="800">S1 {seamType}</text>
+      <text x="142" y="160" fill="#111" fontSize="12" fontWeight="700">B</text>
+      <text x="40" y="98" fill="#111" fontSize="12" fontWeight="700">C1</text>
+      <text x="248" y="80" fill="#111" fontSize="12" fontWeight="700">C2</text>
+      <text x="34" y="112" fill="#555" fontSize="10">{c1}</text>
+      <text x="244" y="94" fill="#555" fontSize="10">{c2}</text>
+    </svg>
+  )
+}
+
+function ServiceVisualWorkspace({
+  diameter,
+  length,
+  seamAngle,
+  seamType,
+  c1,
+  c2,
+}: {
+  diameter: number
+  length: number
+  seamAngle: number
+  seamType: string
+  c1: string
+  c2: string
+}) {
+  return (
+    <div className="r001-visual-workspace">
+      <ServiceViewPanel title="Вид 1"><ServiceSideView length={length} seamType={seamType} c1={c1} c2={c2} /></ServiceViewPanel>
+      <ServiceViewPanel title="Вид 2"><ServiceEndView diameter={diameter} seamAngle={seamAngle} /></ServiceViewPanel>
+      <ServiceViewPanel title="Вид 3"><ServiceBottomView length={length} /></ServiceViewPanel>
+      <ServiceViewPanel title="Изометрия"><ServiceIsoView seamType={seamType} c1={c1} c2={c2} /></ServiceViewPanel>
+    </div>
+  )
+}
+
+function R001ServicePanel({
+  diameter,
+  setDiameter,
+  length,
+  setLength,
+  thickness,
+  setThickness,
+  quantity,
+  setQuantity,
+  materialLabel,
+  result,
+}: {
+  diameter: number
+  setDiameter: (value: number) => void
+  length: number
+  setLength: (value: number) => void
+  thickness: number
+  setThickness: (value: number) => void
+  quantity: number
+  setQuantity: (value: number) => void
+  materialLabel: string
+  result: ReturnType<typeof calculateR001PrototypeDemo>
+}) {
+  const [tab, setTab] = useState<ServiceTab>('dimensions')
+  const [seamAngle, setSeamAngle] = useState(90)
+  const [c1, setC1] = useState('Нет')
+  const [c2, setC2] = useState('Нет')
+
+  return (
+    <div className="r001-service-shell" aria-label="R-001 service view">
+      <div className="r001-service-toolbar" aria-label="CAMduct toolbar">
+        {['Быстрый запуск', 'Инфо работы', 'Список работы', 'Развертка'].map((tool) => (
+          <button key={tool} type="button">
+            <span aria-hidden="true">▣</span>
+            {tool}
+          </button>
+        ))}
+      </div>
+
+      <div className="r001-service-main">
+        <ServiceVisualWorkspace diameter={diameter} length={length} seamAngle={seamAngle} seamType={result.seamType} c1={c1} c2={c2} />
+
+        <aside className="r001-service-panel">
+          <div className="r001-tabs">
+            {[
+              ['dimensions', 'Размеры'],
+              ['options', 'Опции'],
+              ['detail', 'Деталь'],
+              ['connectors', 'Соединители'],
+            ].map(([key, label]) => (
+              <button key={key} type="button" className={tab === key ? 'is-active' : ''} onClick={() => setTab(key as ServiceTab)}>
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {tab === 'dimensions' ? (
+            <div className="r001-service-table">
+              <label><span>A</span><span>Диаметр</span><input type="number" value={diameter} onChange={(event) => setDiameter(Number(event.target.value || 0))} /></label>
+              <label><span>B</span><span>Базовая длина</span><input type="number" value={length} onChange={(event) => setLength(Number(event.target.value || 0))} /></label>
+              <label><span>C</span><span>Левое удлинение</span><input type="number" value={0} disabled readOnly /></label>
+              <label><span>D</span><span>Правое удлинение</span><input type="number" value={0} disabled readOnly /></label>
+            </div>
+          ) : null}
+
+          {tab === 'options' ? (
+            <div className="r001-service-fields">
+              <label>Расположение шва<select value={seamAngle} onChange={(event) => setSeamAngle(Number(event.target.value))}><option value={0}>0</option><option value={90}>90</option><option value={180}>180</option><option value={270}>270</option></select></label>
+              <label>Тип диаметра<select defaultValue="nominal"><option value="nominal">номинальный</option><option value="inside">внутренний</option><option value="outside">внешний</option></select></label>
+            </div>
+          ) : null}
+
+          {tab === 'detail' ? (
+            <div className="r001-service-fields">
+              <label>Изделие<input value="труба 14" readOnly /></label>
+              <label>Код<input value="R-001" readOnly /></label>
+              <label>Материал<input value={materialLabel} readOnly /></label>
+              <label>Толщина<select value={thickness} onChange={(event) => setThickness(Number(event.target.value))}><option value={0.5}>0.5</option><option value={0.7}>0.7</option><option value={0.9}>0.9</option></select></label>
+              <label>Количество<input type="number" min={1} value={quantity} onChange={(event) => setQuantity(Math.max(1, Number(event.target.value || 1)))} /></label>
+              <label>Спецификация<input value="DW144-LV" readOnly /></label>
+            </div>
+          ) : null}
+
+          {tab === 'connectors' ? (
+            <div className="r001-service-fields">
+              <label>C1<select value={c1} onChange={(event) => setC1(event.target.value)}><option>Нет</option><option>Фланец</option><option>Бандаж</option></select></label>
+              <label>C2<select value={c2} onChange={(event) => setC2(event.target.value)}><option>Нет</option><option>Фланец</option><option>Бандаж</option></select></label>
+              <label>S1<input value={result.seamType} readOnly /></label>
+              <label>D1<input value="Нет" readOnly /></label>
+              <label>D2<input value="Нет" readOnly /></label>
+            </div>
+          ) : null}
+        </aside>
+      </div>
+
+      <div className="r001-service-diagnostics" aria-label="Service diagnostics">
+        <span>S1 = {result.seamType}</span>
+        <span>allowance = {result.allowance} мм</span>
+        <span>unfoldWidth = {formatNumber(result.unfoldWidth)} мм</span>
+        <span>area = {formatNumber(result.area)} м²</span>
+      </div>
+    </div>
+  )
+}
+
 export function R001WorkspaceCalculator() {
   const role = useAppStore((state) => state.role)
+  const camductMode = useAppStore((state) => state.camductMode)
   const project = useProjectStore((state) => state.project)
   const setProject = useProjectStore((state) => state.setProject)
-  const [engineeringOn, setEngineeringOn] = useState(false)
   const [diameter, setDiameter] = useState(125)
   const [length, setLength] = useState(1000)
   const [quantity, setQuantity] = useState(1)
@@ -130,11 +334,7 @@ export function R001WorkspaceCalculator() {
   const massRaw = result.area * quantity * (thickness / 1000) * 7850
   const description = `Труба прямошовная · D ${diameter} мм · L ${length} мм · ${quantity} шт · ${materialLabel} · ${thickness} мм`
   const holesText = holesDescription(holes)
-  const showEngineering = canViewDebugPanel(role) && engineeringOn
-
-  useEffect(() => {
-    if (!canViewDebugPanel(role)) setEngineeringOn(false)
-  }, [role])
+  const showEngineering = canViewDebugPanel(role) && camductMode
 
   const handleNumberKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter') return
@@ -199,18 +399,22 @@ export function R001WorkspaceCalculator() {
         <div className="r001-status-left">
           <span className="r001-spec-indicator">Спецификация · {project.items.length} позиций</span>
         </div>
-        {canViewDebugPanel(role) ? (
-          <button
-            type="button"
-            className={`r001-eng-toggle${engineeringOn ? ' is-on' : ''}`}
-            onClick={() => setEngineeringOn((value) => !value)}
-            aria-label={engineeringOn ? 'Инженерный режим включён' : 'Инженерный режим выключен'}
-          >
-            {engineeringOn ? '⚙ ON' : '⚙ OFF'}
-          </button>
-        ) : null}
       </div>
 
+      {showEngineering ? (
+        <R001ServicePanel
+          diameter={diameter}
+          setDiameter={setDiameter}
+          length={length}
+          setLength={setLength}
+          thickness={thickness}
+          setThickness={setThickness}
+          quantity={quantity}
+          setQuantity={setQuantity}
+          materialLabel={materialLabel}
+          result={result}
+        />
+      ) : (
       <section className="r001-public-form" aria-label="R-001 рабочий калькулятор">
         <div className="r001-split-input-row">
           <div className="r001-split-visual" aria-label="Схема трубы прямошовной">
@@ -322,6 +526,7 @@ export function R001WorkspaceCalculator() {
           </button>
         </div>
       </section>
+      )}
 
       {holeOpen ? <R001HoleModal onClose={() => setHoleOpen(false)} onAdd={(hole) => { addHole(hole); setHoleOpen(false) }} /> : null}
       <AccessInvitationDialog open={invitationOpen} onClose={() => setInvitationOpen(false)} />
