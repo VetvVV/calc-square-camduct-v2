@@ -196,6 +196,30 @@ describe('formula cards page', () => {
     ).toBeInTheDocument()
     expect(within(details!).getByText(/Упрощённая формула прямоугольного тройника: ствол \+ ветка − отверстие/)).toBeInTheDocument()
 
+    const rectangularCrossRow = screen.getByText('PRM-006').closest('tr')
+    expect(rectangularCrossRow).not.toBeNull()
+    fireEvent.click(rectangularCrossRow!)
+
+    expect(rectangularCrossRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getAllByText('PRM-006').length).toBeGreaterThan(0)
+    expect(within(details!).getByText('Крестовина прямоугольная')).toBeInTheDocument()
+    expect(within(details!).getByText('Не смешивать PRM-006 с PRM-005, PRM-010 или KMB-004.')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Базовая инженерная структура, если CAMduct считает изделие как ствол + две ветки − отверстия:'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Sчистовая = Sствол + Sветка1 + Sветка2 − Sотверстие1_ствол − Sотверстие2_ствол'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Нельзя записывать простую сумму PRM-005 + PRM-005 как основную формулу без корректировки, потому что можно задвоить площадь основного ствола.',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Не ставить “Проверена” только из-за аналогии с PRM-005.')).toBeInTheDocument()
+    expect(within(details!).queryByText(/^Проверена$/)).not.toBeInTheDocument()
+    expect(within(details!).getByText('СПВА покрывает соседний базовый аналог PRM-005, но прямого СПВА-аналога для PRM-006 не добавлено.')).toBeInTheDocument()
+    expect(within(details!).queryByText('Альтернативные источники / справочные формулы')).not.toBeInTheDocument()
+
     const elbowRow = screen.getByText('KRG-002').closest('tr')
     expect(elbowRow).not.toBeNull()
     fireEvent.click(elbowRow!)
