@@ -58,10 +58,10 @@ describe('specification row preview', () => {
 
     const preview = openPreview()
     expect(preview).toHaveClass('spec-row-preview-v1')
-    expect(preview.querySelector('.product-svg--r-001')).toBeInTheDocument()
+    expect(preview.querySelector('.product-svg--krg-001')).toBeInTheDocument()
     expect(preview).toHaveTextContent('Позиция №1')
-    expect(preview).toHaveTextContent('R-001')
-    expect(preview).toHaveTextContent('Труба прямошовная')
+    expect(preview).toHaveTextContent('KRG-001')
+    expect(preview).toHaveTextContent('Воздуховод круглый / труба прямошовная')
     expect(preview).toHaveTextContent('D 250 × L 1000 мм')
     expect(preview).toHaveTextContent('Количество')
     expect(preview).toHaveTextContent('Материал')
@@ -88,7 +88,7 @@ describe('specification row preview', () => {
     expect(document.body.querySelector('#spec-row-preview-preview-test-item')).not.toBeInTheDocument()
   })
 
-  it('uses the inline RECT-001 visual in the row preview instead of placeholder text', () => {
+  it('uses the inline PRM-001 visual in the row preview instead of placeholder text', () => {
     const project = createEmptyProject()
     const item = createSpecificationItem('rect-duct')
     item.id = 'preview-test-item'
@@ -110,10 +110,10 @@ describe('specification row preview', () => {
     const preview = openPreview()
     const visual = preview.querySelector('.spec-row-preview-visual-v1')
 
-    expect(visual?.querySelector('.product-svg--rect-001')).toBeInTheDocument()
-    expect(visual).not.toHaveTextContent('RECT-001')
-    expect(preview).toHaveTextContent('RECT-001')
-    expect(preview).toHaveTextContent('Прямоугольный воздуховод')
+    expect(visual?.querySelector('.product-svg--prm-001')).toBeInTheDocument()
+    expect(visual).not.toHaveTextContent('PRM-001')
+    expect(preview).toHaveTextContent('PRM-001')
+    expect(preview).toHaveTextContent('Воздуховод прямоугольный')
     expect(preview).toHaveTextContent('W 400 × H 300 × L 1000 мм')
     expect(preview).not.toHaveTextContent('A 400 × B 300')
   })

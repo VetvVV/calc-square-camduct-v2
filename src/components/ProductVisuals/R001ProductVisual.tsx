@@ -2,9 +2,9 @@ interface R001ProductVisualProps {
   title?: string
 }
 
-export function R001ProductVisual({ title = 'R-001 Труба прямошовная' }: R001ProductVisualProps) {
+export function R001ProductVisual({ title = 'KRG-001 Воздуховод круглый / труба прямошовная' }: R001ProductVisualProps) {
   return (
-    <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={title} className="product-svg product-svg--r-001">
+    <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={title} className="product-svg product-svg--krg-001">
       <g className="p-shadow">
         <ellipse cx="206" cy="236" rx="152" ry="12" fill="var(--p-shadow, #1f2328)" opacity="var(--p-shadow-opacity, 0.07)" />
       </g>

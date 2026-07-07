@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { calculateRectDuct } from '../domain/calculators'
 
 describe('rectangular duct calculation baseline', () => {
-  it('matches RECT-001 default baseline with raw area kept for storage', () => {
+  it('matches PRM-001 default baseline with raw area kept for storage', () => {
     const result = calculateRectDuct({ A: 400, B: 300, L: 1000, T: 0.5, Q: 1 })
     const meta = result.moduleMetadata.rectangularDuct as Record<string, unknown>
 

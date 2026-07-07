@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest'
 import { rect001ModuleConfig } from '../config/modules'
 
 describe('module config foundation', () => {
-  it('defines RECT-001 without using CAMduct designations as public labels', () => {
+  it('defines PRM-001 without using CAMduct designations as public labels', () => {
     expect(rect001ModuleConfig.key).toBe('rect-duct')
-    expect(rect001ModuleConfig.productCode).toBe('RECT-001')
+    expect(rect001ModuleConfig.productCode).toBe('PRM-001')
     expect(rect001ModuleConfig.publicSubtitle).toContain('Модуль расчёта')
     expect(rect001ModuleConfig.publicSubtitle).not.toContain('Калькулятор')
 
@@ -16,7 +16,7 @@ describe('module config foundation', () => {
     })
   })
 
-  it('contains only confirmed CAMduct designations for RECT-001', () => {
+  it('contains only confirmed CAMduct designations for PRM-001', () => {
     expect(rect001ModuleConfig.designations).toEqual({
       A: 'width',
       B: 'height',

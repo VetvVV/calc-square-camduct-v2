@@ -2,9 +2,9 @@ interface Rect001ProductVisualProps {
   title?: string
 }
 
-export function Rect001ProductVisual({ title = 'RECT-001 Прямоугольный воздуховод' }: Rect001ProductVisualProps) {
+export function Rect001ProductVisual({ title = 'PRM-001 Воздуховод прямоугольный' }: Rect001ProductVisualProps) {
   return (
-    <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={title} className="product-svg product-svg--rect-001">
+    <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={title} className="product-svg product-svg--prm-001">
       <g className="p-shadow">
         <ellipse cx="206" cy="236" rx="154" ry="13" fill="var(--p-shadow, #1f2328)" opacity="var(--p-shadow-opacity, 0.07)" />
       </g>

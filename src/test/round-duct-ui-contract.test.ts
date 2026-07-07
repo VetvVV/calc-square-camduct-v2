@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { calculateRoundDuct } from '../domain/calculators'
 
 describe('round duct UI contract baseline', () => {
-  it('returns result payload needed for R-001 UI', () => {
+  it('returns result payload needed for KRG-001 UI', () => {
     const result = calculateRoundDuct({
       A: 250,
       B: 3200,

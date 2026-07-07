@@ -235,7 +235,7 @@ function R001ServicePanel({
   const [c2, setC2] = useState('Нет')
 
   return (
-    <div className="r001-service-shell" aria-label="R-001 service view">
+    <div className="r001-service-shell" aria-label="KRG-001 service view">
       <div className="r001-service-toolbar" aria-label="CAMduct toolbar">
         {['Быстрый запуск', 'Инфо работы', 'Список работы', 'Развертка'].map((tool) => (
           <button key={tool} type="button">
@@ -281,7 +281,7 @@ function R001ServicePanel({
           {tab === 'detail' ? (
             <div className="r001-service-fields">
               <label>Изделие<input value="труба 14" readOnly /></label>
-              <label>Код<input value="R-001" readOnly /></label>
+              <label>Код<input value="KRG-001" readOnly /></label>
               <label>Материал<input value={materialLabel} readOnly /></label>
               <label>Толщина<select value={thickness} onChange={(event) => setThickness(Number(event.target.value))}><option value={0.5}>0.5</option><option value={0.7}>0.7</option><option value={0.9}>0.9</option></select></label>
               <label>Количество<input type="number" min={1} value={quantity} onChange={(event) => setQuantity(Math.max(1, Number(event.target.value || 1)))} /></label>
@@ -332,7 +332,7 @@ export function R001WorkspaceCalculator() {
   const canAdd = canAddSpecItem(role)
   const areaTotal = round3(result.area * quantity)
   const massRaw = result.area * quantity * (thickness / 1000) * 7850
-  const description = `Труба прямошовная · D ${diameter} мм · L ${length} мм · ${quantity} шт · ${materialLabel} · ${thickness} мм`
+  const description = `Воздуховод круглый / труба прямошовная · D ${diameter} мм · L ${length} мм · ${quantity} шт · ${materialLabel} · ${thickness} мм`
   const holesText = holesDescription(holes)
   const showEngineering = canViewDebugPanel(role) && camductMode
 
@@ -392,7 +392,7 @@ export function R001WorkspaceCalculator() {
 
       <div className="r001-workspace-title">
         <span>Расчётный модуль</span>
-        <h3>R-001 / Труба прямошовная</h3>
+        <h3>KRG-001 / Воздуховод круглый / труба прямошовная</h3>
       </div>
 
       <div className="r001-status-bar">
@@ -415,7 +415,7 @@ export function R001WorkspaceCalculator() {
           result={result}
         />
       ) : (
-      <section className="r001-public-form" aria-label="R-001 рабочий калькулятор">
+      <section className="r001-public-form" aria-label="KRG-001 рабочий калькулятор">
         <div className="r001-split-input-row">
           <div className="r001-split-visual" aria-label="Схема трубы прямошовной">
             <R001ProductDiagram diameter={diameter} length={length} holes={holes} />

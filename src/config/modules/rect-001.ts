@@ -3,9 +3,9 @@ import type { ModuleConfig } from './types'
 
 export const rect001ModuleConfig: ModuleConfig = {
   key: 'rect-duct',
-  productCode: 'RECT-001',
+  productCode: 'PRM-001',
   category: 'rectangular',
-  publicTitle: 'Прямоугольный воздуховод',
+  publicTitle: 'Воздуховод прямоугольный',
   publicSubtitle: 'Модуль расчёта прямоугольного воздуховода',
   fields: [
     {
@@ -57,7 +57,7 @@ export const rect001ModuleConfig: ModuleConfig = {
   },
   formula: {
     key: 'rect-duct',
-    description: 'RECT-001 rectangular duct formula is implemented in the domain calculator and is not wired through this config yet.',
+    description: 'PRM-001 rectangular duct formula is implemented in the domain calculator and is not wired through this config yet.',
     version: 'foundation',
   },
 }

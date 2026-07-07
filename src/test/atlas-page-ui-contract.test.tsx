@@ -31,20 +31,20 @@ describe('Atlas page UI contract', () => {
     expect(screen.getByText('Прямоугольные изделия')).toBeInTheDocument()
     expect(screen.getByText('Комбинированные изделия')).toBeInTheDocument()
 
-    expect(screen.getAllByText('R-001').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('RECT-001').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('COMB-001').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('KRG-001').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('PRM-001').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('KMB-001').length).toBeGreaterThan(0)
     expect(container.querySelectorAll('.atlas-grid-v1')).toHaveLength(3)
   })
 
-  it('uses the inline R-001 SVG visual without replacing other Atlas images', () => {
+  it('uses the inline KRG-001 SVG visual without replacing other Atlas images', () => {
     const { container } = render(
       <MemoryRouter initialEntries={['/atlas']}>
         <AtlasPage />
       </MemoryRouter>,
     )
 
-    const r001Visual = container.querySelector('.product-svg.product-svg--r-001')
+    const r001Visual = container.querySelector('.product-svg.product-svg--krg-001')
     expect(r001Visual).toBeInTheDocument()
     expect(r001Visual).toHaveAttribute('viewBox', '0 0 400 300')
 
@@ -52,7 +52,7 @@ describe('Atlas page UI contract', () => {
     expect(dimensionsLayer).toBeInTheDocument()
     expect(dimensionsLayer).toHaveAttribute('opacity', '0')
 
-    expect(screen.getByAltText('Отвод 45°')).toBeInTheDocument()
+    expect(screen.getByAltText('Отвод круглый')).toBeInTheDocument()
   })
 
   it('uses the inline R-sp-001 SVG visual in the Atlas card', () => {
@@ -72,19 +72,19 @@ describe('Atlas page UI contract', () => {
     expect(dimensionsLayer).toHaveAttribute('opacity', '0')
   })
 
-  it('uses the inline RECT-001 SVG visual instead of the Atlas placeholder', () => {
+  it('uses the inline PRM-001 SVG visual instead of the Atlas placeholder', () => {
     const { container } = render(
       <MemoryRouter initialEntries={['/atlas']}>
         <AtlasPage />
       </MemoryRouter>,
     )
 
-    const rect001Visual = container.querySelector('.product-svg.product-svg--rect-001')
+    const rect001Visual = container.querySelector('.product-svg.product-svg--prm-001')
     expect(rect001Visual).toBeInTheDocument()
     expect(rect001Visual).toHaveAttribute('viewBox', '0 0 400 300')
-    expect(rect001Visual).toHaveAccessibleName('RECT-001 Прямоугольный воздуховод')
+    expect(rect001Visual).toHaveAccessibleName('PRM-001 Воздуховод прямоугольный')
 
-    const rect001Card = screen.getByRole('link', { name: /Открыть расчёт: Прямоугольный воздуховод/i })
+    const rect001Card = screen.getByRole('link', { name: /Открыть расчёт: Воздуховод прямоугольный/i })
     expect(rect001Card.querySelector('.atlas-placeholder-v1')).not.toBeInTheDocument()
   })
 })

@@ -18,9 +18,9 @@ interface SpecRowPreviewProps {
 }
 
 function productCode(item: SpecificationItem) {
-  if (item.moduleKey === 'round-duct') return 'R-001'
+  if (item.moduleKey === 'round-duct') return 'KRG-001'
   if (item.moduleKey === 'spiral-duct') return 'R-sp-001'
-  if (item.moduleKey === 'rect-duct') return 'RECT-001'
+  if (item.moduleKey === 'rect-duct') return 'PRM-001'
   return null
 }
 

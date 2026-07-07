@@ -29,16 +29,16 @@ describe('split page query module routing', () => {
     cleanup()
   })
 
-  it('opens the RECT-001 calculator for /split?module=rect-duct', () => {
+  it('opens the PRM-001 calculator for /split?module=rect-duct', () => {
     renderSplit('/split?module=rect-duct')
 
-    expect(screen.getByText('RECT-001 / Прямоугольный воздуховод')).toBeInTheDocument()
-    expect(screen.queryByText('R-001 / Труба прямошовная')).not.toBeInTheDocument()
+    expect(screen.getByText('PRM-001 / Воздуховод прямоугольный')).toBeInTheDocument()
+    expect(screen.queryByText('KRG-001 / Воздуховод круглый / труба прямошовная')).not.toBeInTheDocument()
   })
 
   it('keeps round and spiral query modules openable in split', () => {
     const { container, unmount } = renderSplit('/split?module=round-duct')
-    expect(screen.getByText('R-001 / Труба прямошовная')).toBeInTheDocument()
+    expect(screen.getByText('KRG-001 / Воздуховод круглый / труба прямошовная')).toBeInTheDocument()
     expect(screen.getByText('Расчётный модуль')).toBeInTheDocument()
     expect(screen.getByText('ОПЫТНЫЙ ОБРАЗЕЦ')).toBeInTheDocument()
     expect(screen.queryByLabelText('Режим доступа')).not.toBeInTheDocument()
@@ -56,9 +56,9 @@ describe('split page query module routing', () => {
     expect(screen.queryByRole('button', { name: 'Ознакомительный доступ' })).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Рабочий кабинет подключён' })).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Администрирование' })).not.toBeInTheDocument()
-    expect(screen.getByLabelText('R-001 рабочий калькулятор')).toHaveTextContent('D / Диаметр, мм')
-    expect(screen.getByLabelText('R-001 рабочий калькулятор')).toHaveTextContent('L / Длина, мм')
-    expect(screen.getByLabelText('R-001 рабочий калькулятор')).toHaveTextContent('Опции')
+    expect(screen.getByLabelText('KRG-001 рабочий калькулятор')).toHaveTextContent('D / Диаметр, мм')
+    expect(screen.getByLabelText('KRG-001 рабочий калькулятор')).toHaveTextContent('L / Длина, мм')
+    expect(screen.getByLabelText('KRG-001 рабочий калькулятор')).toHaveTextContent('Опции')
     expect(screen.queryByText('Торцевое соединение 1')).not.toBeInTheDocument()
     expect(screen.queryByText('Торцевое соединение 2')).not.toBeInTheDocument()
     expect(screen.queryByText('Тип внутреннего соединения')).not.toBeInTheDocument()
@@ -74,7 +74,7 @@ describe('split page query module routing', () => {
     expect(screen.getByText('R-sp-001 / Спирально-навивная труба')).toBeInTheDocument()
   })
 
-  it('adds R-001 from the split right panel with selected material and quantity', () => {
+  it('adds KRG-001 from the split right panel with selected material and quantity', () => {
     const { container } = renderSplit('/split?module=round-duct')
 
     fireEvent.change(screen.getByLabelText('Количество'), { target: { value: '3' } })
@@ -143,12 +143,12 @@ describe('split page query module routing', () => {
     expect(screen.getByRole('button', { name: 'Добавлено в проект' })).toBeInTheDocument()
   })
 
-  it('restores the R-001 service view when CAMduct mode is on for service roles', () => {
+  it('restores the KRG-001 service view when CAMduct mode is on for service roles', () => {
     useAppStore.setState({ activeModule: 'round-duct', role: 'service', camductMode: true })
 
     renderSplit('/split?module=round-duct')
 
-    const serviceView = screen.getByLabelText('R-001 service view')
+    const serviceView = screen.getByLabelText('KRG-001 service view')
     expect(serviceView).toBeInTheDocument()
     expect(screen.getByLabelText('CAMduct toolbar')).toHaveTextContent('Быстрый запуск')
     expect(within(serviceView).getByRole('button', { name: 'Размеры' })).toBeInTheDocument()
@@ -157,6 +157,6 @@ describe('split page query module routing', () => {
     expect(screen.getByLabelText('Service diagnostics')).toHaveTextContent('allowance = 25 мм')
     expect(within(serviceView).getAllByText('A').length).toBeGreaterThan(0)
     expect(within(serviceView).getByText('Базовая длина')).toBeInTheDocument()
-    expect(screen.queryByLabelText('R-001 рабочий калькулятор')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('KRG-001 рабочий калькулятор')).not.toBeInTheDocument()
   })
 })
