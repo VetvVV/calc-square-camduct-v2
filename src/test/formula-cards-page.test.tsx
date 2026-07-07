@@ -315,6 +315,23 @@ describe('formula cards page', () => {
     expect(within(details!).getByText('СПВА не подтверждает внутреннюю компонентную структуру PRM-011; прямой СПВА-источник для прямоугольного шумоглушителя не добавлен.')).toBeInTheDocument()
     expect(within(details!).queryByText('Альтернативные источники / справочные формулы')).not.toBeInTheDocument()
 
+    const rectangularUmbrellaRow = screen.getByText('PRM-012').closest('tr')
+    expect(rectangularUmbrellaRow).not.toBeNull()
+    fireEvent.click(rectangularUmbrellaRow!)
+
+    expect(rectangularUmbrellaRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getAllByText('PRM-012').length).toBeGreaterThan(0)
+    expect(within(details!).getByText('Зонт прямоугольный')).toBeInTheDocument()
+    expect(within(details!).getByText('Не смешивать PRM-012 с PRM-001, PRM-004, PRM-008 или KRG-012.')).toBeInTheDocument()
+    expect(within(details!).getByText('Sчистовая = Sпанель_длинная_1 + Sпанель_длинная_2 + Sпанель_короткая_1 + Sпанель_короткая_2')).toBeInTheDocument()
+    expect(within(details!).getByText('Hдлинная_наклонная = √(H² + ((W1 − W2) / 2)²)')).toBeInTheDocument()
+    expect(within(details!).getByText('Для пристенного зонта геометрия может отличаться: одна сторона может быть вертикальной/задней стенкой, а наклонных панелей может быть меньше.')).toBeInTheDocument()
+    expect(within(details!).getByText('Не ставить “Проверена” только из-за СПВА.')).toBeInTheDocument()
+    expect(within(details!).queryByText(/^Проверена$/)).not.toBeInTheDocument()
+    expect(within(details!).getByText('Альтернативные источники / справочные формулы')).toBeInTheDocument()
+    expect(within(details!).getByText('S = [(Д1 × Ш1 + Д2 × Ш2 + (Д1 + Д2)/2 × В × 2 + (Ш1 + Ш2)/2 × В × 2) × 1.1] × n')).toBeInTheDocument()
+    expect(within(details!).getByText('S = [(Д × Ш + (Ш + П)/2 × В × 2 + Д × В) × 1.1] × n')).toBeInTheDocument()
+
     const elbowRow = screen.getByText('KRG-002').closest('tr')
     expect(elbowRow).not.toBeNull()
     fireEvent.click(elbowRow!)
