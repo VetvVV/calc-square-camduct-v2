@@ -15,7 +15,7 @@ export function R001ProductDiagram({ diameter, length, holes = [] }: R001Product
   const markX = (position: number) => 120 + Math.min(0.94, Math.max(0.06, position / Math.max(length, 1))) * 300
 
   return (
-    <svg viewBox="0 0 520 300" role="img" aria-label={`Труба прямошовная D ${diameter}, L ${length}`}>
+    <svg viewBox="0 0 520 300" role="img" aria-label={`Воздуховод круглый / труба прямошовная D ${diameter}, L ${length}`}>
       <ellipse cx="266" cy="238" rx="176" ry="12" fill="#1f2328" opacity="0.07" />
       <path d="M 104 96 L 424 96 A 21 56 0 0 1 424 208 L 104 208 Z" fill="#f4f6f8" />
       <ellipse cx="104" cy="152" rx="21" ry="56" fill="#e8ebee" />

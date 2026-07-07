@@ -3,7 +3,7 @@ import { validateImportedProject } from '../data/importValidation'
 import { createEmptyProject, createSpecificationItem } from '../domain/specification/itemFactory'
 
 describe('import validation', () => {
-  it('accepts RECT-001 moduleKey', () => {
+  it('accepts PRM-001 moduleKey', () => {
     const project = createEmptyProject()
     const item = createSpecificationItem('rect-duct')
     item.moduleKey = 'rect-duct'

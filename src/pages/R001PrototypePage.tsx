@@ -349,7 +349,7 @@ function PublicSpecification({ positions, holes, area, quantity, diameter, lengt
           {rows.map((row, index) => (
             <tr key={row.id}>
               <td>{index + 1}</td>
-              <td>Труба прямошовная</td>
+              <td>Воздуховод круглый / труба прямошовная</td>
               <td>{row.diameter}</td>
               <td>{row.length}</td>
               <td>{row.quantity}</td>
@@ -412,7 +412,7 @@ function PublicR001Calculator({
   const [added, setAdded] = useState(false)
 
   const canAdd = access !== 'guest'
-  const description = `Труба прямошовная · D ${diameter} мм · L ${length} мм · ${quantity} шт · ${material} · ${thickness} мм`
+  const description = `Воздуховод круглый / труба прямошовная · D ${diameter} мм · L ${length} мм · ${quantity} шт · ${material} · ${thickness} мм`
 
   const handleAdd = () => {
     if (!canAdd) {
@@ -663,7 +663,7 @@ function RightPropertyPanel({
       {tab === 'detail' ? (
         <div className="r001-service-fields">
           <label>Изделие<input value="труба 14" readOnly /></label>
-          <label>Код<input value="R-001" readOnly /></label>
+          <label>Код<input value="KRG-001" readOnly /></label>
           <label>Материал<input value={material} readOnly /></label>
           <label>Толщина<select value={thickness} onChange={(event) => setThickness(Number(event.target.value))}><option value={0.5}>0.5</option><option value={0.7}>0.7</option><option value={0.9}>0.9</option></select></label>
           <label>Количество<input type="number" value={quantity} onChange={(event) => setQuantity(Number(event.target.value || 1))} /></label>
@@ -835,7 +835,7 @@ function ServiceR001Calculator({
 
   const addWork = () => {
     setWorkItems([{ id: 1, quantity, area: result.area, seamType: result.seamType }])
-    showToast('R-001 добавлен в список работы.')
+    showToast('KRG-001 добавлен в список работы.')
   }
 
   return (
@@ -866,7 +866,7 @@ function ServiceR001Calculator({
           },
         }}
       />
-      <BottomActionBar openHole={() => setHoleOpen(true)} openUnfold={() => setUnfoldOpen(true)} update={() => showToast('R-001 обновлён.')} addWork={addWork} />
+      <BottomActionBar openHole={() => setHoleOpen(true)} openUnfold={() => setUnfoldOpen(true)} update={() => showToast('KRG-001 обновлён.')} addWork={addWork} />
       {toast ? <div className="r001-toast">{toast}</div> : null}
       {holeOpen ? <ServiceHoleModal onClose={() => setHoleOpen(false)} /> : null}
       {unfoldOpen ? <UnfoldViewer result={result} length={length} thickness={thickness} material={material} onClose={() => setUnfoldOpen(false)} /> : null}

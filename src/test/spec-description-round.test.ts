@@ -3,7 +3,7 @@ import i18n from '../i18n'
 import { buildDescription } from '../domain/descriptions/descriptionBuilder'
 
 describe('round spec description', () => {
-  it('contains round split summary for R-001 250x3200', async () => {
+  it('contains round split summary for KRG-001 250x3200', async () => {
     await i18n.changeLanguage('ru')
     const text = buildDescription(i18n.t.bind(i18n), 'round-duct', {
       A: 250,

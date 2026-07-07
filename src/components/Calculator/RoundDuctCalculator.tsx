@@ -137,7 +137,7 @@ export function RoundDuctCalculator() {
       <div className="brand-cream-panel">
         <div className="brand-section-head flex flex-col gap-3 px-4 py-3 md:flex-row md:items-start md:justify-between">
           <div>
-            <h3 className="text-lg font-extrabold text-[#5b4e2a]">R-001 / {t('product.roundDuctStraight')}</h3>
+            <h3 className="text-lg font-extrabold text-[#5b4e2a]">KRG-001 / {t('product.roundDuctStraight')}</h3>
             <p className="mt-1 text-sm font-semibold leading-6 text-[#6d6247]">{t('product.roundDuctStraightDescription')}</p>
           </div>
           {showRoundSplitInfo && (

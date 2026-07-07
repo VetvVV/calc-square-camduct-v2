@@ -9,7 +9,7 @@ const chipText = () => document.querySelector('.r001-status-chip')?.textContent
 const setState = (name: string) =>
   fireEvent.click(within(screen.getByLabelText('Тестовый режим прототипа')).getByRole('button', { name }))
 
-describe('R-001 prototype demo engine', () => {
+describe('KRG-001 prototype demo engine', () => {
   it('calculates the short welded seam demo case', () => {
     const result = calculateR001PrototypeDemo({ diameter: 125, length: 400, thickness: 0.5 })
     expect(result.seamType).toBe('точка 3/0')
@@ -33,7 +33,7 @@ describe('R-001 prototype demo engine', () => {
   })
 })
 
-describe('R-001 prototype public UI', () => {
+describe('KRG-001 prototype public UI', () => {
   afterEach(() => {
     cleanup()
   })

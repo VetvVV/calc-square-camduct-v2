@@ -37,7 +37,7 @@ describe('app header role and access labels', () => {
     expect(screen.queryByRole('button', { name: 'RU' })).not.toBeInTheDocument()
   })
 
-  it('keeps the active language switcher on non R-001 routes', async () => {
+  it('keeps the active language switcher on non KRG-001 routes', async () => {
     await i18n.changeLanguage('ru')
     useAppStore.setState({ activeModule: 'round-duct', role: 'guest', camductMode: false })
 
@@ -51,7 +51,7 @@ describe('app header role and access labels', () => {
     expect(screen.getByRole('button', { name: 'RU' })).toBeInTheDocument()
   })
 
-  it('shows a static language badge on the R-001 prototype route', async () => {
+  it('shows a static language badge on the KRG-001 prototype route', async () => {
     await i18n.changeLanguage('ru')
     useAppStore.setState({ activeModule: 'round-duct', role: 'guest', camductMode: false })
 

@@ -11,9 +11,9 @@ export function VariantCard({ variant }: VariantCardProps) {
   const { i18n, t } = useTranslation()
   const lang = i18n.language as 'ru' | 'uk' | 'en'
   const available = variant.status === 'available' && Boolean(variant.moduleKey)
-  const useInlineR001Visual = variant.code === 'R-001'
+  const useInlineR001Visual = variant.code === 'KRG-001'
   const useInlineRsp001Visual = variant.code === 'R-sp-001'
-  const useInlineRect001Visual = variant.code === 'RECT-001'
+  const useInlineRect001Visual = variant.code === 'PRM-001'
 
   const content = (
     <>

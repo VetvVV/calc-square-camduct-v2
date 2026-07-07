@@ -27,7 +27,7 @@ function renderRectCalculator() {
   )
 }
 
-describe('RECT-001 UI contract', () => {
+describe('PRM-001 UI contract', () => {
   beforeEach(async () => {
     await i18n.changeLanguage('ru')
     navigateMock.mockClear()
@@ -42,14 +42,14 @@ describe('RECT-001 UI contract', () => {
   it('shows product UI without internal terms and opens invitation for guest add', () => {
     const { container } = renderRectCalculator()
 
-    expect(screen.getByText('RECT-001 / Прямоугольный воздуховод')).toBeInTheDocument()
+    expect(screen.getByText('PRM-001 / Воздуховод прямоугольный')).toBeInTheDocument()
     expect(screen.getByText('Расчётный модуль')).toBeInTheDocument()
     expect(screen.getByText('W — Ширина, мм')).toBeInTheDocument()
     expect(screen.getByText('H — Высота, мм')).toBeInTheDocument()
     expect(screen.getByText('L — Длина, мм')).toBeInTheDocument()
     expect(screen.queryByText('C — Длина, мм')).not.toBeInTheDocument()
     expect(screen.getByText(/W 400 × H 300 × L 1000 мм/)).toBeInTheDocument()
-    expect(screen.getAllByText(/Прямоугольный воздуховод/).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/Воздуховод прямоугольный/).length).toBeGreaterThan(0)
     expect(screen.getByText(/Результат обновляется автоматически при изменении параметров/)).toBeInTheDocument()
 
     const visibleText = container.textContent ?? ''
