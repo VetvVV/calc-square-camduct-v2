@@ -299,6 +299,22 @@ describe('formula cards page', () => {
     expect(within(details!).getByText('S = 2 × (Ш + Г) × Д × n')).toBeInTheDocument()
     expect(within(details!).getByText(/Для PRM-010 это только возможный компонент врезки, а не вся формула изделия со стволом/)).toBeInTheDocument()
 
+    const rectangularSilencerRow = screen.getByText('PRM-011').closest('tr')
+    expect(rectangularSilencerRow).not.toBeNull()
+    fireEvent.click(rectangularSilencerRow!)
+
+    expect(rectangularSilencerRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getAllByText('PRM-011').length).toBeGreaterThan(0)
+    expect(within(details!).getByText('Шумоглушитель прямоугольный')).toBeInTheDocument()
+    expect(within(details!).getByText('Не смешивать PRM-011 с PRM-001, KRG-011, PRM-013 или PRM-008.')).toBeInTheDocument()
+    expect(within(details!).getByText('Sкорпус = 2 × (W + H) × L / 1_000_000')).toBeInTheDocument()
+    expect(within(details!).getByText('Если внутри есть металлические кулисы/кассеты: Sчистовая = Sкорпус + Sпатрубки + Sкулисы/кассеты')).toBeInTheDocument()
+    expect(within(details!).getByText('Sкулисы/кассеты = n × Sодной_кулисы')).toBeInTheDocument()
+    expect(within(details!).getByText('Не ставить “Проверена” только из-за формулы корпуса PRM-001.')).toBeInTheDocument()
+    expect(within(details!).queryByText(/^Проверена$/)).not.toBeInTheDocument()
+    expect(within(details!).getByText('СПВА не подтверждает внутреннюю компонентную структуру PRM-011; прямой СПВА-источник для прямоугольного шумоглушителя не добавлен.')).toBeInTheDocument()
+    expect(within(details!).queryByText('Альтернативные источники / справочные формулы')).not.toBeInTheDocument()
+
     const elbowRow = screen.getByText('KRG-002').closest('tr')
     expect(elbowRow).not.toBeNull()
     fireEvent.click(elbowRow!)
