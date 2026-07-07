@@ -116,6 +116,39 @@ describe('formula cards page', () => {
     expect(within(details!).getByText('S = 2 × (Ш + В) × Lдуги × n')).toBeInTheDocument()
     expect(within(details!).getByText(/СПВА — внешний справочный источник, не заменяет CAMduct/)).toBeInTheDocument()
 
+    const rectangularElbowTransitionRow = screen.getByText('PRM-003').closest('tr')
+    expect(rectangularElbowTransitionRow).not.toBeNull()
+    fireEvent.click(rectangularElbowTransitionRow!)
+
+    expect(rectangularElbowTransitionRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getAllByText('PRM-003').length).toBeGreaterThan(0)
+    expect(within(details!).getByText('Колено прямоугольное переходное')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'PRM-003 — переходное прямоугольное колено: изделие одновременно меняет направление и может менять размеры сечения.',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Не считать PRM-003 обычным PRM-002, обычным PRM-004 или прямым воздуховодом PRM-001.')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Безопасная панельная структура: Sчистовая = Sпанель_верх + Sпанель_низ + Sпанель_бок1 + Sпанель_бок2',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Sпанель_i = средняя_ширина_панели_i × эффективная_длина_панели_i')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Если изделие приближённо считается как “отвод + переход”: Sчистовая ≈ Sотвод_PRM-002 + Sпереход_PRM-004 − корректировка_общей_зоны',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Упрощённая условная геометрия: Sчистовая ≈ 2 × (Wср + Hср) × Lдуги / 1_000_000')).toBeInTheDocument()
+    expect(within(details!).queryByText(/^Проверена$/)).not.toBeInTheDocument()
+    expect(within(details!).queryByText('Альтернативные источники / справочные формулы')).not.toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'СПВА не добавлен как прямой альтернативный источник для PRM-003, потому что прямого соответствия не найдено.',
+      ),
+    ).toBeInTheDocument()
+
     const elbowRow = screen.getByText('KRG-002').closest('tr')
     expect(elbowRow).not.toBeNull()
     fireEvent.click(elbowRow!)
