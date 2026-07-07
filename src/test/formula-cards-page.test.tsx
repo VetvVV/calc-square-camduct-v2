@@ -220,6 +220,27 @@ describe('formula cards page', () => {
     expect(within(details!).getByText('СПВА покрывает соседний базовый аналог PRM-005, но прямого СПВА-аналога для PRM-006 не добавлено.')).toBeInTheDocument()
     expect(within(details!).queryByText('Альтернативные источники / справочные формулы')).not.toBeInTheDocument()
 
+    const rectangularDuckRow = screen.getByText('PRM-007').closest('tr')
+    expect(rectangularDuckRow).not.toBeNull()
+    fireEvent.click(rectangularDuckRow!)
+
+    expect(rectangularDuckRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getAllByText('PRM-007').length).toBeGreaterThan(0)
+    expect(within(details!).getByText('Утка прямоугольная')).toBeInTheDocument()
+    expect(within(details!).getByText('Не смешивать PRM-007 с PRM-001, PRM-003 или PRM-004.')).toBeInTheDocument()
+    expect(within(details!).getByText('Lнаклонная = √(L² + C²)')).toBeInTheDocument()
+    expect(within(details!).getByText('Sчистовая ≈ 2 × (W + H) × Lнаклонная / 1_000_000')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Если CAMduct считает PRM-007 как набор панелей: Sчистовая = Sпанель_верх + Sпанель_низ + Sпанель_левая + Sпанель_правая',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Не ставить “Проверена” только из-за СПВА.')).toBeInTheDocument()
+    expect(within(details!).queryByText(/^Проверена$/)).not.toBeInTheDocument()
+    expect(within(details!).getByText('Альтернативные источники / справочные формулы')).toBeInTheDocument()
+    expect(within(details!).getByText('S = [2(Д × В + Д × Ш + Ш × В) × SF × 1.15] × n')).toBeInTheDocument()
+    expect(within(details!).getByText(/СПВА не раскрывает в тексте страницы формулу SF/)).toBeInTheDocument()
+
     const elbowRow = screen.getByText('KRG-002').closest('tr')
     expect(elbowRow).not.toBeNull()
     fireEvent.click(elbowRow!)
