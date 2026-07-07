@@ -173,6 +173,29 @@ describe('formula cards page', () => {
     expect(within(details!).getByText('S = [((Ш1 + Ш2)/2 × Д × 2 + (В1 + В2)/2 × Д × 2) × 1.1] × n')).toBeInTheDocument()
     expect(within(details!).getByText(/Внешняя упрощённая формула прямоугольного перехода.*не заменяет CAMduct/)).toBeInTheDocument()
 
+    const rectangularTeeRow = screen.getByText('PRM-005').closest('tr')
+    expect(rectangularTeeRow).not.toBeNull()
+    fireEvent.click(rectangularTeeRow!)
+
+    expect(rectangularTeeRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getAllByText('PRM-005').length).toBeGreaterThan(0)
+    expect(within(details!).getByText('Тройник прямоугольный')).toBeInTheDocument()
+    expect(within(details!).getByText('Не смешивать PRM-005 с PRM-010, KMB-004 или PRM-006.')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Базовая инженерная структура, если CAMduct считает изделие как ствол + ветка − отверстие:'),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Sчистовая = Sствол + Sветка − Sотверстие_ствол')).toBeInTheDocument()
+    expect(within(details!).getByText('Sотверстие_ствол = W2 × H2')).toBeInTheDocument()
+    expect(within(details!).getByText('Не ставить “Проверена” только из-за СПВА.')).toBeInTheDocument()
+    expect(within(details!).queryByText(/^Проверена$/)).not.toBeInTheDocument()
+    expect(within(details!).getByText('Альтернативные источники / справочные формулы')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'S = [(2(Ш1 + В1) × Д1 + 2(Ш2 + В2) × Д2 − Ш2 × В2 + 2(Ш2 + В2) × 0.05) × 1.15] × n',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText(/Упрощённая формула прямоугольного тройника: ствол \+ ветка − отверстие/)).toBeInTheDocument()
+
     const elbowRow = screen.getByText('KRG-002').closest('tr')
     expect(elbowRow).not.toBeNull()
     fireEvent.click(elbowRow!)
