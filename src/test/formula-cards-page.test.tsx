@@ -434,6 +434,36 @@ describe('formula cards page', () => {
     expect(within(details!).getByText('S = [(2(Ш + В) × Д1 + π × D × Д2 − π × (D/2)² + π × D × 0.1) × 1.2] × n')).toBeInTheDocument()
     expect(within(details!).getByText(/В более понятной записи: S = \[\(2\(W1 \+ H1\) × L1 \+ π × D2 × L2 − π × \(D2 \/ 2\)² \+ π × D2 × 0\.1\) × 1\.2\] × n/)).toBeInTheDocument()
 
+    const roundAdapterRow = screen.getByText('KMB-005').closest('tr')
+    expect(roundAdapterRow).not.toBeNull()
+    fireEvent.click(roundAdapterRow!)
+
+    expect(roundAdapterRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getAllByText('KMB-005').length).toBeGreaterThan(0)
+    expect(within(details!).getByText('Адаптер круглый')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'KMB-005 — круглый адаптер: изделие связано с круглым сечением, но его CAMduct-смысл требует подтверждения.',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Не смешивать KMB-005 с KRG-001, KRG-003, KRG-004, KRG-010, KRG-014, KRG-019 или KMB-001.'),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('KMB-005 не должен автоматически считаться простым KRG-001.')).toBeInTheDocument()
+    expect(within(details!).getByText('Sчистовая = π × D × L / 1_000_000')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Это совпадает с геометрией KRG-001, но не делать статус “Проверена” только по аналогии.'),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Если адаптер является переходом D1 → D2:')).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Не фиксировать переходную формулу как формулу KMB-005 без подтверждения CAMduct.'),
+    ).toBeInTheDocument()
+    expect(
+      within(details!).getByText('Прямой СПВА-аналог для KMB-005 не зафиксирован; СПВА не добавлен как прямой источник.'),
+    ).toBeInTheDocument()
+    expect(within(details!).queryByText(/^Проверена$/)).not.toBeInTheDocument()
+    expect(within(details!).queryByText('Альтернативные источники / справочные формулы')).not.toBeInTheDocument()
+
     const elbowRow = screen.getByText('KRG-002').closest('tr')
     expect(elbowRow).not.toBeNull()
     fireEvent.click(elbowRow!)
