@@ -241,6 +241,23 @@ describe('formula cards page', () => {
     expect(within(details!).getByText('S = [2(Д × В + Д × Ш + Ш × В) × SF × 1.15] × n')).toBeInTheDocument()
     expect(within(details!).getByText(/СПВА не раскрывает в тексте страницы формулу SF/)).toBeInTheDocument()
 
+    const rectangularCapRow = screen.getByText('PRM-008').closest('tr')
+    expect(rectangularCapRow).not.toBeNull()
+    fireEvent.click(rectangularCapRow!)
+
+    expect(rectangularCapRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getAllByText('PRM-008').length).toBeGreaterThan(0)
+    expect(within(details!).getByText('Заглушка прямоугольная')).toBeInTheDocument()
+    expect(within(details!).getByText('Не смешивать PRM-008 с PRM-001, PRM-009, PRM-010 или KRG-007.')).toBeInTheDocument()
+    expect(within(details!).getByText('Sчистовая = W × H / 1_000_000')).toBeInTheDocument()
+    expect(within(details!).getByText('Sчистовая = W × H + 2 × (W + H) × b')).toBeInTheDocument()
+    expect(within(details!).getByText('b — высота борта/отгиба в мм; b нельзя фиксировать без подтверждения CAMduct/методички.')).toBeInTheDocument()
+    expect(within(details!).getByText('Не ставить “Проверена” только из-за СПВА.')).toBeInTheDocument()
+    expect(within(details!).queryByText(/^Проверена$/)).not.toBeInTheDocument()
+    expect(within(details!).getByText('Альтернативные источники / справочные формулы')).toBeInTheDocument()
+    expect(within(details!).getByText('S = [Ш × В + 2(Ш + В) × 0.05] × n')).toBeInTheDocument()
+    expect(within(details!).getByText(/Плоскость заглушки \+ добавка на загиб кромки 50 мм/)).toBeInTheDocument()
+
     const elbowRow = screen.getByText('KRG-002').closest('tr')
     expect(elbowRow).not.toBeNull()
     fireEvent.click(elbowRow!)
