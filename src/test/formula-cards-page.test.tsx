@@ -149,6 +149,30 @@ describe('formula cards page', () => {
       ),
     ).toBeInTheDocument()
 
+    const rectangularTransitionRow = screen.getByText('PRM-004').closest('tr')
+    expect(rectangularTransitionRow).not.toBeNull()
+    fireEvent.click(rectangularTransitionRow!)
+
+    expect(rectangularTransitionRow).toHaveAttribute('aria-selected', 'true')
+    expect(within(details!).getAllByText('PRM-004').length).toBeGreaterThan(0)
+    expect(within(details!).getByText('Переход прямоугольный')).toBeInTheDocument()
+    expect(within(details!).getByText('Не считать PRM-004 прямым воздуховодом PRM-001, отводом PRM-002 или переходным коленом PRM-003.')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Основная безопасная структура: Sчистовая = Sпанель_верх + Sпанель_низ + Sпанель_левая + Sпанель_правая',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).getByText('Sпанель_i = средняя_ширина_панели_i × эффективная_длина_панели_i')).toBeInTheDocument()
+    expect(
+      within(details!).getByText(
+        'Test 003 без припусков: панель 1 — 862.544 × 420 = 0.289 м²; панель 2 — 854.647 × 300 = 0.179 м²; панель 3 — 851.032 × 420 = 0.285 м²; панель 4 — 854.647 × 300 = 0.179 м²; итог = 0.932 м².',
+      ),
+    ).toBeInTheDocument()
+    expect(within(details!).queryByText(/^Проверена$/)).not.toBeInTheDocument()
+    expect(within(details!).getByText('Альтернативные источники / справочные формулы')).toBeInTheDocument()
+    expect(within(details!).getByText('S = [((Ш1 + Ш2)/2 × Д × 2 + (В1 + В2)/2 × Д × 2) × 1.1] × n')).toBeInTheDocument()
+    expect(within(details!).getByText(/Внешняя упрощённая формула прямоугольного перехода.*не заменяет CAMduct/)).toBeInTheDocument()
+
     const elbowRow = screen.getByText('KRG-002').closest('tr')
     expect(elbowRow).not.toBeNull()
     fireEvent.click(elbowRow!)
